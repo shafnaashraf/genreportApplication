@@ -1,0 +1,12 @@
+<div class="main-container">
+  <div class="button-container" *ngIf="!showReportForm">
+    <div class="vertical-buttons">
+      <button class="btn"  (click)="showForm()">ADD JOB</button>
+      <button class="btn">ADD SUPPORT MATERIALS</button>
+      <button class="btn">VIEW JOB</button>
+    </div>
+  </div>
+  <div *ngIf="showReportForm">
+    <add-job></add-job>
+  </div>
+</div>
