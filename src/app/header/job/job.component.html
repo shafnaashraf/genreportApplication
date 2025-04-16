@@ -1,12 +1,14 @@
 <div class="main-container">
-  <div class="button-container" *ngIf="!showReportForm">
+  <div class="button-container" *ngIf="activeComponent == ''">
     <div class="vertical-buttons">
-      <button class="btn"  (click)="showForm()">ADD JOB</button>
-      <button class="btn">ADD SUPPORT MATERIALS</button>
+      <button class="btn"  (click)="showComponent('add-job')">ADD JOB</button>
+      <button class="btn" (click)="showComponent('add-support')">ADD SUPPORT MATERIALS</button>
       <button class="btn">VIEW JOB</button>
     </div>
   </div>
-  <div *ngIf="showReportForm">
-    <add-job></add-job>
+  <!-- Dynamic Component Display -->
+  <div *ngIf="activeComponent !=''" class="component-area container">
+    <add-job *ngIf="activeComponent === 'add-job'"></add-job>
+    <add-support *ngIf="activeComponent === 'add-support'"></add-support>
   </div>
 </div>

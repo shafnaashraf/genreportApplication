@@ -44,3 +44,9 @@ body {
     background-color: #0056b3;
     transform: scale(1.05);
 }
+.container {
+    max-width: none !important;
+    width: 100vw;
+    padding: 0;
+    margin: 0;
+}
