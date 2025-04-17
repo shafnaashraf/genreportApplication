@@ -1,90 +1,54 @@
-<div class="container">
-  <!-- Prepopulated Section -->
-  <div class="prepopulated-section">
-    <h3>Job Information</h3>
-    <div class="info-row">
+<div class="table-form-container">
+  <!-- Fixed Header with Job and Report Info -->
+  <div class="header-bar">
+    <div class="header-item">
       <label>Job Number:</label>
       <span>{{ jobDetails.jobNumber }}</span>
     </div>
-    <div class="info-row">
+    <div class="header-item">
       <label>Report Number:</label>
       <span>{{ jobDetails.reportNumber }}</span>
     </div>
-    <div class="info-row">
-      <label>Client:</label>
-      <span>{{ jobDetails.client }}</span>
-    </div>
-    <div class="info-row">
-      <label>Project:</label>
-      <span>{{ jobDetails.project }}</span>
-    </div>
-    <div class="info-row">
-      <label>Title:</label>
-      <span>{{ jobDetails.title }}</span>
-    </div>
   </div>
 
-  <!-- Form Section -->
-  <div class="form-section">
-    <h3>Enter Support Details</h3>
-    <form (ngSubmit)="onSubmit()" #supportForm="ngForm">
-      <div class="form-group">
-        <label for="drawingNo">Drawing Number:</label>
-        <input type="text" id="drawingNo" name="supportType" ngModel required />
-      </div>
+  <h3>Enter Support Details</h3>
 
-      <div class="form-group">
-        <label for="desc">Description:</label>
-        <input type="text" id="desc" name="desc" ngModel required />
-      </div>
-      <div class="form-group">
-        <label for="qty">Qty:</label>
-        <input type="text" id="qty" name="qty" ngModel required />
-      </div>
-      <div class="form-group">
-        <label for="itemNo">Item No:</label>
-        <input type="text" id="itemNo" name="itemNo" ngModel required />
-      </div>
-      <div class="form-group">
-        <label for="itemDesc">Item Description:</label>
-        <input type="text" id="itemDesc" name="itemDesc" ngModel required />
-      </div>
-      <div class="form-group">
-        <label for="specGrade">Specification Grade:</label>
-        <input type="text" id="specGrade" name="specGrade" ngModel required />
-      </div>
-      <div class="form-group">
-        <label for="thk">Thk/Size:</label>
-        <input type="text" id="thk" name="thk" ngModel required />
-      </div>
-      <div class="form-group">
-        <label for="heatNo">Heat No:</label>
-        <input type="text" id="heatNo" name="heatNo" ngModel required />
-      </div>
-      <div class="form-group">
-        <label for="MTCNo">MTC No:</label>
-        <input type="text" id="MTCNo" name="MTCNo" ngModel required />
-      </div>
-      <div class="form-group">
-        <label for="IGIRNo">IGIR No:</label>
-        <input type="text" id="IGIRNo" name="IGIRNo" ngModel required />
-      </div>
-      <div class="form-group">
-        <label for="material">Material:</label>
-        <input type="text" id="material" name="material" ngModel required />
-      </div>
-      <div class="form-group">
-        <label for="wps">WPS:</label>
-        <input type="text" id="wps" name="wps" ngModel required />
-      </div>
-      <div class="form-group">
-        <label for="welderId">Welder ID:</label>
-        <input type="text" id="welderId" name="welderId" ngModel required />
-      </div>
+  <div class="table-wrapper">
+    <table class="support-table">
+      <thead>
+      <tr>
+        <th>Drawing No</th>
+        <th>Description</th>
+        <th>Qty</th>
+        <th>Item No</th>
+        <th>Item Description</th>
+        <th>Specification Grade</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- Input Row -->
+      <tr>
+        <td><input type="text" [(ngModel)]="newSupport.drawingNo"  [class.invalid]="isFieldInvalid(newSupport.drawingNo)"/></td>
+        <td><input type="text" [(ngModel)]="newSupport.desc" /></td>
+        <td><input type="text" [(ngModel)]="newSupport.qty" /></td>
+        <td><input type="text" [(ngModel)]="newSupport.itemNo" /></td>
+        <td><input type="text" [(ngModel)]="newSupport.itemDesc" /></td>
+        <td><input type="text" [(ngModel)]="newSupport.specGrade" /></td>
+        <td><button (click)="saveSupport()"><i class="fa fa-save"></i></button></td>
+      </tr>
 
-
-      <button type="submit">Submit</button>
-    </form>
+      <!-- Saved Data Rows -->
+      <tr *ngFor="let support of supportList">
+        <td>{{ support.drawingNo }}</td>
+        <td>{{ support.desc }}</td>
+        <td>{{ support.qty }}</td>
+        <td>{{ support.itemNo }}</td>
+        <td>{{ support.itemDesc }}</td>
+        <td>{{ support.specGrade }}</td>
+        <td><button (click)="editSupport(support)"><i class="fa fa-edit"></i></button></td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 </div>
-
