@@ -1,44 +1,77 @@
+/* header.component.css */
 .header {
     background-color: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    padding: 18px 30px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    padding: 20px 30px;
     position: sticky;
     top: 0;
     z-index: 1000;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .container {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: auto;
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* Align everything to the left */
-    gap: 50px; /* Add space between logo and nav */
+    justify-content: flex-start;
+    gap: 60px;
 }
 
 .logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-text {
     font-size: 1.8rem;
-    font-weight: 700;
+    font-weight: 800;
     color: #2c3e50;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     white-space: nowrap;
+}
+
+.logo-highlight {
+    color: #0066cc;
 }
 
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 30px; /* Consistent space between links */
+    gap: 36px;
 }
 
-.nav-links a {
+.nav-link {
     text-decoration: none;
-    color: #2c3e50;
-    font-weight: 500;
+    color: #475569;
+    font-weight: 600;
     font-size: 1rem;
-    transition: color 0.3s ease, transform 0.2s ease;
+    transition: all 0.3s ease;
+    padding: 8px 0;
+    position: relative;
 }
 
-.nav-links a:hover {
-    color: #007bff;
+.nav-link:hover {
+    color: #0066cc;
     transform: translateY(-2px);
+}
+
+.nav-link.active {
+    color: #0066cc;
+}
+
+.nav-link.active:after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #0066cc;
+}
+
+.main-content {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
