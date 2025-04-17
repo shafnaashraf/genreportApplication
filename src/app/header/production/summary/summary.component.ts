@@ -18,7 +18,7 @@ export class SummaryComponent{
   searchJobNumber: string = '';
   selectedReportNumbers: string[] = [];
 
-  availableReportNumbers: string[] = ['RPT001', 'RPT002', 'RPT003'];
+  availableReportNumbers: string[] = ['RPT001', 'RPT002', 'RPT003' ,'12','321','321'];
 
   jobNumber: string = '';
   reportNumber: string = '';
@@ -32,8 +32,15 @@ export class SummaryComponent{
     this.showReportHeader = true;
   }
 
-  toggleReportSelection(report: string, isChecked: Event) {
-    if (isChecked) {
+
+  showDropdown = false
+
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
+
+  toggleReportSelection(report: string, event: any) {
+    if (event.target.checked) {
       this.selectedReportNumbers.push(report);
     } else {
       this.selectedReportNumbers = this.selectedReportNumbers.filter(r => r !== report);

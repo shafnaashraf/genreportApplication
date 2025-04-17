@@ -10,27 +10,33 @@
     />
   </div>
 
-  <div class="field-group checkbox-group">
-    <label>Report Numbers:</label>
-    <div class="checkbox-list">
-      <div
-        class="checkbox-item"
-        *ngFor="let report of availableReportNumbers"
-      >
-        <input
-          type="checkbox"
-          [value]="report"
-          (change)="toggleReportSelection(report, $event)"
-          [checked]="selectedReportNumbers.includes(report)"
-        />
-        <span>{{ report }}</span>
+  <div class="field-group">
+    <label >Report Number:</label>
+    <div class="dropdown-container">
+      <div class="dropdown-display" (click)="toggleDropdown()">
+        {{ selectedReportNumbers.length ? selectedReportNumbers.join(', ') : 'Select Report Numbers' }}
+        <span class="arrow">&#9662;</span>
+      </div>
+
+      <div class="checkbox-list" *ngIf="showDropdown">
+        <div class="checkbox-item" *ngFor="let report of availableReportNumbers">
+          <input
+            type="checkbox"
+            [value]="report"
+            (change)="toggleReportSelection(report, $event)"
+            [checked]="selectedReportNumbers.includes(report)"
+          />
+          <span>{{ report }}</span>
+        </div>
       </div>
     </div>
   </div>
 
-  <button (click)="search()">Search</button>
+  <div class="field-group button-group">
+    <label>&nbsp;</label>
+    <button (click)="search()">Search</button>
+  </div>
 </div>
-
 
 <div class="report-header">
   <div class="job-info">
