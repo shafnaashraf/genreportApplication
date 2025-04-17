@@ -50,4 +50,28 @@ export class SummaryComponent{
   search() {
     return 1;
   }
+
+  summaryRows = [
+    {
+      jobNumber: 'REST',
+      title: 'PIPE SHOE SUPPORT',
+      totalQty: '9',
+      uom: 'NOS',
+      cutting: '100%',
+      fitup: '100%',
+      welding: '100%',
+      fabricationComp: '100%',
+      paintReleaseDate: '',
+      blastPaint: '0%',
+      comp: '85%',
+      remarks: '',
+      isEditing: false
+    },
+    // add more rows here...
+  ];
+
+  toggleEdit(row: any) {
+    row.isEditing = !row.isEditing;
+  }
+
 }

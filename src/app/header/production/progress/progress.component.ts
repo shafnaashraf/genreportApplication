@@ -22,7 +22,7 @@ export class ProgressComponent{
 
   availableReportNumbers: string[] = ['RPT001', 'RPT002', 'RPT003' ,'12','321','321'];
 
-  showReportHeader: boolean = false;
+  showReportHeader: boolean = false; //implement ngif for table
 
   showDropdown = false
 
@@ -39,6 +39,145 @@ export class ProgressComponent{
   }
 
   search() {
-    return 1;
+    return 1; //write backend logic here
+  }
+
+  rows = [
+    {
+      assemblyTagNo: 'BM-1',
+      drawingNo: 'SW-300-100-16"-CS',
+      title: 'PIPE SHOE SUPPORT',
+      weight: 1,
+      qty: 1,
+      cutting: '100%',
+      fitup: '100%',
+      welding: '100%',
+      paintReleaseDate: '',
+      blastPaint: '0%',
+      remarks: '',
+      editMode: false
+    },
+    {
+      assemblyTagNo: 'BM-2',
+      drawingNo: 'SW-300-100-16"-CS',
+      title: 'PIPE  SUPPORT',
+      weight: 1,
+      qty: 1,
+      cutting: '100%',
+      fitup: '100%',
+      welding: '100%',
+      paintReleaseDate: '',
+      blastPaint: '0%',
+      remarks: '',
+      editMode: false
+    },
+    {
+      assemblyTagNo: 'BM-2',
+      drawingNo: 'SW-300-100-16"-CS',
+      title: 'PIPE  SUPPORT',
+      weight: 1,
+      qty: 1,
+      cutting: '100%',
+      fitup: '100%',
+      welding: '100%',
+      paintReleaseDate: '',
+      blastPaint: '0%',
+      remarks: '',
+      editMode: false
+    },
+    {
+      assemblyTagNo: 'BM-2',
+      drawingNo: 'SW-300-100-16"-CS',
+      title: 'PIPE  SUPPORT',
+      weight: 1,
+      qty: 1,
+      cutting: '100%',
+      fitup: '100%',
+      welding: '100%',
+      paintReleaseDate: '',
+      blastPaint: '0%',
+      remarks: '',
+      editMode: false
+    },
+    {
+      assemblyTagNo: 'BM-2',
+      drawingNo: 'SW-300-100-16"-CS',
+      title: 'PIPE  SUPPORT',
+      weight: 1,
+      qty: 1,
+      cutting: '100%',
+      fitup: '100%',
+      welding: '100%',
+      paintReleaseDate: '',
+      blastPaint: '0%',
+      remarks: '',
+      editMode: false
+    },
+    {
+      assemblyTagNo: 'BM-2',
+      drawingNo: 'SW-300-100-16"-CS',
+      title: 'PIPE  SUPPORT',
+      weight: 1,
+      qty: 1,
+      cutting: '100%',
+      fitup: '100%',
+      welding: '100%',
+      paintReleaseDate: '',
+      blastPaint: '0%',
+      remarks: '',
+      editMode: false
+    },
+    {
+      assemblyTagNo: 'BM-2',
+      drawingNo: 'SW-300-100-16"-CS',
+      title: 'PIPE  SUPPORT',
+      weight: 1,
+      qty: 1,
+      cutting: '100%',
+      fitup: '100%',
+      welding: '100%',
+      paintReleaseDate: '',
+      blastPaint: '0%',
+      remarks: '',
+      editMode: false
+    },
+    {
+      assemblyTagNo: 'BM-2',
+      drawingNo: 'SW-300-100-16"-CS',
+      title: 'PIPE  SUPPORT',
+      weight: 1,
+      qty: 1,
+      cutting: '100%',
+      fitup: '100%',
+      welding: '100%',
+      paintReleaseDate: '',
+      blastPaint: '0%',
+      remarks: '',
+      editMode: false
+    },
+    {
+      assemblyTagNo: 'BM-2',
+      drawingNo: 'SW-300-100-16"-CS',
+      title: 'PIPE  SUPPORT',
+      weight: 1,
+      qty: 1,
+      cutting: '100%',
+      fitup: '100%',
+      welding: '100%',
+      paintReleaseDate: '',
+      blastPaint: '0%',
+      remarks: '',
+      editMode: false
+    },
+
+    // Add more rows if needed
+  ];
+
+  toggleEdit(row: any) {
+    row.editMode = !row.editMode;
+    if (!row.editMode) {
+      // Optional: Save logic here (e.g. send to backend)
+      console.log('Saved Row:', row);
+    }
   }
 }

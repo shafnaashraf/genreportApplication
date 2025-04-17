@@ -59,23 +59,61 @@
     <th>Paint Release Date</th>
     <th>Blasting & Painting</th>
     <th>Remarks</th>
+    <th>Action</th>
   </tr>
   </thead>
   <tbody>
-  <!-- Sample Row -->
-  <tr>
-    <td>BM-1</td>
-    <td>SW-300-100-16"-CS</td>
-    <td>PIPE SHOE SUPPORT</td>
-    <td>1</td>
-    <td>1</td>
-    <td>100%</td>
-    <td>100%</td>
-    <td>100%</td>
-    <td></td>
-    <td>0%</td>
-    <td></td>
+  <tr *ngFor="let row of rows; let i = index">
+    <td>
+      <input *ngIf="row.editMode" [(ngModel)]="row.assemblyTagNo" />
+      <span *ngIf="!row.editMode">{{ row.assemblyTagNo }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.editMode" [(ngModel)]="row.drawingNo" />
+      <span *ngIf="!row.editMode">{{ row.drawingNo }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.editMode" [(ngModel)]="row.title" />
+      <span *ngIf="!row.editMode">{{ row.title }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.editMode" [(ngModel)]="row.weight" />
+      <span *ngIf="!row.editMode">{{ row.weight }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.editMode" [(ngModel)]="row.qty" />
+      <span *ngIf="!row.editMode">{{ row.qty }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.editMode" [(ngModel)]="row.cutting" />
+      <span *ngIf="!row.editMode">{{ row.cutting }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.editMode" [(ngModel)]="row.fitup" />
+      <span *ngIf="!row.editMode">{{ row.fitup }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.editMode" [(ngModel)]="row.welding" />
+      <span *ngIf="!row.editMode">{{ row.welding }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.editMode" [(ngModel)]="row.paintReleaseDate" />
+      <span *ngIf="!row.editMode">{{ row.paintReleaseDate }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.editMode" [(ngModel)]="row.blastPaint" />
+      <span *ngIf="!row.editMode">{{ row.blastPaint }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.editMode" [(ngModel)]="row.remarks" />
+      <span *ngIf="!row.editMode">{{ row.remarks }}</span>
+    </td>
+    <td>
+      <button class="edit-btn" (click)="toggleEdit(row)">
+        {{ row.editMode ? 'Save' : 'Edit' }}
+      </button>
+    </td>
   </tr>
-  <!-- Add more rows as needed -->
   </tbody>
+
 </table>

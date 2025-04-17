@@ -137,3 +137,34 @@ thead th {
 .button-group button:hover {
   background-color: #388e3c;
 }
+
+.summary-table input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 2px 4px;
+  font-size: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.summary-table button {
+  font-size: 8px;
+  padding: 2px 4px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.edit-btn {
+  background-color: #555566;
+  color: white;
+  border: none;
+  padding: 2px 6px;
+  font-size: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  height: 20px;
+  width: 50px;
+}
+
+.edit-btn:hover {
+  background-color: #777788;
+}

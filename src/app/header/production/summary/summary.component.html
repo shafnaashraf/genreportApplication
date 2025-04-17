@@ -61,23 +61,62 @@
     <th>Blasting & Painting</th>
     <th>Comp.%</th>
     <th>Remarks</th>
+    <th>Action</th>
   </tr>
   </thead>
   <tbody>
-  <tr>
-    <td>REST</td>
-    <td>PIPE SHOE SUPPORT</td>
-    <td>9</td>
-    <td>NOS</td>
-    <td>100%</td>
-    <td>100%</td>
-    <td>100%</td>
-    <td>100%</td>
-    <td></td>
-    <td>0%</td>
-    <td>85%</td>
-    <td></td>
+  <tr *ngFor="let row of summaryRows; let i = index">
+    <td>
+      <input *ngIf="row.isEditing" [(ngModel)]="row.jobNumber" />
+      <span *ngIf="!row.isEditing">{{ row.jobNumber }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.isEditing" [(ngModel)]="row.title" />
+      <span *ngIf="!row.isEditing">{{ row.title }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.isEditing" [(ngModel)]="row.totalQty" />
+      <span *ngIf="!row.isEditing">{{ row.totalQty }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.isEditing" [(ngModel)]="row.uom" />
+      <span *ngIf="!row.isEditing">{{ row.uom }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.isEditing" [(ngModel)]="row.cutting" />
+      <span *ngIf="!row.isEditing">{{ row.cutting }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.isEditing" [(ngModel)]="row.fitup" />
+      <span *ngIf="!row.isEditing">{{ row.fitup }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.isEditing" [(ngModel)]="row.welding" />
+      <span *ngIf="!row.isEditing">{{ row.welding }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.isEditing" [(ngModel)]="row.fabricationComp" />
+      <span *ngIf="!row.isEditing">{{ row.fabricationComp }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.isEditing" [(ngModel)]="row.paintReleaseDate" />
+      <span *ngIf="!row.isEditing">{{ row.paintReleaseDate }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.isEditing" [(ngModel)]="row.blastPaint" />
+      <span *ngIf="!row.isEditing">{{ row.blastPaint }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.isEditing" [(ngModel)]="row.comp" />
+      <span *ngIf="!row.isEditing">{{ row.comp }}</span>
+    </td>
+    <td>
+      <input *ngIf="row.isEditing" [(ngModel)]="row.remarks" />
+      <span *ngIf="!row.isEditing">{{ row.remarks }}</span>
+    </td>
+    <td>
+      <button class="edit-btn" (click)="toggleEdit(row)">{{ row.isEditing ? 'Save' : 'Edit' }}</button>
+    </td>
   </tr>
-  <!-- Add more rows -->
   </tbody>
 </table>
