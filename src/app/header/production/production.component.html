@@ -1,9 +1,21 @@
-<div class="tab-container">
-  <button (click)="activeTab = 'progress'" [ngClass]="{ active: activeTab === 'progress' }">PROGRESS</button>
-  <button (click)="activeTab = 'summary'" [ngClass]="{ active: activeTab === 'summary' }">SUMMARY</button>
+<!-- HTML -->
+<div class="tabs-container">
+  <div class="tabs-header">
+    <button class="tab-button"
+            [ngClass]="{'active': activeTab === 'progress'}"
+            (click)="activeTab = 'progress'">
+      <span>Progress</span>
+    </button>
+    <button class="tab-button"
+            [ngClass]="{'active': activeTab === 'summary'}"
+            (click)="activeTab = 'summary'">
+      <span>Summary</span>
+    </button>
+  </div>
+  <div class="tab-content">
+    <app-progress *ngIf="activeTab === 'progress'"></app-progress>
+    <app-summary *ngIf="activeTab === 'summary'"></app-summary>
+  </div>
 </div>
 
-<div class="tab-content">
-  <app-progress *ngIf="activeTab === 'progress'"></app-progress>
-  <app-summary *ngIf="activeTab === 'summary'"></app-summary>
-</div>
+

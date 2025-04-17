@@ -1,28 +1,58 @@
-.tab-container {
-  margin-bottom: 10px;
-  margin-left: 20px;
-  margin-top: 10px;
+.tabs-container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  max-width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
 }
 
-button {
-  padding: 4px 16px;
+.tabs-header {
+  display: flex;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  padding: 0 16px;
+}
+
+.tab-button {
+  background: transparent;
   border: none;
-  background-color: white;
-  border: 1px solid #ccc;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6c757d;
   cursor: pointer;
-  margin-right: 5px;
-  font-size: 12px;
+  transition: all 0.2s ease;
+  position: relative;
+  outline: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-button.active {
-  background-color: #999;
-  font-weight: bold;
-  border-color: #999;
+.tab-button:hover {
+  color: #495057;
+}
+
+.tab-button.active {
+  color: #4263eb;
+  font-weight: 600;
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #4263eb;
+  border-radius: 3px 3px 0 0;
 }
 
 .tab-content {
-  padding: 5px;
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
-  font-size: 10px;
+  padding: 16px;
+  background-color: #ffffff;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #212529;
 }
