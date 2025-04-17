@@ -65,15 +65,15 @@
   <tbody>
   <tr *ngFor="let row of rows; let i = index">
     <td>
-      <input *ngIf="row.editMode" [(ngModel)]="row.assemblyTagNo" />
+      <input *ngIf="row.editMode" [disabled]="true" [(ngModel)]="row.assemblyTagNo" />
       <span *ngIf="!row.editMode">{{ row.assemblyTagNo }}</span>
     </td>
     <td>
-      <input *ngIf="row.editMode" [(ngModel)]="row.drawingNo" />
+      <input *ngIf="row.editMode"  [disabled]="true" [(ngModel)]="row.drawingNo" />
       <span *ngIf="!row.editMode">{{ row.drawingNo }}</span>
     </td>
     <td>
-      <input *ngIf="row.editMode" [(ngModel)]="row.title" />
+      <input *ngIf="row.editMode" [disabled]="true" [(ngModel)]="row.title" />
       <span *ngIf="!row.editMode">{{ row.title }}</span>
     </td>
     <td>

@@ -161,3 +161,11 @@ td input {
   font-size: 8px;
   padding: 2px;
 }
+input:disabled {
+  background-color: #f9f9f9;
+  color: #333;
+  border: 1px solid #ccc;
+  cursor: not-allowed;
+  opacity: 2;
+  font-weight: 900/* remove default grayed-out look */
+}

@@ -122,7 +122,7 @@ thead th {
 
 
 .button-group button {
-  background-color: #4caf50;
+  background-color: #555566;
   color: white;
   padding: 2px 4px;
   border: none;
@@ -135,7 +135,7 @@ thead th {
 }
 
 .button-group button:hover {
-  background-color: #388e3c;
+  background-color: #777788;
 }
 
 .summary-table input {
