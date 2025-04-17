@@ -1,119 +1,148 @@
-<div class="search-container">
-  <div class="field-group">
-    <label for="searchJobNumber">Job Number:</label>
-    <input
-      type="text"
-      id="searchJobNumber"
-      placeholder="Enter Job Number"
-      [(ngModel)]="searchJobNumber"
-      name="jobNumber"
-    />
-  </div>
-
-  <div class="field-group">
-    <label >Report Number:</label>
-    <div class="dropdown-container">
-      <div class="dropdown-display" (click)="toggleDropdown()">
-        {{ selectedReportNumbers.length ? selectedReportNumbers.join(', ') : 'Select Report Numbers' }}
-        <span class="arrow">&#9662;</span>
-      </div>
-
-      <div class="checkbox-list" *ngIf="showDropdown">
-        <div class="checkbox-item" *ngFor="let report of availableReportNumbers">
-          <input
-            type="checkbox"
-            [value]="report"
-            (change)="toggleReportSelection(report, $event)"
-            [checked]="selectedReportNumbers.includes(report)"
-          />
-          <span>{{ report }}</span>
-        </div>
-      </div>
+<!-- HTML Template -->
+<div class="container">
+  <div class="page-header">
+    <div class="page-title">Project Progress Tracker</div>
+    <div class="action-buttons">
+      <button class="action-btn import-btn">
+        <span class="btn-icon">↓</span> Import
+      </button>
+      <button class="action-btn export-btn" [disabled]="!searchPerformed || !hasSearchResults" [ngClass]="{'disabled-btn': !searchPerformed || !hasSearchResults}">
+        <span class="btn-icon">↑</span> Export
+      </button>
     </div>
   </div>
 
-  <div class="field-group button-group">
-    <label>&nbsp;</label>
-    <button (click)="search()">Search</button>
+  <div class="search-container">
+    <div class="field-group">
+      <input
+        type="text"
+        id="searchJobNumber"
+        placeholder="Enter Job Number"
+        [(ngModel)]="searchJobNumber"
+        name="jobNumber"
+      />
+    </div>
+
+    <div class="field-group">
+      <div class="dropdown-container">
+        <div class="dropdown-display" (click)="toggleDropdown()">
+          {{ selectedReportNumbers.length ? selectedReportNumbers.join(', ') : 'Select Report Numbers' }}
+          <span class="arrow">&#9662;</span>
+        </div>
+
+        <div class="checkbox-list" *ngIf="showDropdown">
+          <div class="checkbox-item" *ngFor="let report of availableReportNumbers">
+            <input
+              type="checkbox"
+              [value]="report"
+              (change)="toggleReportSelection(report, $event)"
+              [checked]="selectedReportNumbers.includes(report)"
+            />
+            <span>{{ report }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group button-group">
+
+      <button class="search-btn" (click)="search()">Search</button>
+    </div>
+  </div>
+
+  <!-- Show this section only when search has been performed -->
+  <div *ngIf="searchPerformed">
+    <!-- Show when search returns results -->
+    <div *ngIf="hasSearchResults">
+      <div class="report-header">
+        <div class="job-info">
+          <span class="info-label"><strong>JOB NUMBER:</strong> <span class="info-value">{{ searchJobNumber }}</span></span>
+          <span class="info-label"><strong>REPORT NUMBER:</strong> <span class="info-value">{{ selectedReportNumbers.join(', ') }}</span></span>
+        </div>
+        <div class="title">DAS ISLAND SECTIONAL REPLACEMENT OF LZ RELIEF HEADER</div>
+      </div>
+
+      <div class="table-container">
+        <table class="progress-table">
+          <thead>
+          <tr>
+            <th>Assembly Tag No</th>
+            <th>DRAWING No.</th>
+            <th>TITLE</th>
+            <th>Wt. (Kg)</th>
+            <th>QTY</th>
+            <th>Cutting</th>
+            <th>Fitup</th>
+            <th>Welding</th>
+            <th>Paint Date</th>
+            <th>Painting</th>
+            <th>Remarks</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let row of filteredRows; let i = index" [ngClass]="{'edited-row': row.isEdited}">
+            <td>
+              <input *ngIf="row.editMode" [disabled]="true" [(ngModel)]="row.assemblyTagNo" />
+              <span *ngIf="!row.editMode">{{ row.assemblyTagNo }}</span>
+            </td>
+            <td>
+              <input *ngIf="row.editMode" [disabled]="true" [(ngModel)]="row.drawingNo" />
+              <span *ngIf="!row.editMode">{{ row.drawingNo }}</span>
+            </td>
+            <td>
+              <input *ngIf="row.editMode" [disabled]="true" [(ngModel)]="row.title" />
+              <span *ngIf="!row.editMode">{{ row.title }}</span>
+            </td>
+            <td>
+              <input *ngIf="row.editMode" [(ngModel)]="row.weight" />
+              <span *ngIf="!row.editMode">{{ row.weight }}</span>
+            </td>
+            <td>
+              <input *ngIf="row.editMode" [(ngModel)]="row.qty" />
+              <span *ngIf="!row.editMode">{{ row.qty }}</span>
+            </td>
+            <td>
+              <input *ngIf="row.editMode" [(ngModel)]="row.cutting" />
+              <span *ngIf="!row.editMode">{{ row.cutting }}</span>
+            </td>
+            <td>
+              <input *ngIf="row.editMode" [(ngModel)]="row.fitup" />
+              <span *ngIf="!row.editMode">{{ row.fitup }}</span>
+            </td>
+            <td>
+              <input *ngIf="row.editMode" [(ngModel)]="row.welding" />
+              <span *ngIf="!row.editMode">{{ row.welding }}</span>
+            </td>
+            <td>
+              <input *ngIf="row.editMode" [(ngModel)]="row.paintReleaseDate" type="date" />
+              <span *ngIf="!row.editMode">{{ row.paintReleaseDate }}</span>
+            </td>
+            <td>
+              <input *ngIf="row.editMode" [(ngModel)]="row.blastPaint" />
+              <span *ngIf="!row.editMode">{{ row.blastPaint }}</span>
+            </td>
+            <td>
+              <input *ngIf="row.editMode" [(ngModel)]="row.remarks" />
+              <span *ngIf="!row.editMode">{{ row.remarks }}</span>
+            </td>
+            <td>
+              <button class="edit-btn" (click)="toggleEdit(row)">
+                {{ row.editMode ? 'Save' : 'Edit' }}
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Show when no results found -->
+    <div *ngIf="!hasSearchResults" class="no-results">
+      <div class="no-results-icon">🔍</div>
+      <h3>No Results Found</h3>
+      <p>No matching records found for Job Number "{{ searchJobNumber }}" and Report Number "{{ selectedReportNumbers.join(', ') }}"</p>
+      <p>Please try with different search criteria.</p>
+    </div>
   </div>
 </div>
-<div class="report-header">
-  <div class="job-info">
-    <label><strong>JOB NUMBER:</strong> 2403</label>
-    <label><strong>REPORT NUMBER:</strong> 1</label>
-  </div>
-  <div class="title">DAS ISLAND SECTIONAL REPLACEMENT OF LZ RELIEF HEADER</div>
-</div>
-
-<table class="progress-table">
-  <thead>
-  <tr>
-    <th>Assembly Tag No</th>
-    <th>DRAWING No.</th>
-    <th>TITLE</th>
-    <th>Wt. (Kg)</th>
-    <th>QTY</th>
-    <th>Cutting</th>
-    <th>Fitup</th>
-    <th>Welding</th>
-    <th>Paint Release Date</th>
-    <th>Blasting & Painting</th>
-    <th>Remarks</th>
-    <th>Action</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let row of rows; let i = index">
-    <td>
-      <input *ngIf="row.editMode" [disabled]="true" [(ngModel)]="row.assemblyTagNo" />
-      <span *ngIf="!row.editMode">{{ row.assemblyTagNo }}</span>
-    </td>
-    <td>
-      <input *ngIf="row.editMode"  [disabled]="true" [(ngModel)]="row.drawingNo" />
-      <span *ngIf="!row.editMode">{{ row.drawingNo }}</span>
-    </td>
-    <td>
-      <input *ngIf="row.editMode" [disabled]="true" [(ngModel)]="row.title" />
-      <span *ngIf="!row.editMode">{{ row.title }}</span>
-    </td>
-    <td>
-      <input *ngIf="row.editMode" [(ngModel)]="row.weight" />
-      <span *ngIf="!row.editMode">{{ row.weight }}</span>
-    </td>
-    <td>
-      <input *ngIf="row.editMode" [(ngModel)]="row.qty" />
-      <span *ngIf="!row.editMode">{{ row.qty }}</span>
-    </td>
-    <td>
-      <input *ngIf="row.editMode" [(ngModel)]="row.cutting" />
-      <span *ngIf="!row.editMode">{{ row.cutting }}</span>
-    </td>
-    <td>
-      <input *ngIf="row.editMode" [(ngModel)]="row.fitup" />
-      <span *ngIf="!row.editMode">{{ row.fitup }}</span>
-    </td>
-    <td>
-      <input *ngIf="row.editMode" [(ngModel)]="row.welding" />
-      <span *ngIf="!row.editMode">{{ row.welding }}</span>
-    </td>
-    <td>
-      <input *ngIf="row.editMode" [(ngModel)]="row.paintReleaseDate" />
-      <span *ngIf="!row.editMode">{{ row.paintReleaseDate }}</span>
-    </td>
-    <td>
-      <input *ngIf="row.editMode" [(ngModel)]="row.blastPaint" />
-      <span *ngIf="!row.editMode">{{ row.blastPaint }}</span>
-    </td>
-    <td>
-      <input *ngIf="row.editMode" [(ngModel)]="row.remarks" />
-      <span *ngIf="!row.editMode">{{ row.remarks }}</span>
-    </td>
-    <td>
-      <button class="edit-btn" (click)="toggleEdit(row)">
-        {{ row.editMode ? 'Save' : 'Edit' }}
-      </button>
-    </td>
-  </tr>
-  </tbody>
-
-</table>

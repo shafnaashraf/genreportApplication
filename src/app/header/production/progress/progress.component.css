@@ -1,78 +1,132 @@
+/* Global Styles */
+* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 16px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Page Header with Title and Import/Export Buttons */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.import-btn {
+  background-color: #f8f9fa;
+  color: #444;
+  border: 1px solid #ddd;
+}
+
+.import-btn:hover {
+  background-color: #e9ecef;
+}
+
+.export-btn {
+  background-color: #27ae60;
+  color: white;
+}
+
+.export-btn:hover {
+  background-color: #219653;
+}
+
+.disabled-btn {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn-icon {
+  font-size: 16px;
+}
+
+/* Search Container Styles */
 .search-container {
   display: flex;
-  gap: 20px;
-  align-items: flex-end;
-  padding: 6px;
-  border: 1px solid #ccc;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 5px;
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
-  background-color: #ccc;
+  background-color: #f9f9f9;
   max-width: 100%;
-  margin-left: 0px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
-  margin-bottom: 10px;
 }
+
 .field-group {
   display: flex;
   flex-direction: column;
-  min-width: 200px;
+  min-width: 220px;
   flex: 1;
+  font-size: 10px;
 }
 
 .field-group input,
 .dropdown-display {
-  padding: 8px 10px;
-  font-size: 10px;
-  border: 1px solid #ccc;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
   border-radius: 6px;
-  height: 28px;
-  box-sizing: border-box;
+  height: 40px;
   width: 100%;
   background-color: white;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.field-group input:focus,
+.dropdown-display:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
 .field-group label {
   font-weight: 600;
+  margin-bottom: 8px;
+  color: #555;
+  font-size: 14px;
 }
 
-/* Report Header & Table Styles */
-.report-header {
-  background-color: #d9d9d9;
-  text-align: center;
-  font-weight: bold;
-  padding: 5px;
-  margin-bottom: 7px;
-}
-
-.job-info {
-  display: flex;
-  justify-content: space-between;
-  padding: 2px 10px;
-  font-size: 9px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 8px;
-}
-
-th, td {
-  border: 1px solid #444;
-  padding: 3px;
-  text-align: center;
-}
-
-thead th {
-  background-color: #f0f0f0;
-  font-size: 10px;
-}
-
-.summary-table tbody tr td:first-child {
-  font-weight: bold;
-}
-
+/* Dropdown Styles */
 .dropdown-container {
   position: relative;
+  width: 100%;
 }
 
 .dropdown-display {
@@ -80,11 +134,17 @@ thead th {
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-
+  user-select: none;
 }
 
 .arrow {
   margin-left: 8px;
+  color: #888;
+  transition: transform 0.2s;
+}
+
+.dropdown-display:hover .arrow {
+  color: #333;
 }
 
 .checkbox-list {
@@ -93,79 +153,243 @@ thead th {
   left: 0;
   z-index: 10;
   width: 100%;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   border-radius: 6px;
   background-color: #fff;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin-top: 4px;
-  padding: 5px;
-  max-height: 100px;
+  padding: 8px 0;
+  max-height: 200px;
   overflow-y: auto;
 }
+
 .checkbox-list::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 .checkbox-list::-webkit-scrollbar-thumb {
-  background-color: #aaa;
+  background-color: #ccc;
   border-radius: 4px;
+}
+
+.checkbox-list::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
 }
 
 .checkbox-item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 2px 0;
-  width: fit-content;
-  margin-left: 20px;
+  gap: 8px;
+  padding: 8px 12px;
+  transition: background-color 0.2s;
+  cursor: pointer;
 }
 
+.checkbox-item:hover {
+  background-color: #f5f5f5;
+}
 
-.button-group button {
-  background-color: #555566;
+.checkbox-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* Button Styles */
+.search-btn {
+  background-color: #3498db;
   color: white;
-  padding: 2px 4px;
+  padding: 10px 16px;
   border: none;
   border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  height: 28px;
-  width: 60px;
+  height: 40px;
+  min-width: 100px;
+  font-size: 14px;
 }
 
-.button-group button:hover {
-  background-color: #777788;
+.search-btn:hover {
+  background-color: #2980b9;
 }
 
-.edit-btn {
-  background-color: #555566;
-  color: white;
-  border: none;
-  padding: 2px 6px;
-  font-size: 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  height: 20px;
-  width: 50px;
+/* Report Header Styles */
+.report-header {
+  background-color: #f8f9fa;
+  text-align: center;
+  font-weight: bold;
+  padding: 12px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
 }
 
-.edit-btn:hover {
-  background-color: #777788;
+.job-info {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px 8px;
+  font-size: 13px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 8px;
 }
 
+.info-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.info-value {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.report-header .title {
+  font-size: 16px;
+  color: #2c3e50;
+}
+
+/* Table Styles - Made more compact */
+.table-container {
+  overflow-x: auto;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  background-color: white;
+}
+
+th, td {
+  border: 1px solid #e0e0e0;
+  padding: 8px 10px;
+  text-align: left;
+}
+
+thead th {
+  background-color: #f1f5f9;
+  color: #334155;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  font-size: 12px;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+tbody tr:hover {
+  background-color: #f0f7ff;
+}
+
+.edited-row {
+  animation: highlight 2s ease-out;
+}
+
+@keyframes highlight {
+  0% { background-color: rgba(255, 251, 214, 1); }
+  100% { background-color: transparent; }
+}
+
+/* Input Styles */
 td input {
   width: 100%;
   box-sizing: border-box;
-  font-size: 8px;
-  padding: 2px;
+  font-size: 13px;
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: border-color 0.2s;
 }
+
+td input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+}
+
 input:disabled {
-  background-color: #f9f9f9;
-  color: #333;
-  border: 1px solid #ccc;
+  background-color: #f5f5f5;
+  color: #555;
+  border: 1px solid #ddd;
   cursor: not-allowed;
-  opacity: 2;
-  font-weight: 900/* remove default grayed-out look */
+}
+
+/* Edit Button Styles */
+.edit-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 60px;
+}
+
+.edit-btn:hover {
+  background-color: #2980b9;
+}
+
+/* No Results Message */
+.no-results {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px dashed #ddd;
+  margin: 20px 0;
+}
+
+.no-results-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: #bbb;
+}
+
+.no-results h3 {
+  font-size: 20px;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+.no-results p {
+  color: #777;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .action-buttons {
+    width: 100%;
+  }
+
+  .action-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .search-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .field-group {
+    width: 100%;
+  }
 }
