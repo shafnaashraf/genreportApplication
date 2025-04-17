@@ -1,0 +1,9 @@
+<div class="tab-container">
+  <button (click)="activeTab = 'progress'" [ngClass]="{ active: activeTab === 'progress' }">PROGRESS</button>
+  <button (click)="activeTab = 'summary'" [ngClass]="{ active: activeTab === 'summary' }">SUMMARY</button>
+</div>
+
+<div class="tab-content">
+  <app-progress *ngIf="activeTab === 'progress'"></app-progress>
+  <app-summary *ngIf="activeTab === 'summary'"></app-summary>
+</div>

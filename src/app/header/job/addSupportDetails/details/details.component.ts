@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {NgForOf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 
 interface SupportDetail {
   drawingNo: string;
@@ -17,7 +17,8 @@ interface SupportDetail {
   styleUrl: 'details.component.css',
   imports: [
     FormsModule,
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   standalone: true
 })
@@ -53,12 +54,19 @@ export class DetailsComponent{
     }
   }
 
-  editSupport(item: any) {
-    this.newSupport = { ...item };
-  }
-
   isFieldInvalid(value: string): boolean {
     return value === '';
+  }
+
+  editingRow: any = null;
+
+  editSupport(support: any) {
+    this.editingRow = support; // clone the object to avoid modifying directly
+  }
+
+  saveEditedSupport(original: any) {
+    Object.assign(original, this.editingRow); // update original with edited data
+    this.editingRow = null;
   }
 
 }

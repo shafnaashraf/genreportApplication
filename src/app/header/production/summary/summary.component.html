@@ -1,0 +1,77 @@
+<div class="search-container">
+  <div class="field-group">
+    <label for="searchJobNumber">Job Number:</label>
+    <input
+      type="text"
+      id="searchJobNumber"
+      placeholder="Enter Job Number"
+      [(ngModel)]="searchJobNumber"
+      name="jobNumber"
+    />
+  </div>
+
+  <div class="field-group checkbox-group">
+    <label>Report Numbers:</label>
+    <div class="checkbox-list">
+      <div
+        class="checkbox-item"
+        *ngFor="let report of availableReportNumbers"
+      >
+        <input
+          type="checkbox"
+          [value]="report"
+          (change)="toggleReportSelection(report, $event)"
+          [checked]="selectedReportNumbers.includes(report)"
+        />
+        <span>{{ report }}</span>
+      </div>
+    </div>
+  </div>
+
+  <button (click)="search()">Search</button>
+</div>
+
+
+<div class="report-header">
+  <div class="job-info">
+    <label><strong>JOB NUMBER:</strong> {{searchJobNumber}}</label>
+    <label><strong>REPORT NUMBER:</strong> {{selectedReportNumbers}}</label>
+  </div>
+  <div class="title">DAS ISLAND SECTIONAL REPLACEMENT OF LZ RELIEF HEADER</div>
+</div>
+
+<table class="summary-table">
+  <thead>
+  <tr>
+    <th>JOB NUMBER</th>
+    <th>TITLE</th>
+    <th>Total QTY</th>
+    <th>UOM</th>
+    <th>Cutting</th>
+    <th>Fitup</th>
+    <th>Welding</th>
+    <th>Fabrication Comp.%</th>
+    <th>Paint Release Date</th>
+    <th>Blasting & Painting</th>
+    <th>Comp.%</th>
+    <th>Remarks</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>REST</td>
+    <td>PIPE SHOE SUPPORT</td>
+    <td>9</td>
+    <td>NOS</td>
+    <td>100%</td>
+    <td>100%</td>
+    <td>100%</td>
+    <td>100%</td>
+    <td></td>
+    <td>0%</td>
+    <td>85%</td>
+    <td></td>
+  </tr>
+  <!-- Add more rows -->
+  </tbody>
+</table>

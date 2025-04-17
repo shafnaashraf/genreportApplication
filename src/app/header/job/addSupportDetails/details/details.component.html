@@ -18,7 +18,7 @@
       <thead>
       <tr>
         <th>Drawing No</th>
-        <th>Description</th>
+        <th>Assembly Tag No</th>
         <th>Qty</th>
         <th>Item No</th>
         <th>Item Description</th>
@@ -40,13 +40,38 @@
 
       <!-- Saved Data Rows -->
       <tr *ngFor="let support of supportList">
-        <td>{{ support.drawingNo }}</td>
-        <td>{{ support.desc }}</td>
-        <td>{{ support.qty }}</td>
-        <td>{{ support.itemNo }}</td>
-        <td>{{ support.itemDesc }}</td>
-        <td>{{ support.specGrade }}</td>
-        <td><button (click)="editSupport(support)"><i class="fa fa-edit"></i></button></td>
+        <td>
+          <input *ngIf="editingRow === support" [(ngModel)]="editingRow.drawingNo" />
+          <span *ngIf="editingRow !== support">{{ support.drawingNo }}</span>
+        </td>
+        <td>
+          <input *ngIf="editingRow === support" [(ngModel)]="editingRow.desc" />
+          <span *ngIf="editingRow !== support">{{ support.desc }}</span>
+        </td>
+        <td>
+          <input *ngIf="editingRow === support" [(ngModel)]="editingRow.qty" />
+          <span *ngIf="editingRow !== support">{{ support.qty }}</span>
+        </td>
+        <td>
+          <input *ngIf="editingRow === support" [(ngModel)]="editingRow.itemNo" />
+          <span *ngIf="editingRow !== support">{{ support.itemNo }}</span>
+        </td>
+        <td>
+          <input *ngIf="editingRow === support" [(ngModel)]="editingRow.itemDesc" />
+          <span *ngIf="editingRow !== support">{{ support.itemDesc }}</span>
+        </td>
+        <td>
+          <input *ngIf="editingRow === support" [(ngModel)]="editingRow.specGrade" />
+          <span *ngIf="editingRow !== support">{{ support.specGrade }}</span>
+        </td>
+        <td>
+          <button *ngIf="editingRow !== support" (click)="editSupport(support)">
+            <i class="fa fa-edit"></i>
+          </button>
+          <button *ngIf="editingRow === support" (click)="saveEditedSupport(support)">
+            <i class="fa fa-save"></i>
+          </button>
+        </td>
       </tr>
       </tbody>
     </table>
