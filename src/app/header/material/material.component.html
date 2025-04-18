@@ -1,0 +1,139 @@
+<!-- material-tracking.component.html -->
+<div class="material-tracking-container">
+  <div class="search-section">
+    <form [formGroup]="searchForm">
+      <div class="search-header">
+        <div class="search-title">Material Tracking System</div>
+      </div>
+      <div class="search-fields">
+        <div class="field-group">
+          <label>JOB NUMBER</label>
+          <input type="text" formControlName="jobNumber">
+        </div>
+        <div class="field-group">
+          <label>SUB JOB NUMBER</label>
+          <input type="text" formControlName="subJobNumber">
+        </div>
+        <div class="field-group">
+          <label>DRAWING No</label>
+          <input type="text" formControlName="drawingNo">
+        </div>
+        <div class="button-group">
+          <button class="action-btn search-btn" (click)="search()">
+            <i class="fas fa-search"></i> SEARCH
+          </button>
+          <button class="action-btn export-btn" (click)="exportReport()">
+            <i class="fas fa-file-export"></i> EXPORT
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="results-section" *ngIf="showResults">
+    <div class="table-container">
+      <table class="results-table">
+        <thead>
+        <tr>
+          <th class="checkbox-column">
+            <input type="checkbox" [checked]="allSelected" (change)="toggleSelectAll()">
+          </th>
+          <th>Sl No.</th>
+          <th>Drawing no</th>
+          <th>Description /Assembly Tag No</th>
+          <th>Qty</th>
+          <th>Item No</th>
+          <th>Item Description</th>
+          <th>Specification Grade</th>
+          <th>Thk/Size</th>
+          <th>Heat No</th>
+          <th>MTC No</th>
+          <th>IGIR No</th>
+          <th>Report Number</th>
+          <th>Remarks</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of materialItems" [ngClass]="{'selected': item.isSelected, 'editing': item.isEditing}">
+          <td class="checkbox-column">
+            <input type="checkbox" [checked]="item.isSelected" (change)="toggleSelection(item)">
+          </td>
+          <td>{{ item.slNo }}</td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.drawingNo }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.drawingNo">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.descriptionAssemblyTagNo }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.descriptionAssemblyTagNo">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
+            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.itemNo }}</span>
+            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.itemNo">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.itemDescription }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.itemDescription">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.specificationGrade }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.specificationGrade">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.thkSize }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.thkSize">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.heatNo }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.heatNo">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.mtcNo }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.mtcNo">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.igirNo }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.igirNo">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.reportNumber }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.reportNumber">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.remarks }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.remarks">
+          </td>
+          <td class="actions-column">
+            <button *ngIf="!item.isEditing" class="edit-btn" (click)="toggleEditMode(item)">
+              EDIT
+            </button>
+            <button *ngIf="item.isEditing" class="save-btn" (click)="saveItem(item)">
+              SAVE
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="report-number-section">
+      <div class="report-section-header">
+        <h3>Add Report Number to Selected Items</h3>
+      </div>
+      <div class="report-number-form">
+        <div class="field-group">
+          <label for="reportNumber">Report Number:</label>
+          <input type="text" id="reportNumber" [(ngModel)]="currentReportNumber" placeholder="Enter report number">
+        </div>
+        <button class="action-btn apply-btn" [disabled]="!hasSelectedItems()" (click)="applyReportNumber()">
+          Apply Report Number
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
