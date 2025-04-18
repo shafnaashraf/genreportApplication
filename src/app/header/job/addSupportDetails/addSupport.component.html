@@ -1,23 +1,40 @@
 <div class="form-container">
-  <h2 *ngIf="!showAddReportForm">ADD SUPPORT DETAILS</h2>
+  <div class="form-header" *ngIf="!showAddReportForm">
+    <h2>ADD SUPPORT DETAILS</h2>
+    <div class="form-description">
+      Search for a job and add support information to existing reports
+    </div>
+  </div>
 
   <!-- Search Section -->
-  <div class="search-container" *ngIf="!showAddReportForm">
-    <label for="jobSearch">Job Number:</label>
-    <input type="text" id="jobSearch" [(ngModel)]="jobNumber" placeholder="Enter job number" />
-    <button (click)="searchJob()">Search</button>
+  <div class="card" *ngIf="!showAddReportForm">
+    <div class="search-container">
+      <label for="jobSearch">Job Number:</label>
+      <div class="input-with-button">
+        <input type="text" id="jobSearch" [(ngModel)]="jobNumber" placeholder="Enter job number" />
+        <button (click)="searchJob()" class="primary-button">
+          <span class="button-icon">🔍</span>
+          Search
+        </button>
+      </div>
+    </div>
+
+    <!-- Show if reports found -->
+    <div *ngIf="showReportDropdown" class="results-container">
+      <label for="reportDropdown">Select Report Number:</label>
+      <div class="select-with-button">
+        <select id="reportDropdown" [(ngModel)]="selectedReport">
+          <option *ngFor="let report of reportNumbers" [value]="report">{{ report }}</option>
+        </select>
+        <button (click)="addReportDetails()" class="action-button">
+          <span class="button-icon">+</span>
+          Add Report Details
+        </button>
+      </div>
+    </div>
   </div>
 
-  <!-- Show if reports found -->
-  <div *ngIf="showReportDropdown && !showAddReportForm" class="results-container">
-    <label for="reportDropdown">Select Report Number:</label>
-    <select id="reportDropdown" [(ngModel)]="selectedReport">
-      <option *ngFor="let report of reportNumbers" [value]="report">{{ report }}</option>
-    </select>
-
-    <button (click)="addReportDetails()">Add Report Details</button>
-  </div>
-  <div class="results-container" *ngIf="showAddReportForm">
+  <div class="details-card" *ngIf="showAddReportForm">
     <details-supp [jobDetails]="jobDetails"></details-supp>
   </div>
 </div>
