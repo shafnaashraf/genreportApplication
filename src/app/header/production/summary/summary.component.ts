@@ -2,6 +2,25 @@ import {Component} from '@angular/core';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
+interface ProgressRow {
+  jobNo: string;
+  title: string;
+  totalQty: string;
+  UOM: string;
+  cutting: string;
+  fitup: string;
+  welding: string;
+  fabCompPercent: string;
+  paintReleaseDate: string;
+  blastPaint: string;
+  compPercent:string;
+  remarks: string;
+  editMode: boolean;
+  isEdited?: boolean;
+  jobNumber: string;
+  reportNumber: string;
+}
+
 @Component({
   selector: 'app-summary',
   templateUrl: 'summary.component.html',
@@ -17,29 +36,108 @@ import {FormsModule} from '@angular/forms';
 export class SummaryComponent{
   searchJobNumber: string = '';
   selectedReportNumbers: string[] = [];
+  availableReportNumbers: string[] = ['1', '2', '3', '4', '5'];
+  showDropdown: boolean = false;
+  rows: ProgressRow[] = [];
+  filteredRows: ProgressRow[] = [];
+  searchPerformed: boolean = false;
+  hasSearchResults: boolean = false;
 
-  availableReportNumbers: string[] = ['RPT001', 'RPT002', 'RPT003' ,'12','321','321'];
-
-  jobNumber: string = '';
-  reportNumber: string = '';
-  showReportHeader: boolean = false;
-
-  searchReport() {
-    // You can add actual logic here to fetch report data
-    this.jobNumber = this.searchJobNumber;
-    //this.reportNumber = this.searchReportNumber;
-
-    this.showReportHeader = true;
+  ngOnInit(): void {
+    // Sample data
+    this.rows = [
+      {
+        jobNo: 'A001',
+        fabCompPercent: 'DWG-2403-001',
+        title: 'HEADER SECTION 1 rythjukcmjgfkmjjkkjkhjjfhjkjh',
+        UOM: '450',
+        totalQty: '1',
+        cutting: '100%',
+        fitup: '80%',
+        welding: '65%',
+        paintReleaseDate: '2025-05-15',
+        blastPaint: '0%',
+        compPercent:'20%',
+        remarks: '',
+        editMode: false,
+        jobNumber: '2403',
+        reportNumber: '1'
+      },
+      {
+        jobNo: 'A001',
+        fabCompPercent: 'DWG-2403-001',
+        title: 'HEADER SECTION 1',
+        UOM: '450',
+        totalQty: '1',
+        cutting: '100%',
+        fitup: '80%',
+        welding: '65%',
+        paintReleaseDate: '2025-05-15',
+        blastPaint: '0%',
+        compPercent:'20%',
+        remarks: '',
+        editMode: false,
+        jobNumber: '2403',
+        reportNumber: '1'
+      },
+      {
+        jobNo: 'A001',
+        fabCompPercent: 'DWG-2403-001',
+        title: 'HEADER SECTION 1',
+        UOM: '450',
+        totalQty: '1',
+        cutting: '100%',
+        fitup: '80%',
+        welding: '65%',
+        paintReleaseDate: '2025-05-15',
+        blastPaint: '0%',
+        compPercent:'20%',
+        remarks: '',
+        editMode: false,
+        jobNumber: '2403',
+        reportNumber: '1'
+      },
+      {
+        jobNo: 'A001',
+        fabCompPercent: 'DWG-2403-001',
+        title: 'HEADER SECTION 1',
+        UOM: '450',
+        totalQty: '1',
+        cutting: '100%',
+        fitup: '80%',
+        welding: '65%',
+        paintReleaseDate: '2025-05-15',
+        blastPaint: '0%',
+        compPercent:'20%',
+        remarks: '',
+        editMode: false,
+        jobNumber: '2403',
+        reportNumber: '1'
+      }, {
+        jobNo: 'A001',
+        fabCompPercent: 'DWG-2403-001',
+        title: 'HEADER SECTION 1',
+        UOM: '450',
+        totalQty: '1',
+        cutting: '100%',
+        fitup: '80%',
+        welding: '65%',
+        paintReleaseDate: '2025-05-15',
+        blastPaint: '0%',
+        compPercent:'20%',
+        remarks: '',
+        editMode: false,
+        jobNumber: '2403',
+        reportNumber: '1'
+      }
+    ];
   }
 
-
-  showDropdown = false
-
-  toggleDropdown() {
+  toggleDropdown(): void {
     this.showDropdown = !this.showDropdown;
   }
 
-  toggleReportSelection(report: string, event: any) {
+  toggleReportSelection(report: string, event: any): void {
     if (event.target.checked) {
       this.selectedReportNumbers.push(report);
     } else {
@@ -47,31 +145,63 @@ export class SummaryComponent{
     }
   }
 
-  search() {
-    return 1;
+  search(): void {
+    // Mark that search has been performed
+    this.searchPerformed = true;
+
+    // Close dropdown
+    this.showDropdown = false;
+
+    // Filter rows based on search criteria
+    if (this.searchJobNumber && this.selectedReportNumbers.length > 0) {
+      this.filteredRows = this.rows.filter(row =>
+        row.jobNumber === this.searchJobNumber &&
+        this.selectedReportNumbers.includes(row.reportNumber)
+      );
+    } else if (this.searchJobNumber) {
+      this.filteredRows = this.rows.filter(row =>
+        row.jobNumber === this.searchJobNumber
+      );
+    } else if (this.selectedReportNumbers.length > 0) {
+      this.filteredRows = this.rows.filter(row =>
+        this.selectedReportNumbers.includes(row.reportNumber)
+      );
+    } else {
+      // If no search criteria, show nothing
+      this.filteredRows = [];
+    }
+
+    // Update search results flag
+    this.hasSearchResults = this.filteredRows.length > 0;
+
+    console.log('Search results:', this.filteredRows.length);
   }
 
-  summaryRows = [
-    {
-      jobNumber: 'REST',
-      title: 'PIPE SHOE SUPPORT',
-      totalQty: '9',
-      uom: 'NOS',
-      cutting: '100%',
-      fitup: '100%',
-      welding: '100%',
-      fabricationComp: '100%',
-      paintReleaseDate: '',
-      blastPaint: '0%',
-      comp: '85%',
-      remarks: '',
-      isEditing: false
-    },
-    // add more rows here...
-  ];
+  toggleEdit(row: ProgressRow): void {
+    if (row.editMode) {
+      // Save changes
+      row.editMode = false;
+      row.isEdited = true;
 
-  toggleEdit(row: any) {
-    row.isEditing = !row.isEditing;
+      // Reset the highlight effect after 2 seconds
+      setTimeout(() => {
+        row.isEdited = false;
+      }, 2000);
+
+      console.log('Saved row:', row);
+    } else {
+      // Enter edit mode
+      row.editMode = true;
+    }
   }
 
+  importData(): void {
+    console.log('Import functionality');
+    // Implement import logic
+  }
+
+  exportData(): void {
+    console.log('Export functionality');
+    // Implement export logic
+  }
 }
