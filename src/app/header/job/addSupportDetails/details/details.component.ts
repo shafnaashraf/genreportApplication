@@ -1,6 +1,6 @@
-import {Component, Input} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {NgForOf, NgIf} from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgForOf, NgIf } from '@angular/common';
 
 interface SupportDetail {
   drawingNo: string;
@@ -14,7 +14,7 @@ interface SupportDetail {
 @Component({
   selector: 'details-supp',
   templateUrl: 'details.component.html',
-  styleUrl: 'details.component.css',
+  styleUrls: ['details.component.css'],
   imports: [
     FormsModule,
     NgForOf,
@@ -22,12 +22,9 @@ interface SupportDetail {
   ],
   standalone: true
 })
-
-
-export class DetailsComponent{
-
+export class DetailsComponent {
   @Input()
-  jobDetails!: { jobNumber: string; reportNumber: string; client : string ; project : string;title : string };
+  jobDetails!: { jobNumber: string; reportNumber: string; client: string; project: string; title: string };
 
   newSupport: SupportDetail = {
     drawingNo: '',
@@ -39,9 +36,11 @@ export class DetailsComponent{
   };
 
   supportList: SupportDetail[] = [];
+  editingSupport: SupportDetail | null = null;
+  editingIndex: number = -1;
 
   saveSupport() {
-    if(this.newSupport.drawingNo != ''){
+    if (this.newSupport.drawingNo !== '') {
       this.supportList.push({ ...this.newSupport });
       this.newSupport = {
         drawingNo: '',
@@ -58,15 +57,21 @@ export class DetailsComponent{
     return value === '';
   }
 
-  editingRow: any = null;
-
-  editSupport(support: any) {
-    this.editingRow = support; // clone the object to avoid modifying directly
+  editSupport(support: SupportDetail, index: number) {
+    // Create a clone of the support to edit
+    this.editingSupport = { ...support };
+    this.editingIndex = index;
   }
 
-  saveEditedSupport(original: any) {
-    Object.assign(original, this.editingRow); // update original with edited data
-    this.editingRow = null;
+  saveEditedSupport() {
+    if (this.editingSupport && this.editingIndex >= 0) {
+      this.supportList[this.editingIndex] = { ...this.editingSupport };
+      this.cancelEdit();
+    }
   }
 
+  cancelEdit() {
+    this.editingSupport = null;
+    this.editingIndex = -1;
+  }
 }

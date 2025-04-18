@@ -1,5 +1,5 @@
 <div class="table-form-container">
-  <!-- Fixed Header with Job and Report Info -->
+  <!-- Job and Report Info Header -->
   <div class="header-bar">
     <div class="header-item">
       <label>Job Number:</label>
@@ -9,9 +9,11 @@
       <label>Report Number:</label>
       <span>{{ jobDetails.reportNumber }}</span>
     </div>
+    <div class="header-item">
+      <label>Project:</label>
+      <span>{{ jobDetails.project }}</span>
+    </div>
   </div>
-
-  <h3>Enter Support Details</h3>
 
   <div class="table-wrapper">
     <table class="support-table">
@@ -23,55 +25,87 @@
         <th>Item No</th>
         <th>Item Description</th>
         <th>Specification Grade</th>
-        <th>Action</th>
+        <th class="actions-col">Actions</th>
       </tr>
       </thead>
       <tbody>
-      <!-- Input Row -->
-      <tr>
-        <td><input type="text" [(ngModel)]="newSupport.drawingNo"  [class.invalid]="isFieldInvalid(newSupport.drawingNo)"/></td>
-        <td><input type="text" [(ngModel)]="newSupport.desc" /></td>
-        <td><input type="text" [(ngModel)]="newSupport.qty" /></td>
-        <td><input type="text" [(ngModel)]="newSupport.itemNo" /></td>
-        <td><input type="text" [(ngModel)]="newSupport.itemDesc" /></td>
-        <td><input type="text" [(ngModel)]="newSupport.specGrade" /></td>
-        <td><button (click)="saveSupport()"><i class="fa fa-save"></i></button></td>
+      <!-- Input Row - Always visible for adding new items -->
+      <tr class="input-row">
+        <td>
+          <input type="text" [(ngModel)]="newSupport.drawingNo"
+                 [class.invalid]="isFieldInvalid(newSupport.drawingNo)"
+                 placeholder="Drawing No"/>
+        </td>
+        <td>
+          <input type="text" [(ngModel)]="newSupport.desc" placeholder="Assembly Tag No"/>
+        </td>
+        <td>
+          <input type="text" [(ngModel)]="newSupport.qty" placeholder="Qty"/>
+        </td>
+        <td>
+          <input type="text" [(ngModel)]="newSupport.itemNo" placeholder="Item No"/>
+        </td>
+        <td>
+          <input type="text" [(ngModel)]="newSupport.itemDesc" placeholder="Item Description"/>
+        </td>
+        <td>
+          <input type="text" [(ngModel)]="newSupport.specGrade" placeholder="Spec Grade"/>
+        </td>
+        <td class="actions-cell">
+          <button class="action-btn add-btn" (click)="saveSupport()" title="Add Support">
+            <i class="fa fa-plus"></i> Add
+          </button>
+        </td>
       </tr>
 
       <!-- Saved Data Rows -->
-      <tr *ngFor="let support of supportList">
+      <tr *ngFor="let support of supportList; let i = index"
+          [class.editing]="editingIndex === i"
+          [class.even-row]="i % 2 === 0">
         <td>
-          <input *ngIf="editingRow === support" [(ngModel)]="editingRow.drawingNo" />
-          <span *ngIf="editingRow !== support">{{ support.drawingNo }}</span>
+          <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.drawingNo" />
+          <span *ngIf="editingIndex !== i">{{ support.drawingNo }}</span>
         </td>
         <td>
-          <input *ngIf="editingRow === support" [(ngModel)]="editingRow.desc" />
-          <span *ngIf="editingRow !== support">{{ support.desc }}</span>
+          <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.desc" />
+          <span *ngIf="editingIndex !== i">{{ support.desc }}</span>
         </td>
         <td>
-          <input *ngIf="editingRow === support" [(ngModel)]="editingRow.qty" />
-          <span *ngIf="editingRow !== support">{{ support.qty }}</span>
+          <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.qty" />
+          <span *ngIf="editingIndex !== i">{{ support.qty }}</span>
         </td>
         <td>
-          <input *ngIf="editingRow === support" [(ngModel)]="editingRow.itemNo" />
-          <span *ngIf="editingRow !== support">{{ support.itemNo }}</span>
+          <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.itemNo" />
+          <span *ngIf="editingIndex !== i">{{ support.itemNo }}</span>
         </td>
         <td>
-          <input *ngIf="editingRow === support" [(ngModel)]="editingRow.itemDesc" />
-          <span *ngIf="editingRow !== support">{{ support.itemDesc }}</span>
+          <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.itemDesc" />
+          <span *ngIf="editingIndex !== i">{{ support.itemDesc }}</span>
         </td>
         <td>
-          <input *ngIf="editingRow === support" [(ngModel)]="editingRow.specGrade" />
-          <span *ngIf="editingRow !== support">{{ support.specGrade }}</span>
+          <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.specGrade" />
+          <span *ngIf="editingIndex !== i">{{ support.specGrade }}</span>
         </td>
-        <td>
-          <button *ngIf="editingRow !== support" (click)="editSupport(support)">
-            <i class="fa fa-edit"></i>
-          </button>
-          <button *ngIf="editingRow === support" (click)="saveEditedSupport(support)">
-            <i class="fa fa-save"></i>
-          </button>
+        <td class="actions-cell">
+          <div *ngIf="editingIndex !== i" class="btn-group">
+            <button class="action-btn edit-btn" (click)="editSupport(support, i)" title="Edit">
+              <i class="fa fa-edit"></i>
+            </button>
+          </div>
+          <div *ngIf="editingIndex === i" class="btn-group">
+            <button class="action-btn save-btn" (click)="saveEditedSupport()" title="Save">
+              <i class="fa fa-save"></i>
+            </button>
+            <button class="action-btn cancel-btn" (click)="cancelEdit()" title="Cancel">
+              <i class="fa fa-times"></i>
+            </button>
+          </div>
         </td>
+      </tr>
+
+      <!-- Empty state message -->
+      <tr *ngIf="supportList.length === 0" class="empty-row">
+        <td colspan="7">No support details added yet. Use the form above to add new entries.</td>
       </tr>
       </tbody>
     </table>

@@ -1,73 +1,217 @@
+/* Main container styling */
 .table-form-container {
-  margin-top: 0;
-  padding: 0;
-  background-color: #f7f7f7;
-  border-radius: 10px;
-  width: 90vw;
+  margin: 1px 0;
+  background-color: #ffffff;
+  border-radius: 8px;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
+
+/* Header styling */
 .header-bar {
   display: flex;
-  justify-content: center; /* Center the content horizontally */
+  justify-content: flex-start;
   align-items: center;
-  background-color: #e0e0e0;
-  padding: 10px 20px;
+  background: linear-gradient(to right, #3498db, #2980b9);
+  padding: 15px 20px;
   border-radius: 6px;
   margin-bottom: 20px;
   flex-wrap: wrap;
-  gap: 60px;
-  font-size: 14px;
+  gap: 40px;
+  color: #fff;
 }
 
 .header-item {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 8px;
 }
 
 .header-item label {
-  font-weight: 1000;
-  color: #333;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
 }
 
 .header-item span {
-  color: #555;
-  font-weight: 800;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 3px 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
 }
 
+
+/* Table wrapper */
 .table-wrapper {
   overflow-x: auto;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
 }
+
+/* Table styling */
 .support-table {
   width: 100%;
   min-width: 900px;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
-h3{
-  font-size: 20px;
+/* Table header styling */
+th {
+  background-color: #f5f7fa;
+  color: #2c3e50;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-bottom: 2px solid #dfe6e9;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  text-align: left;
+  letter-spacing: 0.5px;
+}
+
+/* Table cell styling */
+td {
+  padding: 10px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ecf0f1;
+  font-size: 13px;
+  color: #34495e;
+  vertical-align: middle;
+}
+
+/* Input styling */
+input[type="text"] {
+  padding: 8px 10px;
+  font-size: 12px;
+  width: 100%;
+  border: 1px solid #dfe6e9;
+  border-radius: 4px;
+  transition: border 0.2s ease;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Invalid input highlighting */
+.invalid {
+  border-color: #e74c3c !important;
+  background-color: rgba(231, 76, 60, 0.05);
+}
+
+/* Button styling */
+.action-btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+  color: white;
+}
+
+.add-btn {
+  background-color: #2ecc71;
+}
+
+.add-btn:hover {
+  background-color: #27ae60;
+}
+
+.edit-btn {
+  background-color: #3498db;
+}
+
+.edit-btn:hover {
+  background-color: #2980b9;
+}
+
+.save-btn {
+  background-color: #2ecc71;
+}
+
+.save-btn:hover {
+  background-color: #27ae60;
+}
+
+.cancel-btn {
+  background-color: #e74c3c;
+  margin-left: 5px;
+}
+
+.cancel-btn:hover {
+  background-color: #c0392b;
+}
+
+/* Button group */
+.btn-group {
+  display: flex;
+  gap: 5px;
+}
+
+/* Input row styling */
+.input-row {
+  background-color: #f9fafb;
+}
+
+/* Actions column width */
+.actions-col {
+  width: 100px;
   text-align: center;
 }
 
-th, td {
-  padding: 8px 10px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-  font-size: 10px;
+.actions-cell {
+  text-align: center;
 }
 
-th {
-  background-color: #f7f7f7;
-  font-weight: 1000;
-}
-td{
-  font-weight: 600;
+/* Row styling */
+tr.editing {
+  background-color: rgba(52, 152, 219, 0.08);
 }
 
-input[type="text"] {
-  padding: 4px 4px;
-  font-size: 10px;
-  width: 120px;
+tr.even-row {
+  background-color: #f9fafb;
 }
-.invalid {
 
+/* Improved hover effect */
+tbody tr:not(.input-row):hover {
+  background-color: rgba(52, 152, 219, 0.05);
+}
+
+/* Empty state message */
+.empty-row td {
+  text-align: center;
+  padding: 20px;
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .header-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  h3 {
+    text-align: center;
+  }
+
+  h3:after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
