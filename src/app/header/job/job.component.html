@@ -1,14 +1,53 @@
+<!-- HTML Component -->
 <div class="main-container">
-  <div class="button-container" *ngIf="activeComponent == ''">
-    <div class="vertical-buttons">
-      <button class="btn"  (click)="showComponent('add-job')">ADD JOB</button>
-      <button class="btn" (click)="showComponent('add-support')">ADD SUPPORT MATERIALS</button>
-      <button class="btn">VIEW JOB</button>
+  <div class="dashboard-panel" *ngIf="activeComponent == ''">
+    <h1 class="dashboard-title">Job Management Portal</h1>
+    <p class="dashboard-subtitle">Select an option to get started</p>
+
+    <div class="card-container">
+      <div class="action-card" (click)="showComponent('add-job')">
+        <div class="card-icon">
+          <i class="fas fa-plus-circle"></i>
+        </div>
+        <h3>Add Job</h3>
+        <p>Create a new job listing with details</p>
+      </div>
+
+      <div class="action-card" (click)="showComponent('add-support')">
+        <div class="card-icon">
+          <i class="fas fa-file-upload"></i>
+        </div>
+        <h3>Add Support Materials</h3>
+        <p>Upload documents for existing jobs</p>
+      </div>
+
+      <div class="action-card" (click)="showComponent('view-job')">
+        <div class="card-icon">
+          <i class="fas fa-search"></i>
+        </div>
+        <h3>View Job</h3>
+        <p>Browse and manage existing jobs</p>
+      </div>
     </div>
   </div>
-  <!-- Dynamic Component Display -->
-  <div *ngIf="activeComponent !=''" class="component-area container">
-    <add-job *ngIf="activeComponent === 'add-job'"></add-job>
-    <add-support *ngIf="activeComponent === 'add-support'"></add-support>
+  <div *ngIf="activeComponent !=''" class="component-area">
+    <div class="component-header">
+      <button class="back-button" (click)="activeComponent = ''">
+        <i class="fas fa-arrow-left"></i> Back
+      </button>
+      <h2 class="component-title">
+        {{ activeComponent === 'add-job' ? 'Create New Job' :
+        activeComponent === 'add-support' ? 'Add Support Materials' : 'View Job' }}
+      </h2>
+    </div>
+
+    <div class="component-content">
+      <add-job *ngIf="activeComponent === 'add-job'"></add-job>
+      <add-support *ngIf="activeComponent === 'add-support'"></add-support>
+      <!-- <view-job *ngIf="activeComponent === 'view-job'"></view-job> -->
+    </div>
   </div>
+
 </div>
+<!-- Dynamic Component Display -->
+

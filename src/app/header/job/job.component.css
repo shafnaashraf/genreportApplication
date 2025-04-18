@@ -1,52 +1,185 @@
+/* Modern styling for the job management portal */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
 body {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    display: flex;
-    flex-direction: column;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
     min-height: 100vh;
 }
 
-/* Make the space below header grow and center the content */
 .main-container {
-    flex: 1;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
 }
 
-.button-container {
+/* Dashboard Panel Styling */
+.dashboard-panel {
     text-align: center;
-    margin-top: 80px;
+    padding: 2rem 1rem;
 }
 
-.vertical-buttons {
+.dashboard-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-subtitle {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    margin-bottom: 3rem;
+}
+
+/* Card Container Layout */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+/* Action Card Styling */
+.action-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    width: 280px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    border-top: 5px solid transparent;
 }
 
-.btn {
-    padding: 20px 60px;
+.action-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.action-card:nth-child(1) {
+    border-top-color: #3498db;
+}
+
+.action-card:nth-child(2) {
+    border-top-color: #2ecc71;
+}
+
+.action-card:nth-child(3) {
+    border-top-color: #9b59b6;
+}
+
+.card-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    height: 80px;
+    width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f8f9fa;
+}
+
+.action-card:nth-child(1) .card-icon {
+    color: #3498db;
+}
+
+.action-card:nth-child(2) .card-icon {
+    color: #2ecc71;
+}
+
+.action-card:nth-child(3) .card-icon {
+    color: #9b59b6;
+}
+
+.action-card h3 {
     font-size: 1.5rem;
     font-weight: 600;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    width: 600px;
+    margin-bottom: 0.75rem;
+    color: #2c3e50;
 }
 
-.btn:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
+.action-card p {
+    color: #7f8c8d;
+    font-size: 0.95rem;
+    line-height: 1.5;
 }
-.container {
-    max-width: none !important;
-    width: 100vw;
-    padding: 0;
+
+/* Component area styling */
+.component-area {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    min-height: 70vh;
+    overflow: hidden;
+}
+
+.component-header {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    color: #3498db;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+.component-title {
+    flex: 1;
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #2c3e50;
     margin: 0;
+}
+
+.component-content {
+    padding: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .action-card {
+        width: 90%;
+        max-width: 350px;
+    }
+
+    .dashboard-title {
+        font-size: 2rem;
+    }
 }
