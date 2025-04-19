@@ -1,0 +1,80 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="logo-container">
+      <span class="logo-text">GEN<span class="logo-highlight">REPORT</span></span>
+    </div>
+
+    <h2 class="welcome-text">Welcome Back</h2>
+    <p class="login-subtext">Sign in to continue to your dashboard</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <div class="input-container">
+          <i class="fa fa-user input-icon"></i>
+          <input
+            type="text"
+            id="username"
+            formControlName="username"
+            placeholder="Enter your username"
+            [ngClass]="{'input-error': isFieldInvalid('username')}">
+        </div>
+        <div class="error-message" *ngIf="isFieldInvalid('username')">
+          Username is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-container">
+          <i class="fa fa-lock input-icon"></i>
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            placeholder="Enter your password"
+            [ngClass]="{'input-error': isFieldInvalid('password')}">
+          <i class="password-toggle"
+             [ngClass]="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"
+             (click)="togglePasswordVisibility()"></i>
+        </div>
+        <div class="error-message" *ngIf="isFieldInvalid('password')">
+          Password is required
+        </div>
+      </div>
+
+      <div class="remember-forgot">
+        <div class="remember-me">
+          <input type="checkbox" id="remember" formControlName="rememberMe">
+          <label for="remember">Remember me</label>
+        </div>
+        <a href="#" class="forgot-password">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="login-button" [disabled]="loginInProgress">
+        <span *ngIf="!loginInProgress">Sign In</span>
+        <span *ngIf="loginInProgress" class="spinner"></span>
+      </button>
+    </form>
+
+    <div class="login-divider">
+      <span>Or continue with</span>
+    </div>
+
+    <div class="social-logins">
+      <button class="social-button google">
+        <i class="fa fa-google"></i>
+      </button>
+      <button class="social-button microsoft">
+        <i class="fa fa-windows"></i>
+      </button>
+      <button class="social-button apple">
+        <i class="fa fa-apple"></i>
+      </button>
+    </div>
+
+    <p class="signup-text">
+      Don't have an account? <a href="#" (click)="goToRegister($event)">Sign up</a>
+    </p>
+  </div>
+</div>
