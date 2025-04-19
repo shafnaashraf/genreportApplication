@@ -1,25 +1,46 @@
-import { Component } from '@angular/core';
-import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Router, NavigationEnd, RouterOutlet} from '@angular/router';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { AuthService } from './services/auth.service';
+import {NgClass, NgIf} from '@angular/common';
 import {HeaderComponent} from './header/header.component';
-import {filter} from 'rxjs';
-import {NgIf} from '@angular/common';
-
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, NgIf],
   templateUrl: './app.component.html',
   standalone: true,
-  styleUrl: './app.component.css'
+  imports: [
+    NgClass,
+    HeaderComponent,
+    RouterOutlet,
+    NgIf,
+  ],
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'genreportApplication';
-  isLoginPage = true;
+export class AppComponent implements OnInit, OnDestroy {
+  isLoggedIn = false;
+  private authSubscription!: Subscription;
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit() {
+    // Check initial auth state
+    this.isLoggedIn = this.authService.isLoggedIn();
+
+    // Subscribe to route changes to update header visibility
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: NavigationEnd) => {
-      this.isLoginPage = event.url.includes('/login');
+    ).subscribe(() => {
+      this.isLoggedIn = this.authService.isLoggedIn();
     });
+  }
+
+  ngOnDestroy() {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
 }

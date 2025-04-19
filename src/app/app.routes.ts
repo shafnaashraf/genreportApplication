@@ -5,10 +5,10 @@ import {MaterialComponent} from './header/material/material.component';
 import {LoginComponent} from './login/login.component';
 
 export const routes: Routes = [
-  { path: 'login', component:LoginComponent},
+  { path: 'login', component: LoginComponent },
   { path: 'job', component: JobComponent },
-  { path: 'production', component: ProductionComponent},
-  { path: 'material', component: MaterialComponent},
-  { path: '', redirectTo: 'about', pathMatch: 'full' }, // default route
-  { path: '**', redirectTo: 'about' } // fallback route
+  { path: 'production', component: ProductionComponent },
+  { path: 'material', component: MaterialComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' }
 ];

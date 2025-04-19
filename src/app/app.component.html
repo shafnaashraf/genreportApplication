@@ -1,2 +1,6 @@
-<app-header *ngIf="!isLoginPage"></app-header>
-<router-outlet *ngIf="isLoginPage"></router-outlet>
+<!-- Only show header when logged in -->
+<app-header *ngIf="isLoggedIn"></app-header>
+<!-- Main content area -->
+<main [ngClass]="{'main-with-header': isLoggedIn, 'main-no-header': !isLoggedIn}">
+  <router-outlet></router-outlet>
+</main>

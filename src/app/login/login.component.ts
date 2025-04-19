@@ -1,32 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 import {NgClass, NgIf} from "@angular/common";
-
 @Component({
     selector: 'app-login',
     templateUrl: 'login.component.html',
     standalone: true,
     imports: [
+        NgIf,
         ReactiveFormsModule,
         NgClass,
-        NgIf
     ],
     styleUrls: ['login.component.css']
 })
 export class LoginComponent implements OnInit {
+    constructor(
+        private fb: FormBuilder,
+        private router: Router,
+        private authService: AuthService
+    ) { }
     loginForm!: FormGroup;
     showPassword = false;
     loginInProgress = false;
     loginError = '';
 
-    constructor(
-        private fb: FormBuilder,
-        private router: Router
-    ) { }
+
 
     ngOnInit(): void {
         this.initLoginForm();
+        this.checkRememberedUser();
+
+        // Check if user is already logged in
+        if (this.authService.isLoggedIn()) {
+            this.router.navigate(['/job']);
+        }
     }
 
     initLoginForm(): void {
@@ -37,15 +45,21 @@ export class LoginComponent implements OnInit {
         });
     }
 
-    isFieldInvalid(field: string): boolean {
-        const control = this.loginForm.get(field);
-        if (!control) {
-            return false;
+    checkRememberedUser(): void {
+        const rememberedUser = localStorage.getItem('rememberedUser');
+        if (rememberedUser) {
+            this.loginForm.patchValue({
+                username: rememberedUser,
+                rememberMe: true
+            });
         }
-
-        return control.invalid && (control.dirty);
     }
 
+    isFieldInvalid(field: string): boolean {
+        const control = this.loginForm.get(field);
+        // Using hasError() method which is typically public
+        return !!control && control.invalid && (control.dirty);
+    }
 
     togglePasswordVisibility(): void {
         this.showPassword = !this.showPassword;
@@ -53,7 +67,6 @@ export class LoginComponent implements OnInit {
 
     onSubmit(): void {
         if (this.loginForm.invalid) {
-            // Mark all fields as touched to trigger validation messages
             Object.keys(this.loginForm.controls).forEach(field => {
                 const control = this.loginForm.get(field);
                 if (control) {
@@ -64,32 +77,28 @@ export class LoginComponent implements OnInit {
         }
 
         this.loginInProgress = true;
+        this.loginError = '';
         const { username, password, rememberMe } = this.loginForm.value;
 
-        // Simulate API call
-        setTimeout(() => {
-            // Here you would normally call your authentication service
-            // this.authService.login(username, password).subscribe(...)
+        this.authService.login(username, password).subscribe({
+            next: (response) => {
+                this.loginInProgress = false;
 
-            // For demo purposes, we'll just simulate a successful login
-            this.loginInProgress = false;
+                // Handle remember me
+                if (rememberMe) {
+                    localStorage.setItem('rememberedUser', username);
+                } else {
+                    localStorage.removeItem('rememberedUser');
+                }
 
-            // Store the remember me preference if needed
-            if (rememberMe) {
-                localStorage.setItem('rememberedUser', username);
-            } else {
-                localStorage.removeItem('rememberedUser');
+                // Navigate to dashboard
+                this.router.navigate(['/job']);
+            },
+            error: (error) => {
+                this.loginInProgress = false;
+                this.loginError = 'Invalid username or password. Please try again.';
+                console.error('Login error:', error);
             }
-
-            // Navigate to the dashboard or home page
-            this.router.navigate(['/job']);
-        }, 1500);
-    }
-
-    goToRegister(event: Event): void {
-        event.preventDefault();
-        // Navigate to register page
-        // this.router.navigate(['/register']);
-        console.log('Navigate to register page');
+        });
     }
 }
