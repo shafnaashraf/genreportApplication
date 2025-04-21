@@ -39,7 +39,7 @@ export class AuthService {
     if (user) {
       return of({
         token: 'mock-jwt-token',
-        expiresIn: 3600, // 1 hour
+        expiresIn: 600, // 1 hour
         user: { username: user.username }
       }).pipe(
         delay(800), // Simulate network request
