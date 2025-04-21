@@ -1,57 +1,99 @@
-<div class="report-content">
-  <div class="job-info">
-    <table class="job-info-table">
-      <tr>
-        <td class="label">JOB NUMBER</td>
-        <td class="value">{{ jobInfo.jobNumber }}</td>
-      </tr>
-      <tr>
-        <td class="label">SUB JOB NUMBER</td>
-        <td class="value">{{ jobInfo.subJobNumber }}</td>
-      </tr>
-      <tr>
-        <td class="label">DRAWING No</td>
-        <td class="value">{{ jobInfo.drawingNo }}</td>
-      </tr>
-      <tr>
-        <td class="label">REPORT NUMBER</td>
-        <td class="value">{{ jobInfo.reportNumber }}</td>
-      </tr>
-    </table>
+<!-- material-tracking.component.html -->
+<div class="material-tracking-container">
+  <div class="search-section">
+    <form [formGroup]="searchForm">
+      <div class="search-fields">
+        <div class="field-group">
+          <label>JOB NUMBER</label>
+          <input type="text" formControlName="jobNumber">
+        </div>
+        <div class="field-group">
+          <label>SUB JOB NUMBER</label>
+          <input type="text" formControlName="subJobNumber">
+        </div>
+        <div class="field-group">
+          <label>DRAWING No</label>
+          <input type="text" formControlName="drawingNo">
+        </div>
+        <div class="button-group">
+          <button class="action-btn search-btn" (click)="search()">
+            <i class="fas fa-search"></i> SEARCH
+          </button>
+          <button class="action-btn export-btn" (click)="exportReport()">
+            <i class="fas fa-file-export"></i> EXPORT
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
 
-  <div class="table-container">
-    <table class="dimensions-table">
-      <thead>
-      <tr>
-        <th>SL.No</th>
-        <th>Details</th>
-        <th colspan="3">Dimensions</th>
-        <th>Result</th>
-      </tr>
-      <tr>
-        <th></th>
-        <th></th>
-        <th>As per Drg (mm)</th>
-        <th>Actual (mm)</th>
-        <th>Variation (mm)</th>
-        <th></th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let item of dimensionData">
-        <td>{{ item.slNo }}</td>
-        <td>{{ item.details }}</td>
-        <td>{{ item.asPerDrg }}</td>
-        <td>{{ item.actual }}</td>
-        <td>{{ item.variation }}</td>
-        <td>{{ item.result }}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="actions">
-    <button class="btn-export" (click)="exportReport()">Export</button>
+  <div class="results-section" *ngIf="showResults">
+    <div class="table-container">
+      <table class="results-table">
+        <thead>
+        <tr>
+          <th>Sl.No</th>
+          <th>DRAWING No</th>
+          <th>Qty</th>
+          <th>Details</th>
+          <th colspan="3">Dimensions</th>
+          <th>Result</th>
+          <th>ACTION</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th>As per Drg (mm)</th>
+          <th>Actual (mm)</th>
+          <th>Variation (mm)</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of materialItems; let i = index" [ngClass]="{'selected': item.isSelected, 'editing': item.isEditing}">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.drawingNo }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.drawingNo">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.qty">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.details }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.details">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.drawingDimension }}</span>
+            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.drawingDimension">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.actualDimension }}</span>
+            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.actualDimension">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.variation }}</span>
+            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.variation">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.result }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.result">
+          </td>
+          <td class="actions-column">
+            <button *ngIf="!item.isEditing" class="edit-btn" (click)="toggleEditMode(item)">
+              EDIT
+            </button>
+            <button *ngIf="item.isEditing" class="save-btn" (click)="saveItem(item)">
+              SAVE
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
