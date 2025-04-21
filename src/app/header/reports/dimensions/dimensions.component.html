@@ -1,0 +1,57 @@
+<div class="report-content">
+  <div class="job-info">
+    <table class="job-info-table">
+      <tr>
+        <td class="label">JOB NUMBER</td>
+        <td class="value">{{ jobInfo.jobNumber }}</td>
+      </tr>
+      <tr>
+        <td class="label">SUB JOB NUMBER</td>
+        <td class="value">{{ jobInfo.subJobNumber }}</td>
+      </tr>
+      <tr>
+        <td class="label">DRAWING No</td>
+        <td class="value">{{ jobInfo.drawingNo }}</td>
+      </tr>
+      <tr>
+        <td class="label">REPORT NUMBER</td>
+        <td class="value">{{ jobInfo.reportNumber }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="table-container">
+    <table class="dimensions-table">
+      <thead>
+      <tr>
+        <th>SL.No</th>
+        <th>Details</th>
+        <th colspan="3">Dimensions</th>
+        <th>Result</th>
+      </tr>
+      <tr>
+        <th></th>
+        <th></th>
+        <th>As per Drg (mm)</th>
+        <th>Actual (mm)</th>
+        <th>Variation (mm)</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of dimensionData">
+        <td>{{ item.slNo }}</td>
+        <td>{{ item.details }}</td>
+        <td>{{ item.asPerDrg }}</td>
+        <td>{{ item.actual }}</td>
+        <td>{{ item.variation }}</td>
+        <td>{{ item.result }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="actions">
+    <button class="btn-export" (click)="exportReport()">Export</button>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+
+.report-content {
+    padding: 20px;
+}
+
+.job-info-table {
+    border: 1px solid #4169e1;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.job-info-table td {
+    border: 1px solid #4169e1;
+    padding: 8px;
+}
+
+.job-info-table .label {
+    font-weight: bold;
+    background-color: #f2f2f2;
+    width: 200px;
+}
+
+.paint-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #4169e1;
+}
+
+.paint-table th, .paint-table td {
+    border: 1px solid #4169e1;
+    padding: 8px;
+    text-align: center;
+}
+
+.paint-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.actions {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.btn-export {
+    background-color: #4caf50;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}

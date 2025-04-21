@@ -1,0 +1,59 @@
+<div class="report-content">
+    <div class="job-info">
+        <table class="job-info-table">
+            <tr>
+                <td class="label">JOB NUMBER</td>
+                <td class="value">{{ jobInfo.jobNumber }}</td>
+            </tr>
+            <tr>
+                <td class="label">SUB JOB NUMBER</td>
+                <td class="value">{{ jobInfo.subJobNumber }}</td>
+            </tr>
+            <tr>
+                <td class="label">DRAWING No</td>
+                <td class="value">{{ jobInfo.drawingNo }}</td>
+            </tr>
+            <tr>
+                <td class="label">REPORT NUMBER</td>
+                <td class="value">{{ jobInfo.reportNumber }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="table-container">
+        <table class="paint-table">
+            <thead>
+            <tr>
+                <th>SL.No</th>
+                <th>Component</th>
+                <th>Surface Prep</th>
+                <th>Paint Spec</th>
+                <th>Primer</th>
+                <th>Intermediate</th>
+                <th>Finish</th>
+                <th>DFT</th>
+                <th>Inspection Date</th>
+                <th>Result</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of paintData">
+                <td>{{ item.slNo }}</td>
+                <td>{{ item.component }}</td>
+                <td>{{ item.surfacePrep }}</td>
+                <td>{{ item.paintSpec }}</td>
+                <td>{{ item.primer }}</td>
+                <td>{{ item.intermediate }}</td>
+                <td>{{ item.finish }}</td>
+                <td>{{ item.dft }}</td>
+                <td>{{ item.inspectionDate }}</td>
+                <td>{{ item.result }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="actions">
+        <button class="btn-export" (click)="exportReport()">Export</button>
+    </div>
+</div>

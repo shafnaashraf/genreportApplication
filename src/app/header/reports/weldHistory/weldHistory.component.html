@@ -1,0 +1,59 @@
+<div class="report-content">
+  <div class="job-info">
+    <table class="job-info-table">
+      <tr>
+        <td class="label">JOB NUMBER</td>
+        <td class="value">{{ jobInfo.jobNumber }}</td>
+      </tr>
+      <tr>
+        <td class="label">SUB JOB NUMBER</td>
+        <td class="value">{{ jobInfo.subJobNumber }}</td>
+      </tr>
+      <tr>
+        <td class="label">DRAWING No</td>
+        <td class="value">{{ jobInfo.drawingNo }}</td>
+      </tr>
+      <tr>
+        <td class="label">REPORT NUMBER</td>
+        <td class="value">{{ jobInfo.reportNumber }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="table-container">
+    <table class="weld-history-table">
+      <thead>
+      <tr>
+        <th>SL.No</th>
+        <th>Joint No</th>
+        <th>Initial Weld Date</th>
+        <th>Welder</th>
+        <th>Inspection Date</th>
+        <th>Result</th>
+        <th>Repair Required</th>
+        <th>Repair Date</th>
+        <th>Repair Welder</th>
+        <th>Final Result</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of weldHistoryData">
+        <td>{{ item.slNo }}</td>
+        <td>{{ item.jointNo }}</td>
+        <td>{{ item.initialWeld }}</td>
+        <td>{{ item.welder }}</td>
+        <td>{{ item.inspectionDate }}</td>
+        <td>{{ item.result }}</td>
+        <td>{{ item.repairRequired }}</td>
+        <td>{{ item.repairDate }}</td>
+        <td>{{ item.repairWelder }}</td>
+        <td>{{ item.finalResult }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="actions">
+    <button class="btn-export" (click)="exportReport()">Export</button>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<div class="report-container">
+  <div class="tab-header">
+    <ul class="nav-tabs">
+      <li [class.active]="activeTab === 'dimensions'" (click)="setActiveTab('dimensions')">Dimensions</li>
+      <li [class.active]="activeTab === 'welding'" (click)="setActiveTab('welding')">Welding</li>
+      <li [class.active]="activeTab === 'paintRelease'" (click)="setActiveTab('paintRelease')">Paint Release</li>
+      <li [class.active]="activeTab === 'weldHistory'" (click)="setActiveTab('weldHistory')">Weld History</li>
+    </ul>
+  </div>
+
+  <div class="tab-content">
+    <app-dimensions-report *ngIf="activeTab === 'dimensions'"></app-dimensions-report>
+    <app-welding-report *ngIf="activeTab === 'welding'"></app-welding-report>
+    <app-paint-release-report *ngIf="activeTab === 'paintRelease'"></app-paint-release-report>
+    <app-weld-history-report *ngIf="activeTab === 'weldHistory'"></app-weld-history-report>
+  </div>
+</div>
