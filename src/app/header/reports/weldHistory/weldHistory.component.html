@@ -1,59 +1,148 @@
-<div class="report-content">
-  <div class="job-info">
-    <table class="job-info-table">
-      <tr>
-        <td class="label">JOB NUMBER</td>
-        <td class="value">{{ jobInfo.jobNumber }}</td>
-      </tr>
-      <tr>
-        <td class="label">SUB JOB NUMBER</td>
-        <td class="value">{{ jobInfo.subJobNumber }}</td>
-      </tr>
-      <tr>
-        <td class="label">DRAWING No</td>
-        <td class="value">{{ jobInfo.drawingNo }}</td>
-      </tr>
-      <tr>
-        <td class="label">REPORT NUMBER</td>
-        <td class="value">{{ jobInfo.reportNumber }}</td>
-      </tr>
-    </table>
+<!-- material-tracking.component.html -->
+<div class="material-tracking-container">
+  <div class="search-section">
+    <form [formGroup]="searchForm">
+      <div class="search-fields">
+        <div class="field-group">
+          <label>JOB NUMBER</label>
+          <input type="text" formControlName="jobNumber">
+        </div>
+        <div class="field-group">
+          <label>SUB JOB NUMBER</label>
+          <input type="text" formControlName="subJobNumber">
+        </div>
+        <div class="field-group">
+          <label>DRAWING No</label>
+          <input type="text" formControlName="drawingNo">
+        </div>
+        <div class="button-group">
+          <button class="action-btn search-btn" (click)="search()">
+            <i class="fas fa-search"></i> SEARCH
+          </button>
+          <button class="action-btn export-btn" (click)="exportReport()">
+            <i class="fas fa-file-export"></i> EXPORT
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
 
-  <div class="table-container">
-    <table class="weld-history-table">
-      <thead>
-      <tr>
-        <th>SL.No</th>
-        <th>Joint No</th>
-        <th>Initial Weld Date</th>
-        <th>Welder</th>
-        <th>Inspection Date</th>
-        <th>Result</th>
-        <th>Repair Required</th>
-        <th>Repair Date</th>
-        <th>Repair Welder</th>
-        <th>Final Result</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let item of weldHistoryData">
-        <td>{{ item.slNo }}</td>
-        <td>{{ item.jointNo }}</td>
-        <td>{{ item.initialWeld }}</td>
-        <td>{{ item.welder }}</td>
-        <td>{{ item.inspectionDate }}</td>
-        <td>{{ item.result }}</td>
-        <td>{{ item.repairRequired }}</td>
-        <td>{{ item.repairDate }}</td>
-        <td>{{ item.repairWelder }}</td>
-        <td>{{ item.finalResult }}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+  <div class="results-section" *ngIf="showResults">
+    <div class="table-container">
+      <table class="results-table">
+        <thead>
+        <tr>
+          <th>Sl No.</th>
+          <th>JOINT No</th>
+          <th>DRAWING NUMBER</th>
+          <th>ITEM DESCRIPTION</th>
+          <th>MATERIAL DESCRIPTION</th>
+          <th>MATERIAL</th>
+          <th colspan="3">WELDING</th>
+          <th colspan="5">INSPECTION</th>
+          <th>ACTION</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th>WPS</th>
+          <th>WELDER ID</th>
+          <th>FITUP</th>
+          <th>VISUAL</th>
+          <th colspan="3">NDT %</th>
+          <th>REMARKS</th>
+          <th></th>
+        </tr>
+        <tr>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th>PT</th>
+          <th>MT</th>
+          <th>RT/UT</th>
+          <th></th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of materialItems" [ngClass]="{'selected': item.isSelected, 'editing': item.isEditing}">
+          <td>{{ item.slNo }}</td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.drawingNo }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.drawingNo">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.descriptionAssemblyTagNo }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.descriptionAssemblyTagNo">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
+            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
+            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
+            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
+            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
+            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
+            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
+            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
+            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
+            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
+            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+          </td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
+            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+          </td>
+          <td class="actions-column">
+            <button *ngIf="!item.isEditing" class="edit-btn" (click)="toggleEditMode(item)">
+              EDIT
+            </button>
+            <button *ngIf="item.isEditing" class="save-btn" (click)="saveItem(item)">
+              SAVE
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
 
-  <div class="actions">
-    <button class="btn-export" (click)="exportReport()">Export</button>
+
   </div>
 </div>
