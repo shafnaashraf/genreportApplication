@@ -151,7 +151,7 @@ input[type="number"]:focus {
 }
 
 .results-table thead tr:nth-child(3) th {
-  background-color: #f8f9fa;
+  background-color: #F0F8FF;
   font-size: 10px;
   font-weight: 600;
 }
