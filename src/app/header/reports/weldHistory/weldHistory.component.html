@@ -32,103 +32,84 @@
       <table class="results-table">
         <thead>
         <tr>
-          <th>Sl No.</th>
-          <th>JOINT No</th>
-          <th>DRAWING NUMBER</th>
-          <th>ITEM DESCRIPTION</th>
-          <th>MATERIAL DESCRIPTION</th>
-          <th>MATERIAL</th>
+          <th rowspan="3">SI No.</th>
+          <th rowspan="3">JOINT No</th>
+          <th rowspan="3">DRAWING NUMBER</th>
+          <th rowspan="3">ITEM DESCRIPTION</th>
+          <th rowspan="3">MATERIAL DESCRIPTION</th>
+          <th rowspan="3">MATERIAL</th>
           <th colspan="3">WELDING</th>
           <th colspan="5">INSPECTION</th>
-          <th>ACTION</th>
+          <th rowspan="3">ACTION</th>
         </tr>
         <tr>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th>WPS</th>
-          <th>WELDER ID</th>
-          <th>FITUP</th>
-          <th>VISUAL</th>
+          <th rowspan="2">WPS</th>
+          <th rowspan="2">WELDER ID</th>
+          <th rowspan="2">FITUP</th>
+          <th rowspan="3">VISUAL</th>
           <th colspan="3">NDT %</th>
-          <th>REMARKS</th>
-          <th></th>
+          <th rowspan="2">REMARKS</th>
         </tr>
         <tr>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
           <th>PT</th>
           <th>MT</th>
           <th>RT/UT</th>
-          <th></th>
-          <th></th>
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let item of materialItems" [ngClass]="{'selected': item.isSelected, 'editing': item.isEditing}">
-          <td>{{ item.slNo }}</td>
+        <tr *ngFor="let item of materialItems; let i = index" [ngClass]="{'selected': item.isSelected, 'editing': item.isEditing}">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.jointNo }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.jointNo">
+          </td>
           <td>
             <span *ngIf="!item.isEditing">{{ item.drawingNo }}</span>
             <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.drawingNo">
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.descriptionAssemblyTagNo }}</span>
-            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.descriptionAssemblyTagNo">
+            <span *ngIf="!item.isEditing">{{ item.itemDescription }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.itemDescription">
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
-            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+            <span *ngIf="!item.isEditing">{{ item.materialDesc }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.materialDesc">
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
-            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+            <span *ngIf="!item.isEditing">{{ item.material }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.material">
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
-            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+            <span *ngIf="!item.isEditing">{{ item.wps }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.wps">
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
-            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+            <span *ngIf="!item.isEditing">{{ item.welderId }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.welderId">
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
-            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+            <span *ngIf="!item.isEditing">{{ item.fitup }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.fitup">
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
-            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+            <span *ngIf="!item.isEditing">{{ item.visual }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.visual">
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
-            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+            <span *ngIf="!item.isEditing">{{ item.pt }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.pt">
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
-            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+            <span *ngIf="!item.isEditing">{{ item.mt }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.mt">
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
-            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+            <span *ngIf="!item.isEditing">{{ item.rtut }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.rtut">
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
-            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
-          </td>
-          <td>
-            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
-            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+            <span *ngIf="!item.isEditing">{{ item.remarks }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.remarks">
           </td>
           <td class="actions-column">
             <button *ngIf="!item.isEditing" class="edit-btn" (click)="toggleEditMode(item)">
@@ -142,7 +123,5 @@
         </tbody>
       </table>
     </div>
-
-
   </div>
 </div>

@@ -4,17 +4,18 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 
 
 interface MaterialItem {
-  slNo: number;
   drawingNo: string;
-  descriptionAssemblyTagNo: string;
-  qty: number;
-  itemNo: number;
+  jointNo: number;
   itemDescription: string;
-  specificationGrade: string;
-  thkSize: string;
-  heatNo: string;
-  mtcNo: string;
-  igirNo: string;
+  materialDesc: string;
+  material: string;
+  wps: string;
+  welderId: number;
+  fitup: string;
+  visual: string;
+  pt: string;
+  mt: string;
+  rtut:string,
   remarks: string;
   reportNumber?: string;
   isSelected: boolean;
@@ -156,98 +157,104 @@ export class WeldHistoryComponent implements OnInit {
   getMockData(): MaterialItem[] {
     return [
       {
-        slNo: 1,
         drawingNo: 'SW-300-100-16"-CS',
-        descriptionAssemblyTagNo: 'BM-1',
-        qty: 1,
-        itemNo: 1,
+        material: 'BM-1',
+        welderId: 1,
+        jointNo: 156,
         itemDescription: 'BEAM, HEA 100, EN 10025 S275JR',
-        specificationGrade: 'S275JR',
-        thkSize: '',
-        heatNo: '',
-        mtcNo: '',
-        igirNo: '',
+        materialDesc: 'S275JR',
+        wps: '',
+        fitup: '',
+        visual: '',
+        pt: '',
+        mt:'',
+        rtut:'',
         remarks: '',
         isSelected: false,
         isEditing: false
       },
       {
-        slNo: 2,
         drawingNo: 'AW-D-100-16"-CS',
-        descriptionAssemblyTagNo: 'BM-2',
-        qty: 1,
-        itemNo: 2,
+        material: 'BM-2',
+        welderId: 1,
+        jointNo: 2,
         itemDescription: 'BEAM, HEA 100, EN 10025 S275JR',
-        specificationGrade: 'S275JR',
-        thkSize: '',
-        heatNo: '',
-        mtcNo: '',
-        igirNo: '',
+        materialDesc: 'S275JR',
+        wps: '',
+        fitup: '',
+        visual: '',
+        pt: '',
+        mt:'',
+        rtut:'',
         remarks: '',
         isSelected: false,
         isEditing: false
       },
       {
-        slNo: 3,
         drawingNo: 'SW-450-100-16"-CS',
-        descriptionAssemblyTagNo: 'BM-3',
-        qty: 1,
-        itemNo: 3,
+        material: 'BM-3',
+        welderId: 1,
+        jointNo: 343,
         itemDescription: 'PLATE THK 10MM, EN 10025 S275JR',
-        specificationGrade: 'S275JR',
-        thkSize: '',
-        heatNo: '',
-        mtcNo: '',
-        igirNo: '',
+        materialDesc: 'S275JR',
+        wps: '',
+        fitup: '',
+        visual: '',
+        pt: '',
+        mt:'',
+        rtut:'',
         remarks: '',
         isSelected: false,
         isEditing: false
       },
       {
-        slNo: 4,
         drawingNo: 'SW-300-100-12"-CS',
-        descriptionAssemblyTagNo: 'BM-4',
-        qty: 1,
-        itemNo: 4,
+        material: 'BM-4',
+        welderId: 1,
+        jointNo: 498,
         itemDescription: 'PLATE THK 10MM, EN 10025 S275JR',
-        specificationGrade: 'S275JR',
-        thkSize: '',
-        heatNo: '',
-        mtcNo: '',
-        igirNo: '',
+        materialDesc: 'S275JR',
+        wps: '',
+        fitup: '',
+        visual: '',
+        pt: '',
+        mt:'',
+        rtut:'',
         remarks: '',
         isSelected: false,
         isEditing: false
       },
       {
-        slNo: 5,
         drawingNo: 'SW-300-100-12"-CS',
-        descriptionAssemblyTagNo: 'BM-4',
-        qty: 1,
-        itemNo: 5,
+        material: 'BM-4',
+        welderId: 1,
+        jointNo: 235,
         itemDescription: 'BEAM, HEA 100, EN 10025 S275JR',
-        specificationGrade: 'S275JR',
-        thkSize: '',
-        heatNo: '',
-        mtcNo: '',
-        igirNo: '',
-        remarks: '',
+        materialDesc: 'S275JR',
+        wps: 'e',
+        fitup: 'ecew',
+        visual: 'wec',
+        pt: 'gtr',
+        mt:'6445',
+        rtut:'645',
+        remarks: 'hello',
         isSelected: false,
         isEditing: false
       },
       {
-        slNo: 6,
         drawingNo: 'SW-300-100-8"-CS',
-        descriptionAssemblyTagNo: 'BM-5',
-        qty: 1,
-        itemNo: 5,
+        material: 'BM-5',
+        welderId: 1,
+        jointNo: 590,
         itemDescription: 'PLATE THK 10MM, EN 10025 S275JR',
-        specificationGrade: 'S275JR',
-        thkSize: '',
-        heatNo: '',
-        mtcNo: '',
-        igirNo: '',
-        remarks: '',
+        materialDesc: 'S275JR',
+        wps: 're',
+        fitup: 'wre',
+        visual: 'gb',
+        pt: 'gfd',
+        mt:'gsd',
+        rtut:'fds',
+        remarks: 'sgd',
         isSelected: false,
         isEditing: false
       }
