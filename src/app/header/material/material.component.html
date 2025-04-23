@@ -54,11 +54,11 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let item of materialItems" [ngClass]="{'selected': item.isSelected, 'editing': item.isEditing}">
+        <tr *ngFor="let item of materialItems;let i = index" [ngClass]="{'selected': item.isSelected, 'editing': item.isEditing}">
           <td class="checkbox-column">
             <input type="checkbox" [checked]="item.isSelected" (change)="toggleSelection(item)">
           </td>
-          <td>{{ item.slNo }}</td>
+          <td>{{ i + 1 }}</td>
           <td>
             <span *ngIf="!item.isEditing">{{ item.drawingNo }}</span>
             <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.drawingNo">

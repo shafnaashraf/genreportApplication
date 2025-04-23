@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {MaterialTrackingService} from '../../services/materialTracking.service';
 
 interface MaterialItem {
   slNo: number;
@@ -40,8 +41,10 @@ export class MaterialComponent implements OnInit {
   showResults = false;
   currentReportNumber = '';
   allSelected = false;
+  loading = false;
+  error: string | null = null;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder,private materialTrackingService: MaterialTrackingService) { }
 
   ngOnInit(): void {
     this.initSearchForm();
@@ -60,7 +63,24 @@ export class MaterialComponent implements OnInit {
   search(): void {
     // In a real application, you would call an API here
     // For demo, we'll just show the mock data
-    this.showResults = true;
+    //this.showResults = true;
+    this.loading = true;
+    this.error = null;
+    const { jobNumber, subJobNumber, drawingNo } = this.searchForm.value;
+
+    this.materialTrackingService.searchMaterialItems(jobNumber, subJobNumber, drawingNo)
+      .subscribe({
+        next: (data) => {
+          this.materialItems = data;
+          this.showResults = true;
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Error fetching material items:', err);
+          this.error = 'Failed to fetch data. Please try again.';
+          this.loading = false;
+        }
+      });
   }
 
   exportReport(): void {

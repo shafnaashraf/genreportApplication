@@ -215,3 +215,18 @@ tbody tr:not(.input-row):hover {
     transform: translateX(-50%);
   }
 }
+
+.button-btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+  color: black;
+}
