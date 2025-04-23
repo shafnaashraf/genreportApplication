@@ -13,7 +13,7 @@
 }
 
 .search-section {
-    margin-bottom: 25px;
+    margin-bottom: 15px;
     background-color: white;
     border-radius: 8px;
     padding: 15px;
@@ -56,7 +56,7 @@
 .button-group {
     display: flex;
     gap: 10px;
-    margin-top: 20px;
+    align-items: flex-end;
 }
 
 input[type="text"],
@@ -128,6 +128,25 @@ input[type="number"]:focus {
 .apply-btn:disabled {
     background-color: #6c757d;
     cursor: not-allowed;
+}
+
+/* New section for the report actions */
+.report-actions-section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    margin-bottom: 15px;
+}
+
+.report-number-form {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+}
+
+.report-number-form .field-group {
+    flex: 1;
 }
 
 .results-section {
@@ -228,35 +247,6 @@ input[type="number"]:focus {
 
 .save-btn:hover {
     background-color: #2980b9;
-}
-
-.report-number-section {
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    padding: 15px;
-    margin-top: 20px;
-    border: 1px solid #ddd;
-}
-
-.report-section-header {
-    margin-bottom: 15px;
-}
-
-.report-section-header h3 {
-    font-size: 16px;
-    font-weight: 500;
-    color: #333;
-    margin: 0;
-}
-
-.report-number-form {
-    display: flex;
-    gap: 15px;
-    align-items: flex-end;
-}
-
-.report-number-form .field-group {
-    flex: 1;
 }
 
 /* Toast notification */

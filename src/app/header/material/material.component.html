@@ -22,12 +22,25 @@
           <button class="action-btn search-btn" (click)="search()">
             <i class="fas fa-search"></i> SEARCH
           </button>
-          <button class="action-btn export-btn" (click)="exportReport()">
-            <i class="fas fa-file-export"></i> EXPORT
-          </button>
         </div>
       </div>
     </form>
+  </div>
+
+  <!-- Moved Report Number section to top and placed Export button next to it -->
+  <div class="report-actions-section" *ngIf="showResults">
+    <div class="report-number-form">
+      <div class="field-group" style="max-width: 600px;">
+        <label for="reportNumber">REPORT NUMBER:</label>
+        <input type="text" id="reportNumber" [(ngModel)]="currentReportNumber" placeholder="Enter report number">
+      </div>
+      <button class="action-btn apply-btn" [disabled]="!hasSelectedItems()" (click)="applyReportNumber()">
+        APPLY REPORT NUMBER
+      </button>
+      <button class="action-btn export-btn" (click)="exportReport()">
+        <i class="fas fa-file-export"></i> EXPORT
+      </button>
+    </div>
   </div>
 
   <div class="results-section" *ngIf="showResults">
@@ -50,6 +63,8 @@
           <th>MTC No</th>
           <th>IGIR No</th>
           <th>Remarks</th>
+          <!-- Added new Report Number column -->
+          <th>Report Number</th>
           <th>Actions</th>
         </tr>
         </thead>
@@ -103,6 +118,11 @@
             <span *ngIf="!item.isEditing">{{ item.remarks }}</span>
             <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.remarks">
           </td>
+          <!-- Added Report Number cell -->
+          <td>
+            <span *ngIf="!item.isEditing">{{ item.reportNumber }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.reportNumber">
+          </td>
           <td class="actions-column">
             <button *ngIf="!item.isEditing" class="edit-btn" (click)="toggleEditMode(item)">
               EDIT
@@ -114,21 +134,6 @@
         </tr>
         </tbody>
       </table>
-    </div>
-
-    <div class="report-number-section">
-      <div class="report-section-header">
-        <h3>Add Report Number to Selected Items</h3>
-      </div>
-      <div class="report-number-form">
-        <div class="field-group">
-          <label for="reportNumber">Report Number:</label>
-          <input type="text" id="reportNumber" [(ngModel)]="currentReportNumber" placeholder="Enter report number">
-        </div>
-        <button class="action-btn apply-btn" [disabled]="!hasSelectedItems()" (click)="applyReportNumber()">
-          Apply Report Number
-        </button>
-      </div>
     </div>
   </div>
 </div>

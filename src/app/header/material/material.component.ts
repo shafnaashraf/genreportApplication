@@ -63,24 +63,24 @@ export class MaterialComponent implements OnInit {
   search(): void {
     // In a real application, you would call an API here
     // For demo, we'll just show the mock data
-    //this.showResults = true;
-    this.loading = true;
-    this.error = null;
-    const { jobNumber, subJobNumber, drawingNo } = this.searchForm.value;
-
-    this.materialTrackingService.searchMaterialItems(jobNumber, subJobNumber, drawingNo)
-      .subscribe({
-        next: (data) => {
-          this.materialItems = data;
-          this.showResults = true;
-          this.loading = false;
-        },
-        error: (err) => {
-          console.error('Error fetching material items:', err);
-          this.error = 'Failed to fetch data. Please try again.';
-          this.loading = false;
-        }
-      });
+    this.showResults = true;
+    // this.loading = true;
+    // this.error = null;
+    // const { jobNumber, subJobNumber, drawingNo } = this.searchForm.value;
+    //
+    // this.materialTrackingService.searchMaterialItems(jobNumber, subJobNumber, drawingNo)
+    //   .subscribe({
+    //     next: (data) => {
+    //       this.materialItems = data;
+    //       this.showResults = true;
+    //       this.loading = false;
+    //     },
+    //     error: (err) => {
+    //       console.error('Error fetching material items:', err);
+    //       this.error = 'Failed to fetch data. Please try again.';
+    //       this.loading = false;
+    //     }
+    //   });
   }
 
   exportReport(): void {
