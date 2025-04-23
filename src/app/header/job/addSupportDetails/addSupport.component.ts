@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
-import {DetailsComponent} from './details/details.component';
 
 interface SupportDetail {
   drawingNo: string;
@@ -18,8 +17,7 @@ interface SupportDetail {
   imports: [
     FormsModule,
     NgIf,
-    NgForOf,
-    DetailsComponent
+    NgForOf
   ],
   styleUrl: 'addSupport.component.css'
 })
