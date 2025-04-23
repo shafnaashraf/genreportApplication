@@ -1,40 +1,170 @@
 <div class="form-container">
-  <div class="form-header" *ngIf="!showAddReportForm">
-    <h2>ADD SUPPORT DETAILS</h2>
-    <div class="form-description">
-      Search for a job and add support information to existing reports
-    </div>
+  <!-- Form Header -->
+  <div class="form-header">
+    <!-- <h2>SUPPORT DETAILS MANAGEMENT</h2>
+    <div class="form-description">Search for a job and manage support information for reports</div> -->
   </div>
 
-  <!-- Search Section -->
-  <div class="card" *ngIf="!showAddReportForm">
-    <div class="search-container">
-      <label for="jobSearch">Job Number:</label>
-      <div class="input-with-button">
-        <input type="text" id="jobSearch" [(ngModel)]="jobNumber" placeholder="Enter job number" />
-        <button (click)="searchJob()" class="primary-button">
-          <span class="button-icon">🔍</span>
-          Search
-        </button>
+  <!-- Search and Details Container -->
+  <div class="main-card">
+    <!-- Search Section - Always visible -->
+    <div class="search-section">
+      <!-- <div class="section-header">
+        <h3>Search for a job and manage support information for reports</h3>
+
+      </div> -->
+
+      <div class="section-content">
+        <div class="search-container">
+          <label for="jobSearch">JOB NUMBER:</label>
+          <div class="input-with-button">
+            <input type="text" id="jobSearch" [(ngModel)]="jobNumber" placeholder="Enter job number" />
+            <button (click)="searchJob()" class="primary-button">
+              <span class="button-icon">🔍</span>
+              Search
+            </button>
+          </div>
+        </div>
+
+        <!-- Show if reports found -->
+        <div *ngIf="showReportDropdown" class="results-container">
+          <label for="reportDropdown">SELECT SUB JOB NUMBER:</label>
+          <div class="select-with-button">
+            <select id="reportDropdown" [(ngModel)]="selectedReport">
+              <option *ngFor="let report of reportNumbers" [value]="report">{{ report }}</option>
+            </select>
+            <button (click)="loadReportDetails()" class="action-button">
+              <span class="button-icon">📋</span>
+              Load Details
+            </button>
+            <!-- Back button moved here, will only show when reports are loaded
+            <button *ngIf="showDetailsSection" class="action-button back-btn" (click)="backToSearch()">
+              <span class="button-icon">←</span> Back
+            </button>-->
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Show if reports found -->
-    <div *ngIf="showReportDropdown" class="results-container">
-      <label for="reportDropdown">Select Report Number:</label>
-      <div class="select-with-button">
-        <select id="reportDropdown" [(ngModel)]="selectedReport">
-          <option *ngFor="let report of reportNumbers" [value]="report">{{ report }}</option>
-        </select>
-        <button (click)="addReportDetails()" class="action-button">
-          <span class="button-icon">+</span>
-          Add Report Details
-        </button>
+    <!-- Details Section -->
+    <div class="details-section" *ngIf="showDetailsSection">
+      <!-- Job and Report Info Header -->
+      <div class="header-bar">
+        <div class="header-item">
+          <label>Job Number:</label>
+          <span>{{ jobDetails.jobNumber }}</span>
+        </div>
+        <div class="header-item">
+          <label>Sub Job Number:</label>
+          <span>{{ jobDetails.reportNumber }}</span>
+        </div>
+        <div class="header-item">
+          <label>Project:</label>
+          <span>{{ jobDetails.project }}</span>
+        </div>
+        <div class="action-buttons">
+          <button class="button-btn import-btn">
+            <span class="btn-icon">↓</span> Import
+          </button>
+          <!-- Removed back button from here -->
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="support-table">
+          <thead>
+          <tr>
+            <th>Drawing No</th>
+            <th>Assembly Tag No</th>
+            <th>Qty</th>
+            <th>Item No</th>
+            <th>Item Description</th>
+            <th>Specification Grade</th>
+            <th class="actions-col">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- Input Row - Always visible for adding new items -->
+          <tr class="input-row">
+            <td>
+              <input type="text" [(ngModel)]="newSupport.drawingNo"
+                     [class.invalid]="isFieldInvalid(newSupport.drawingNo)"
+                     placeholder="Drawing No"/>
+            </td>
+            <td>
+              <input type="text" [(ngModel)]="newSupport.desc" placeholder="Assembly Tag No"/>
+            </td>
+            <td>
+              <input type="text" [(ngModel)]="newSupport.qty" placeholder="Qty"/>
+            </td>
+            <td>
+              <input type="text" [(ngModel)]="newSupport.itemNo" placeholder="Item No"/>
+            </td>
+            <td>
+              <input type="text" [(ngModel)]="newSupport.itemDesc" placeholder="Item Description"/>
+            </td>
+            <td>
+              <input type="text" [(ngModel)]="newSupport.specGrade" placeholder="Spec Grade"/>
+            </td>
+            <td class="actions-cell">
+              <button class="action-btn add-btn" (click)="saveSupport()" title="Add Support">
+                <i class="fa fa-plus"></i> Add
+              </button>
+            </td>
+          </tr>
+
+          <!-- Saved Data Rows -->
+          <tr *ngFor="let support of supportList; let i = index"
+              [class.editing]="editingIndex === i"
+              [class.even-row]="i % 2 === 0">
+            <td>
+              <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.drawingNo" />
+              <span *ngIf="editingIndex !== i">{{ support.drawingNo }}</span>
+            </td>
+            <td>
+              <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.desc" />
+              <span *ngIf="editingIndex !== i">{{ support.desc }}</span>
+            </td>
+            <td>
+              <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.qty" />
+              <span *ngIf="editingIndex !== i">{{ support.qty }}</span>
+            </td>
+            <td>
+              <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.itemNo" />
+              <span *ngIf="editingIndex !== i">{{ support.itemNo }}</span>
+            </td>
+            <td>
+              <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.itemDesc" />
+              <span *ngIf="editingIndex !== i">{{ support.itemDesc }}</span>
+            </td>
+            <td>
+              <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.specGrade" />
+              <span *ngIf="editingIndex !== i">{{ support.specGrade }}</span>
+            </td>
+            <td class="actions-cell">
+              <div *ngIf="editingIndex !== i" class="btn-group">
+                <button class="action-btn edit-btn" (click)="editSupport(support, i)" title="Edit">
+                  <i class="fa fa-edit"></i>
+                </button>
+              </div>
+              <div *ngIf="editingIndex === i" class="btn-group">
+                <button class="action-btn save-btn" (click)="saveEditedSupport()" title="Save">
+                  <i class="fa fa-save"></i>
+                </button>
+                <button class="action-btn cancel-btn" (click)="cancelEdit()" title="Cancel">
+                  <i class="fa fa-times"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Empty state message -->
+          <tr *ngIf="supportList.length === 0" class="empty-row">
+            <td colspan="7">No support details added yet. Use the form above to add new entries.</td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </div>
-
-  <div class="details-card" *ngIf="showAddReportForm">
-    <details-supp [jobDetails]="jobDetails"></details-supp>
   </div>
 </div>

@@ -6,7 +6,7 @@ import {AddSupportComponent} from './addSupportDetails/addSupport.component';
 
 @Component({
   selector: 'job',
-  imports: [RouterOutlet, AddjobComponent, NgIf, AddSupportComponent],
+  imports: [RouterOutlet, AddjobComponent, NgIf, AddSupportComponent, AddSupportComponent],
   templateUrl: './job.component.html',
   standalone: true,
   styleUrl: './job.component.css'
