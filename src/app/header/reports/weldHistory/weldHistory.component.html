@@ -11,20 +11,24 @@
           <label>SUB JOB NUMBER</label>
           <input type="text" formControlName="subJobNumber">
         </div>
-        <div class="field-group">
-          <label>DRAWING No</label>
-          <input type="text" formControlName="drawingNo">
-        </div>
         <div class="button-group">
           <button class="action-btn search-btn" (click)="search()">
             <i class="fas fa-search"></i> SEARCH
           </button>
-          <button class="action-btn export-btn" (click)="exportReport()">
-            <i class="fas fa-file-export"></i> EXPORT
-          </button>
         </div>
       </div>
     </form>
+  </div>
+  <!-- Report Number section positioned at the top -->
+  <div class="report-actions-section" *ngIf="showResults">
+    <div class="report-number-form">
+      <div class="field-group" style="max-width: 600px;">
+        <input type="text" id="reportNumber" [(ngModel)]="currentReportNumber" placeholder="Enter report number">
+      </div>
+      <button class="action-btn export-btn" (click)="exportReport()">
+        <i class="fas fa-file-export"></i> EXPORT
+      </button>
+    </div>
   </div>
 
   <div class="results-section" *ngIf="showResults">
@@ -111,13 +115,20 @@
             <span *ngIf="!item.isEditing">{{ item.remarks }}</span>
             <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.remarks">
           </td>
-          <td class="actions-column">
-            <button *ngIf="!item.isEditing" class="edit-btn" (click)="toggleEditMode(item)">
-              EDIT
-            </button>
-            <button *ngIf="item.isEditing" class="save-btn" (click)="saveItem(item)">
-              SAVE
-            </button>
+          <td class="actions-cell">
+            <div *ngIf="!item.isEditing" class="btn-group">
+              <button class="action-btn edit-btn" (click)="toggleEditMode(item)" title="Edit">
+                <i class="fa fa-edit"></i>
+              </button>
+            </div>
+            <div *ngIf="item.isEditing" class="btn-group">
+              <button class="action-btn save-btn" (click)="saveItem(item)" title="Save">
+                <i class="fa fa-save"></i>
+              </button>
+              <button class="action-btn cancel-btn"  title="Cancel">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
           </td>
         </tr>
         </tbody>

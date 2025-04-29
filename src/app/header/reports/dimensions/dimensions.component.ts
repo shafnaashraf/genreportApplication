@@ -3,15 +3,16 @@ import { Component, OnInit } from '@angular/core';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 
-interface MaterialItem {
-  slNo: number;
+interface DimensionItem {
+  id?: number;
   drawingNo: string;
   qty: string;
   details: string;
-  drawingDimension: number;
-  actualDimension: number;
-  variation: number;
+  drawingDimension: number | null;
+  actualDimension: number | null;
+  variation: number | null;
   result: string;
+  reportNumber: string;
   isSelected: boolean;
   isEditing: boolean;
 }
@@ -29,45 +30,170 @@ interface MaterialItem {
   styleUrls: ['./dimensions.component.css']
 })
 export class DimensionsComponent implements OnInit {
-  searchForm!: FormGroup;
-  materialItems: MaterialItem[] = [];
-  showResults = false;
-  currentReportNumber = '';
-  allSelected = false;
+  searchForm: FormGroup;
+  materialItems: DimensionItem[] = [];
+  showResults: boolean = false;
+  allSelected: boolean = false;
+  currentReportNumber: string = '';
+  drawingNo : string = '';
 
-  constructor(private fb: FormBuilder) { }
+  // Object for the new item input row
+  newItem: DimensionItem = this.getEmptyDimensionItem();
 
-  ngOnInit(): void {
-    this.initSearchForm();
-    // Mock data for demonstration
-    this.materialItems = this.getMockData();
-  }
+  // For editing functionality
+  originalEditItem: DimensionItem | null = null;
 
-  initSearchForm(): void {
+  constructor(private fb: FormBuilder) {
     this.searchForm = this.fb.group({
-      jobNumber: ['2403', Validators.required],
-      subJobNumber: ['001', Validators.required],
-      drawingNo: ['AW-D-100-16"-CS', Validators.required]
+      jobNumber: [''],
+      subJobNumber: [''],
+      drawingNo: ['']
     });
   }
 
+  ngOnInit(): void {
+    // Any initialization code
+  }
+
+  // Initialize an empty dimension item
+  getEmptyDimensionItem(): DimensionItem {
+    return {
+      drawingNo: '',
+      qty: '',
+      details: '',
+      drawingDimension: null,
+      actualDimension: null,
+      variation: null,
+      result: '',
+      reportNumber: '',
+      isSelected: false,
+      isEditing: false
+    };
+  }
+
+  // Check field validity
+  isFieldInvalid(value: string | number | null): boolean {
+    if (value === null) return false;
+    return value.toString().trim() === '';
+  }
+
+  // Search functionality
   search(): void {
-    // In a real application, you would call an API here
-    // For demo, we'll just show the mock data
+    // Implement search logic - typically an API call
+    // For demo, let's just show sample results
     this.showResults = true;
+    this.drawingNo = this.searchForm.value.drawingNo;
+
+    // Sample data - would normally come from API
+    if (this.materialItems.length === 0) {
+      this.materialItems = [
+        {
+          drawingNo: 'DRW-001',
+          qty: '2',
+          details: 'Flange Connection',
+          drawingDimension: 120.5,
+          actualDimension: 120.7,
+          variation: 0.2,
+          result: 'Pass',
+          reportNumber: 'R-2024-001',
+          isSelected: false,
+          isEditing: false
+        },
+        {
+          drawingNo: 'DRW-001',
+          qty: '1',
+          details: 'Support Bracket',
+          drawingDimension: 85.0,
+          actualDimension: 84.7,
+          variation: -0.3,
+          result: 'Pass',
+          reportNumber: 'R-2024-001',
+          isSelected: false,
+          isEditing: false
+        }
+      ];
+    }
   }
 
-  exportReport(): void {
-    // Implement export functionality
-    console.log('Exporting report...');
-    alert('Report exported successfully!');
+  // Save new item from input row
+  saveNewItem(): void {
+    // Basic validation
+    if (this.isFieldInvalid(this.newItem.drawingNo)) {
+      alert('Drawing No is required');
+      return;
+    }
+
+    // Calculate variation if not provided
+    if (this.newItem.drawingDimension !== null &&
+      this.newItem.actualDimension !== null &&
+      this.newItem.variation === null) {
+      this.newItem.variation = this.newItem.actualDimension - this.newItem.drawingDimension;
+    }
+
+    // Add to the list - create a new object to avoid reference issues
+    const itemToAdd: DimensionItem = {...this.newItem};
+    this.materialItems.unshift(itemToAdd);
+
+    // Reset the new item
+    this.newItem = this.getEmptyDimensionItem();
   }
 
-  toggleSelection(item: MaterialItem): void {
+  // Toggle edit mode for an item
+  toggleEditMode(item: DimensionItem): void {
+    // Store original values before editing to allow cancel operation
+    this.originalEditItem = {...item};
+
+    // Set editing mode
+    item.isEditing = true;
+
+    // Ensure only one item is in edit mode at a time
+    this.materialItems.forEach(i => {
+      if (i !== item) {
+        i.isEditing = false;
+      }
+    });
+  }
+
+  // Save edited item
+  saveItem(item: DimensionItem): void {
+    // Basic validation
+    if (this.isFieldInvalid(item.drawingNo)) {
+      alert('Drawing No is required');
+      return;
+    }
+
+    // Calculate variation if needed
+    if (item.drawingDimension !== null &&
+      item.actualDimension !== null) {
+      item.variation = item.actualDimension - item.drawingDimension;
+    }
+
+    // Exit edit mode
+    item.isEditing = false;
+    this.originalEditItem = null;
+  }
+
+  // Cancel editing
+  cancelEdit(item: DimensionItem): void {
+    if (this.originalEditItem) {
+      // Restore original values
+      Object.assign(item, this.originalEditItem);
+    }
+
+    // Exit edit mode
+    item.isEditing = false;
+    this.originalEditItem = null;
+  }
+
+  // Toggle selection of a single item
+  toggleSelection(item: DimensionItem): void {
     item.isSelected = !item.isSelected;
-    this.updateAllSelectedState();
+
+    // Update allSelected status
+    this.updateAllSelectedStatus();
   }
 
+  // Toggle selection of all items
   toggleSelectAll(): void {
     this.allSelected = !this.allSelected;
     this.materialItems.forEach(item => {
@@ -75,149 +201,38 @@ export class DimensionsComponent implements OnInit {
     });
   }
 
-  updateAllSelectedState(): void {
-    this.allSelected = this.materialItems.length > 0 &&
-      this.materialItems.every(item => item.isSelected);
-  }
-
-  toggleEditMode(item: MaterialItem): void {
-    // First close any other items being edited
-    this.materialItems.forEach(i => {
-      if (i !== item && i.isEditing) {
-        i.isEditing = false;
-      }
-    });
-
-    item.isEditing = !item.isEditing;
-  }
-
-  saveItem(item: MaterialItem): void {
-    item.isEditing = false;
-    // Here you would typically send the updated item to your backend
-    console.log('Saving item:', item);
-    // Show success message
-    this.showToast('Item updated successfully!');
-  }
-
+  // Check if any items are selected
   hasSelectedItems(): boolean {
     return this.materialItems.some(item => item.isSelected);
   }
 
+  // Update all selected status based on individual selections
+  updateAllSelectedStatus(): void {
+    this.allSelected = this.materialItems.length > 0 &&
+      this.materialItems.every(item => item.isSelected);
+  }
+
+  // Apply report number to selected items
   applyReportNumber(): void {
-    if (!this.currentReportNumber) {
+    if (!this.currentReportNumber.trim()) {
       alert('Please enter a report number');
       return;
     }
 
-    const selectedItems = this.materialItems.filter(item => item.isSelected);
-    if (selectedItems.length === 0) {
-      alert('Please select at least one item');
-      return;
-    }
-
-
-    // Show success message
-    this.showToast(`Report number ${this.currentReportNumber} applied to ${selectedItems.length} items`);
-
-    // Clear selections and report number
-    this.materialItems.forEach(item => item.isSelected = false);
-    this.allSelected = false;
-    this.currentReportNumber = '';
-  }
-
-  showToast(message: string): void {
-    // Simple toast implementation - in a real app you'd use a proper toast/notification service
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.textContent = message;
-    document.body.appendChild(toast);
-
-    setTimeout(() => {
-      toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => {
-          document.body.removeChild(toast);
-        }, 300);
-      }, 3000);
-    }, 100);
-  }
-
-  // Mock data for demonstration
-  getMockData(): MaterialItem[] {
-    return [
-      {
-        slNo: 1,
-        drawingNo: 'AW-D-100-16"-CS',
-        qty: '3 NOS',
-        details: 'A',
-        drawingDimension: 300,
-        actualDimension: 300,
-        variation: 0.00,
-        result: 'ACC',
-        isSelected: false,
-        isEditing: false
-      },
-      {
-        slNo: 2,
-        drawingNo: 'AW-D-100-16"-CS',
-        qty: '1 SET',
-        details: 'B',
-        drawingDimension: 100,
-        actualDimension: 100,
-        variation: 0.00,
-        result: 'ACC',
-        isSelected: false,
-        isEditing: false
-      },
-      {
-        slNo: 3,
-        drawingNo: 'SW-450-100-16"-CS',
-        qty: '1 NOS',
-        details: 'C',
-        drawingDimension: 450,
-        actualDimension: 450,
-        variation: 0.00,
-        result: 'ACC',
-        isSelected: false,
-        isEditing: false
-      },
-      {
-        slNo: 4,
-        drawingNo: 'SW-300-100-12"-CS',
-        qty: '1 NOS',
-        details: 'D',
-        drawingDimension: 300,
-        actualDimension: 300,
-        variation: 0.00,
-        result: 'ACC',
-        isSelected: false,
-        isEditing: false
-      },
-      {
-        slNo: 5,
-        drawingNo: 'SW-300-100-10"-CS',
-        qty: '2 NOS',
-        details: 'E',
-        drawingDimension: 300,
-        actualDimension: 298,
-        variation: -2.00,
-        result: 'ACC',
-        isSelected: false,
-        isEditing: false
-      },
-      {
-        slNo: 6,
-        drawingNo: 'SW-300-100-8"-CS',
-        qty: '1 NOS',
-        details: 'F',
-        drawingDimension: 300,
-        actualDimension: 301,
-        variation: 1.00,
-        result: 'ACC',
-        isSelected: false,
-        isEditing: false
+    this.materialItems.forEach(item => {
+      if (item.isSelected) {
+        item.reportNumber = this.currentReportNumber;
       }
-    ];
+    });
+  }
+
+  // Export functionality
+  exportReport(): void {
+    // Implement export functionality
+    // This would typically generate a PDF, Excel, or other format
+    alert('Exporting report...');
+
+    // Example implementation would go here
+    console.log('Exporting items:', this.materialItems);
   }
 }

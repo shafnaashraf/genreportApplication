@@ -1,4 +1,4 @@
-<!-- material-tracking.component.html -->
+<!-- dimensions.component.html -->
 <div class="material-tracking-container">
   <div class="search-section">
     <form [formGroup]="searchForm">
@@ -19,12 +19,24 @@
           <button class="action-btn search-btn" (click)="search()">
             <i class="fas fa-search"></i> SEARCH
           </button>
-          <button class="action-btn export-btn" (click)="exportReport()">
-            <i class="fas fa-file-export"></i> EXPORT
-          </button>
         </div>
       </div>
     </form>
+  </div>
+
+  <!-- Report Number section positioned at the top -->
+  <div class="report-actions-section" *ngIf="showResults">
+    <div class="report-number-form">
+      <div class="field-group" style="max-width: 600px;">
+        <input type="text" id="reportNumber" [(ngModel)]="currentReportNumber" placeholder="Enter report number">
+      </div>
+      <button class="action-btn apply-btn" [disabled]="!hasSelectedItems()" (click)="applyReportNumber()">
+        APPLY REPORT NUMBER
+      </button>
+      <button class="action-btn export-btn" (click)="exportReport()">
+        <i class="fas fa-file-export"></i> EXPORT
+      </button>
+    </div>
   </div>
 
   <div class="results-section" *ngIf="showResults">
@@ -32,12 +44,16 @@
       <table class="results-table">
         <thead>
         <tr>
+          <th rowspan="2" class="checkbox-column">
+            <input type="checkbox" [checked]="allSelected" (change)="toggleSelectAll()">
+          </th>
           <th rowspan="2">Sl.No</th>
-          <th rowspan="2">DRAWING No</th>
-          <th rowspan="2">Qty</th>
-          <th rowspan="2">Details</th>
-          <th colspan="3">Dimensions</th>
-          <th rowspan="2">Result</th>
+          <th rowspan="2">DRAWING NO.</th>
+          <th rowspan="2">QTY</th>
+          <th rowspan="2">DETAILS</th>
+          <th colspan="3">DIMENSIONS</th>
+          <th rowspan="2">RESULT</th>
+          <th rowspan="2">REPORT NO.</th>
           <th rowspan="2">ACTION</th>
         </tr>
         <tr>
@@ -47,44 +63,107 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let item of materialItems; let i = index" [ngClass]="{'selected': item.isSelected, 'editing': item.isEditing}">
+        <!-- Input Row - Always visible for adding new items -->
+        <tr class="input-row">
+          <td class="checkbox-column">
+            <!-- No checkbox in input row -->
+          </td>
+          <td>
+            <!-- Serial number auto-generated -->
+          </td>
+          <td>
+            <!-- <input type="text" [(ngModel)]="newItem.drawingNo"
+                   [class.invalid]="isFieldInvalid(newItem.drawingNo)"
+                   placeholder="Drawing No"> -->
+            <span>{{ drawingNo }}</span>
+          </td>
+          <td>
+            <input type="text" [(ngModel)]="newItem.qty" placeholder="Qty">
+          </td>
+          <td>
+            <input type="text" [(ngModel)]="newItem.details" placeholder="Details">
+          </td>
+          <td>
+            <input type="number" [(ngModel)]="newItem.drawingDimension" placeholder="Drg Dim">
+          </td>
+          <td>
+            <input type="number" [(ngModel)]="newItem.actualDimension" placeholder="Actual">
+          </td>
+          <td>
+            <input type="number" [(ngModel)]="newItem.variation" placeholder="Variation">
+          </td>
+          <td>
+            <input type="text" [(ngModel)]="newItem.result" placeholder="Result">
+          </td>
+          <td>
+            <input type="text" [(ngModel)]="newItem.reportNumber" placeholder="Report No">
+          </td>
+          <td class="actions-cell">
+            <button class="action-btn add-btn" (click)="saveNewItem()" title="Add Item">
+              <i class="fa fa-plus"></i> Add
+            </button>
+          </td>
+        </tr>
+
+        <!-- Saved Data Rows -->
+        <tr *ngFor="let item of materialItems; let i = index"
+            [ngClass]="{'selected': item.isSelected, 'editing': item.isEditing, 'even-row': i % 2 === 0}">
+          <td class="checkbox-column">
+            <input type="checkbox" [checked]="item.isSelected" (change)="toggleSelection(item)">
+          </td>
           <td>{{ i + 1 }}</td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.drawingNo }}</span>
             <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.drawingNo">
+            <span *ngIf="!item.isEditing">{{ item.drawingNo }}</span>
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
             <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.qty">
+            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.details }}</span>
             <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.details">
+            <span *ngIf="!item.isEditing">{{ item.details }}</span>
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.drawingDimension }}</span>
             <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.drawingDimension">
+            <span *ngIf="!item.isEditing">{{ item.drawingDimension }}</span>
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.actualDimension }}</span>
             <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.actualDimension">
+            <span *ngIf="!item.isEditing">{{ item.actualDimension }}</span>
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.variation }}</span>
             <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.variation">
+            <span *ngIf="!item.isEditing">{{ item.variation }}</span>
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.result }}</span>
             <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.result">
+            <span *ngIf="!item.isEditing">{{ item.result }}</span>
           </td>
-          <td class="actions-column">
-            <button *ngIf="!item.isEditing" class="edit-btn" (click)="toggleEditMode(item)">
-              EDIT
-            </button>
-            <button *ngIf="item.isEditing" class="save-btn" (click)="saveItem(item)">
-              SAVE
-            </button>
+          <td>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.reportNumber">
+            <span *ngIf="!item.isEditing">{{ item.reportNumber }}</span>
           </td>
+          <td class="actions-cell">
+            <div *ngIf="!item.isEditing" class="btn-group">
+              <button class="action-btn edit-btn" (click)="toggleEditMode(item)" title="Edit">
+                <i class="fa fa-edit"></i>
+              </button>
+            </div>
+            <div *ngIf="item.isEditing" class="btn-group">
+              <button class="action-btn save-btn" (click)="saveItem(item)" title="Save">
+                <i class="fa fa-save"></i>
+              </button>
+              <button class="action-btn cancel-btn" (click)="cancelEdit(item)" title="Cancel">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Empty state message -->
+        <tr *ngIf="materialItems.length === 0" class="empty-row">
+          <td colspan="11" class="no-data">No data available. Use the form above to add new entries.</td>
         </tr>
         </tbody>
       </table>

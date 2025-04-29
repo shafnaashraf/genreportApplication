@@ -75,28 +75,28 @@
           </td>
           <td>{{ i + 1 }}</td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.drawingNo }}</span>
-            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.drawingNo">
+            <span>{{ item.drawingNo }}</span>
+           <!-- <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.drawingNo"> -->
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.descriptionAssemblyTagNo }}</span>
-            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.descriptionAssemblyTagNo">
+            <span>{{ item.descriptionAssemblyTagNo }}</span>
+            <!-- <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.descriptionAssemblyTagNo">-->
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.qty }}</span>
-            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+            <span>{{ item.qty }}</span>
+           <!-- <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">-->
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.itemNo }}</span>
-            <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.itemNo">
+            <span >{{ item.itemNo }}</span>
+           <!-- <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.itemNo">-->
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.itemDescription }}</span>
-            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.itemDescription">
+            <span >{{ item.itemDescription }}</span>
+            <!--<input *ngIf="item.isEditing" type="text" [(ngModel)]="item.itemDescription">-->
           </td>
           <td>
-            <span *ngIf="!item.isEditing">{{ item.specificationGrade }}</span>
-            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.specificationGrade">
+            <span>{{ item.specificationGrade }}</span>
+            <!-- <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.specificationGrade">-->
           </td>
           <td>
             <span *ngIf="!item.isEditing">{{ item.thkSize }}</span>

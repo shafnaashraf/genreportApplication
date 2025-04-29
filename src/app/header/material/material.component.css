@@ -102,31 +102,31 @@ input[type="number"]:focus {
 }
 
 .search-btn {
-    background-color: #4472C4;
+    background-color: #4a90e2;
 }
 
 .search-btn:hover {
-    background-color: #3a63af;
+    background-color: #3a7bc8;
 }
 
 .export-btn {
-    background-color: #4472C4;
+    background-color: #ff9800;
 }
 
 .export-btn:hover {
-    background-color: #3a63af;
+    background-color: #e68a00;
 }
 
 .apply-btn {
-    background-color: #3a63af;
+    background-color: #4caf50;
 }
 
 .apply-btn:hover {
-    background-color: #3a63af;
+    background-color: #3d9c40;
 }
 
 .apply-btn:disabled {
-    background-color: #6c757d;
+    background-color: #a5d6a7;
     cursor: not-allowed;
 }
 
@@ -234,19 +234,19 @@ input[type="number"]:focus {
 }
 
 .edit-btn {
-    background-color: #3498db;
+    background-color: #2196f3;
 }
 
 .edit-btn:hover {
-    background-color: #2980b9;
+    background-color: #0d8aee;
 }
 
 .save-btn {
-    background-color: #3498db;
+    background-color: #4caf50;
 }
 
 .save-btn:hover {
-    background-color: #2980b9;
+    background-color: #3d9c40;
 }
 
 /* Toast notification */

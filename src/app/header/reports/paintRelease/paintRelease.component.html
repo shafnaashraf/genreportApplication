@@ -11,37 +11,52 @@
                     <label>SUB JOB NUMBER</label>
                     <input type="text" formControlName="subJobNumber">
                 </div>
-                <div class="field-group">
-                    <label>DRAWING No</label>
-                    <input type="text" formControlName="drawingNo">
-                </div>
                 <div class="button-group">
                     <button class="action-btn search-btn" (click)="search()">
                         <i class="fas fa-search"></i> SEARCH
-                    </button>
-                    <button class="action-btn export-btn" (click)="exportReport()">
-                        <i class="fas fa-file-export"></i> EXPORT
                     </button>
                 </div>
             </div>
         </form>
     </div>
+  <!-- Report Number section positioned at the top -->
+  <div class="report-actions-section" *ngIf="showResults">
+    <div class="report-number-form">
+      <div class="field-group" style="max-width: 600px;">
+        <input type="text" id="reportNumber" [(ngModel)]="currentReportNumber" placeholder="Enter report number">
+      </div>
+      <button class="action-btn apply-btn" [disabled]="!hasSelectedItems()" (click)="applyReportNumber()">
+        APPLY REPORT NUMBER
+      </button>
+      <button class="action-btn export-btn" (click)="exportReport()">
+        <i class="fas fa-file-export"></i> EXPORT
+      </button>
+    </div>
+  </div>
 
     <div class="results-section" *ngIf="showResults">
         <div class="table-container">
             <table class="results-table">
                 <thead>
                 <tr>
-                    <th>Sl No.</th>
+                  <th class="checkbox-column">
+                    <input type="checkbox" [checked]="allSelected" (change)="toggleSelectAll()">
+                  </th>
+                    <th style="max-width: 20px">Sl No.</th>
                     <th>DRAWING NUMBER</th>
                     <th>DESCRIPTION</th>
                     <th>QTY</th>
+                    <th>REPORT NO.</th>
+                  <th>PAINT SYSTEM</th>
                     <th>ACTION</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let item of materialItems" [ngClass]="{'selected': item.isSelected, 'editing': item.isEditing}">
-                    <td>{{ item.slNo }}</td>
+                <tr *ngFor="let item of materialItems;let i=index;" [ngClass]="{'selected': item.isSelected, 'editing': item.isEditing}">
+                  <td class="checkbox-column">
+                    <input type="checkbox" [checked]="item.isSelected" (change)="toggleSelection(item)">
+                  </td>
+                    <td>{{ i+1 }}</td>
                     <td>
                         <span *ngIf="!item.isEditing">{{ item.drawingNo }}</span>
                         <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.drawingNo">
@@ -54,14 +69,29 @@
                         <span *ngIf="!item.isEditing">{{ item.qty }}</span>
                         <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
                     </td>
-                    <td class="actions-column">
-                        <button *ngIf="!item.isEditing" class="edit-btn" (click)="toggleEditMode(item)">
-                            EDIT
-                        </button>
-                        <button *ngIf="item.isEditing" class="save-btn" (click)="saveItem(item)">
-                            SAVE
-                        </button>
-                    </td>
+                  <td>
+                    <span *ngIf="!item.isEditing">{{ item.qty }}</span>
+                    <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+                  </td>
+                  <td>
+                    <span *ngIf="!item.isEditing">{{ item.qty }}</span>
+                    <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.qty">
+                  </td>
+                  <td class="actions-cell">
+                    <div *ngIf="!item.isEditing" class="btn-group">
+                      <button class="action-btn edit-btn" (click)="toggleEditMode(item)" title="Edit">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                    </div>
+                    <div *ngIf="item.isEditing" class="btn-group">
+                      <button class="action-btn save-btn" (click)="saveItem(item)" title="Save">
+                        <i class="fa fa-save"></i>
+                      </button>
+                      <button class="action-btn cancel-btn" title="Cancel">
+                        <i class="fa fa-times"></i>
+                      </button>
+                    </div>
+                  </td>
                 </tr>
                 </tbody>
             </table>
