@@ -5,7 +5,7 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 
 interface MaterialItem {
   drawingNo: string;
-  jointNo: number;
+  jointNo: string;
   itemDescription: string;
   materialDesc: string;
   material: string;
@@ -40,6 +40,11 @@ export class WeldHistoryComponent implements OnInit {
   showResults = false;
   currentReportNumber = '';
   allSelected = false;
+  selectedJointNo: string  = '';
+  selectedDrawingNo: string = '';
+  uniqueJointNumbers: string[] = [];
+  uniqueDrawingNumbers: string[] = [];
+  filteredMaterialItems: any[] = [];
 
   constructor(private fb: FormBuilder) { }
 
@@ -47,6 +52,37 @@ export class WeldHistoryComponent implements OnInit {
     this.initSearchForm();
     // Mock data for demonstration
     this.materialItems = this.getMockData();
+    this.extractUniqueValues();
+  }
+
+  extractUniqueValues() {
+    // Extract unique joint numbers
+    this.uniqueJointNumbers = [...new Set(this.materialItems.map(item => item.jointNo))];
+
+    // Extract unique drawing numbers
+    this.uniqueDrawingNumbers = [...new Set(this.materialItems.map(item => item.drawingNo))];
+
+    // Initialize filtered items with all items
+    this.filteredMaterialItems = [...this.materialItems];
+  }
+  // Apply filters based on selections
+  applyFilters() {
+    this.filteredMaterialItems = this.materialItems.filter(item => {
+      // Filter by joint number if selected
+      const jointMatch = !this.selectedJointNo || item.jointNo === this.selectedJointNo;
+
+      // Filter by drawing number if selected
+      const drawingMatch = !this.selectedDrawingNo || item.drawingNo === this.selectedDrawingNo;
+
+      // Return items that match both filters
+      return jointMatch && drawingMatch;
+    });
+  }
+
+// Add cancelEdit method if it's missing
+  cancelEdit(item: any) {
+    item.isEditing = false;
+    // Reset any changes if needed
   }
 
   initSearchForm(): void {
@@ -160,7 +196,7 @@ export class WeldHistoryComponent implements OnInit {
         drawingNo: 'SW-300-100-16"-CS',
         material: 'BM-1',
         welderId: 1,
-        jointNo: 156,
+        jointNo: '156',
         itemDescription: 'BEAM, HEA 100, EN 10025 S275JR',
         materialDesc: 'S275JR',
         wps: '',
@@ -177,7 +213,7 @@ export class WeldHistoryComponent implements OnInit {
         drawingNo: 'AW-D-100-16"-CS',
         material: 'BM-2',
         welderId: 1,
-        jointNo: 2,
+        jointNo: '2',
         itemDescription: 'BEAM, HEA 100, EN 10025 S275JR',
         materialDesc: 'S275JR',
         wps: '',
@@ -194,7 +230,7 @@ export class WeldHistoryComponent implements OnInit {
         drawingNo: 'SW-450-100-16"-CS',
         material: 'BM-3',
         welderId: 1,
-        jointNo: 343,
+        jointNo: '343',
         itemDescription: 'PLATE THK 10MM, EN 10025 S275JR',
         materialDesc: 'S275JR',
         wps: '',
@@ -211,7 +247,7 @@ export class WeldHistoryComponent implements OnInit {
         drawingNo: 'SW-300-100-12"-CS',
         material: 'BM-4',
         welderId: 1,
-        jointNo: 498,
+        jointNo: '498',
         itemDescription: 'PLATE THK 10MM, EN 10025 S275JR',
         materialDesc: 'S275JR',
         wps: '',
@@ -228,7 +264,7 @@ export class WeldHistoryComponent implements OnInit {
         drawingNo: 'SW-300-100-12"-CS',
         material: 'BM-4',
         welderId: 1,
-        jointNo: 235,
+        jointNo: '235',
         itemDescription: 'BEAM, HEA 100, EN 10025 S275JR',
         materialDesc: 'S275JR',
         wps: 'e',
@@ -245,7 +281,7 @@ export class WeldHistoryComponent implements OnInit {
         drawingNo: 'SW-300-100-8"-CS',
         material: 'BM-5',
         welderId: 1,
-        jointNo: 590,
+        jointNo: '590',
         itemDescription: 'PLATE THK 10MM, EN 10025 S275JR',
         materialDesc: 'S275JR',
         wps: 're',

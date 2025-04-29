@@ -19,11 +19,22 @@
       </div>
     </form>
   </div>
-  <!-- Report Number section positioned at the top -->
+  <!-- Replaced report number with filter dropdowns -->
   <div class="report-actions-section" *ngIf="showResults">
-    <div class="report-number-form">
-      <div class="field-group" style="max-width: 600px;">
-        <input type="text" id="reportNumber" [(ngModel)]="currentReportNumber" placeholder="Enter report number">
+    <div class="filter-and-export report-number-form">
+      <div class="field-group">
+        <!-- <label>FILTER BY JOINT NUMBER</label> -->
+        <select [(ngModel)]="selectedJointNo" (change)="applyFilters()">
+          <option value="">All Joint Numbers</option>
+          <option *ngFor="let joint of uniqueJointNumbers" [value]="joint">{{ joint }}</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <!-- <label>FILTER BY DRAWING NUMBER</label> -->
+        <select [(ngModel)]="selectedDrawingNo" (change)="applyFilters()">
+          <option value="">All Drawing Numbers</option>
+          <option *ngFor="let drawing of uniqueDrawingNumbers" [value]="drawing">{{ drawing }}</option>
+        </select>
       </div>
       <button class="action-btn export-btn" (click)="exportReport()">
         <i class="fas fa-file-export"></i> EXPORT
@@ -37,7 +48,7 @@
         <thead>
         <tr>
           <th rowspan="3">SI No.</th>
-          <th rowspan="3">JOINT No</th>
+          <th rowspan="3">JOINT No.</th>
           <th rowspan="3">DRAWING NUMBER</th>
           <th rowspan="3">ITEM DESCRIPTION</th>
           <th rowspan="3">MATERIAL DESCRIPTION</th>
@@ -61,7 +72,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let item of materialItems; let i = index" [ngClass]="{'selected': item.isSelected, 'editing': item.isEditing}">
+        <tr *ngFor="let item of filteredMaterialItems; let i = index" [ngClass]="{'selected': item.isSelected, 'editing': item.isEditing}">
           <td>{{ i + 1 }}</td>
           <td>
             <span *ngIf="!item.isEditing">{{ item.jointNo }}</span>
@@ -125,7 +136,7 @@
               <button class="action-btn save-btn" (click)="saveItem(item)" title="Save">
                 <i class="fa fa-save"></i>
               </button>
-              <button class="action-btn cancel-btn"  title="Cancel">
+              <button class="action-btn cancel-btn" (click)="cancelEdit(item)" title="Cancel">
                 <i class="fa fa-times"></i>
               </button>
             </div>
