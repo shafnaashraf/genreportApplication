@@ -1,13 +1,16 @@
 import {Component} from '@angular/core';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {firstValueFrom} from 'rxjs';
+import {jobService} from '../../../services/job.service';
+import {SupportDetailService} from '../../../services/supportDetail.service';
 
 interface ProgressRow {
   assemblyTagNo: string;
   drawingNo: string;
   title: string;
   weight: string;
-  qty: string;
+  qty: number;
   cutting: string;
   fitup: string;
   welding: string;
@@ -17,7 +20,7 @@ interface ProgressRow {
   editMode: boolean;
   isEdited?: boolean;
   jobNumber: string;
-  reportNumber: string;
+  subJobNumber: string;
 }
 
 @Component({
@@ -36,257 +39,262 @@ interface ProgressRow {
 export class ProgressComponent{
 
   searchJobNumber: string = '';
-  selectedReportNumbers: string[] = [];
-  availableReportNumbers: string[] = ['1', '2', '3', '4', '5'];
+  selectedSubJobNumbers: string[] = [];
+  availableSubJobNumbers: string[] = [];
   showDropdown: boolean = false;
   rows: ProgressRow[] = [];
   filteredRows: ProgressRow[] = [];
   searchPerformed: boolean = false;
   hasSearchResults: boolean = false;
 
+  constructor(
+    private supportService : SupportDetailService,
+    private jobService : jobService// Replace with your actual service
+  ) { }
+
   ngOnInit(): void {
     // Sample data
-    this.rows = [
-      {
-        assemblyTagNo: 'A001',
-        drawingNo: 'DWG-2403-001',
-        title: 'HEADER SECTION 1',
-        weight: '450',
-        qty: '1',
-        cutting: '100%',
-        fitup: '80%',
-        welding: '65%',
-        paintReleaseDate: '2025-05-15',
-        blastPaint: '0%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2403',
-        reportNumber: '1'
-      },
-      {
-        assemblyTagNo: 'A002',
-        drawingNo: 'DWG-2403-002',
-        title: 'HEADER SECTION 2',
-        weight: '520',
-        qty: '1',
-        cutting: '100%',
-        fitup: '75%',
-        welding: '50%',
-        paintReleaseDate: '2025-05-20',
-        blastPaint: '0%',
-        remarks: 'Awaiting material',
-        editMode: false,
-        jobNumber: '2404',
-        reportNumber: '1'
-      },
-      {
-        assemblyTagNo: 'A003',
-        drawingNo: 'DWG-2403-003',
-        title: 'ELBOW JOINT',
-        weight: '180',
-        qty: '2',
-        cutting: '90%',
-        fitup: '60%',
-        welding: '40%',
-        paintReleaseDate: '2025-05-22',
-        blastPaint: '0%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2404',
-        reportNumber: '2'
-      },
-      {
-        assemblyTagNo: 'B001',
-        drawingNo: 'DWG-2404-001',
-        title: 'SUPPORT BRACKET',
-        weight: '85',
-        qty: '4',
-        cutting: '100%',
-        fitup: '100%',
-        welding: '100%',
-        paintReleaseDate: '2025-05-10',
-        blastPaint: '50%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2404',
-        reportNumber: '1'
-      }, {
-        assemblyTagNo: 'B001',
-        drawingNo: 'DWG-2404-001',
-        title: 'SUPPORT BRACKET',
-        weight: '85',
-        qty: '4',
-        cutting: '100%',
-        fitup: '100%',
-        welding: '100%',
-        paintReleaseDate: '2025-05-10',
-        blastPaint: '50%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2404',
-        reportNumber: '1'
-      },
-      {
-        assemblyTagNo: 'B001',
-        drawingNo: 'DWG-2404-001',
-        title: 'SUPPORT BRACKET',
-        weight: '85',
-        qty: '4',
-        cutting: '100%',
-        fitup: '100%',
-        welding: '100%',
-        paintReleaseDate: '2025-05-10',
-        blastPaint: '50%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2404',
-        reportNumber: '1'
-      },
-      {
-        assemblyTagNo: 'B001',
-        drawingNo: 'DWG-2404-001',
-        title: 'SUPPORT BRACKET',
-        weight: '85',
-        qty: '4',
-        cutting: '100%',
-        fitup: '100%',
-        welding: '100%',
-        paintReleaseDate: '2025-05-10',
-        blastPaint: '50%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2404',
-        reportNumber: '1'
-      }, {
-        assemblyTagNo: 'B001',
-        drawingNo: 'DWG-2404-001',
-        title: 'SUPPORT BRACKET',
-        weight: '85',
-        qty: '4',
-        cutting: '100%',
-        fitup: '100%',
-        welding: '100%',
-        paintReleaseDate: '2025-05-10',
-        blastPaint: '50%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2404',
-        reportNumber: '1'
-      },
-      {
-        assemblyTagNo: 'B001',
-        drawingNo: 'DWG-2404-001',
-        title: 'SUPPORT BRACKET',
-        weight: '85',
-        qty: '4',
-        cutting: '100%',
-        fitup: '100%',
-        welding: '100%',
-        paintReleaseDate: '2025-05-10',
-        blastPaint: '50%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2404',
-        reportNumber: '1'
-      },
-      {
-        assemblyTagNo: 'B001',
-        drawingNo: 'DWG-2404-001',
-        title: 'SUPPORT BRACKET',
-        weight: '85',
-        qty: '4',
-        cutting: '100%',
-        fitup: '100%',
-        welding: '100%',
-        paintReleaseDate: '2025-05-10',
-        blastPaint: '50%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2404',
-        reportNumber: '1'
-      },
-      {
-        assemblyTagNo: 'B001',
-        drawingNo: 'DWG-2404-001',
-        title: 'SUPPORT BRACKET',
-        weight: '85',
-        qty: '4',
-        cutting: '100%',
-        fitup: '100%',
-        welding: '100%',
-        paintReleaseDate: '2025-05-10',
-        blastPaint: '50%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2404',
-        reportNumber: '1'
-      },
-      {
-        assemblyTagNo: 'B001',
-        drawingNo: 'DWG-2404-001',
-        title: 'SUPPORT BRACKET',
-        weight: '85',
-        qty: '4',
-        cutting: '100%',
-        fitup: '100%',
-        welding: '100%',
-        paintReleaseDate: '2025-05-10',
-        blastPaint: '50%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2404',
-        reportNumber: '1'
-      },
-      {
-        assemblyTagNo: 'B001',
-        drawingNo: 'DWG-2404-001',
-        title: 'SUPPORT BRACKET',
-        weight: '85',
-        qty: '4',
-        cutting: '100%',
-        fitup: '100%',
-        welding: '100%',
-        paintReleaseDate: '2025-05-10',
-        blastPaint: '50%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2404',
-        reportNumber: '1'
-      },
-      {
-        assemblyTagNo: 'B001',
-        drawingNo: 'DWG-2404-001',
-        title: 'SUPPORT BRACKET',
-        weight: '85',
-        qty: '4',
-        cutting: '100%',
-        fitup: '100%',
-        welding: '100%',
-        paintReleaseDate: '2025-05-10',
-        blastPaint: '50%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2404',
-        reportNumber: '1'
-      },
-      {
-        assemblyTagNo: 'B001',
-        drawingNo: 'DWG-2404-001',
-        title: 'SUPPORT BRACKET',
-        weight: '85',
-        qty: '4',
-        cutting: '100%',
-        fitup: '100%',
-        welding: '100%',
-        paintReleaseDate: '2025-05-10',
-        blastPaint: '50%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2404',
-        reportNumber: '1'
-      }
-
-    ];
+    // this.rows = [
+    //   {
+    //     assemblyTagNo: 'A001',
+    //     drawingNo: 'DWG-2403-001',
+    //     title: 'HEADER SECTION 1',
+    //     weight: '450',
+    //     qty: '1',
+    //     cutting: '100%',
+    //     fitup: '80%',
+    //     welding: '65%',
+    //     paintReleaseDate: '2025-05-15',
+    //     blastPaint: '0%',
+    //     remarks: '',
+    //     editMode: false,
+    //     jobNumber: '2403',
+    //     reportNumber: '1'
+    //   },
+    //   {
+    //     assemblyTagNo: 'A002',
+    //     drawingNo: 'DWG-2403-002',
+    //     title: 'HEADER SECTION 2',
+    //     weight: '520',
+    //     qty: '1',
+    //     cutting: '100%',
+    //     fitup: '75%',
+    //     welding: '50%',
+    //     paintReleaseDate: '2025-05-20',
+    //     blastPaint: '0%',
+    //     remarks: 'Awaiting material',
+    //     editMode: false,
+    //     jobNumber: '2404',
+    //     reportNumber: '1'
+    //   },
+    //   {
+    //     assemblyTagNo: 'A003',
+    //     drawingNo: 'DWG-2403-003',
+    //     title: 'ELBOW JOINT',
+    //     weight: '180',
+    //     qty: '2',
+    //     cutting: '90%',
+    //     fitup: '60%',
+    //     welding: '40%',
+    //     paintReleaseDate: '2025-05-22',
+    //     blastPaint: '0%',
+    //     remarks: '',
+    //     editMode: false,
+    //     jobNumber: '2404',
+    //     reportNumber: '2'
+    //   },
+    //   {
+    //     assemblyTagNo: 'B001',
+    //     drawingNo: 'DWG-2404-001',
+    //     title: 'SUPPORT BRACKET',
+    //     weight: '85',
+    //     qty: '4',
+    //     cutting: '100%',
+    //     fitup: '100%',
+    //     welding: '100%',
+    //     paintReleaseDate: '2025-05-10',
+    //     blastPaint: '50%',
+    //     remarks: '',
+    //     editMode: false,
+    //     jobNumber: '2404',
+    //     reportNumber: '1'
+    //   }, {
+    //     assemblyTagNo: 'B001',
+    //     drawingNo: 'DWG-2404-001',
+    //     title: 'SUPPORT BRACKET',
+    //     weight: '85',
+    //     qty: '4',
+    //     cutting: '100%',
+    //     fitup: '100%',
+    //     welding: '100%',
+    //     paintReleaseDate: '2025-05-10',
+    //     blastPaint: '50%',
+    //     remarks: '',
+    //     editMode: false,
+    //     jobNumber: '2404',
+    //     reportNumber: '1'
+    //   },
+    //   {
+    //     assemblyTagNo: 'B001',
+    //     drawingNo: 'DWG-2404-001',
+    //     title: 'SUPPORT BRACKET',
+    //     weight: '85',
+    //     qty: '4',
+    //     cutting: '100%',
+    //     fitup: '100%',
+    //     welding: '100%',
+    //     paintReleaseDate: '2025-05-10',
+    //     blastPaint: '50%',
+    //     remarks: '',
+    //     editMode: false,
+    //     jobNumber: '2404',
+    //     reportNumber: '1'
+    //   },
+    //   {
+    //     assemblyTagNo: 'B001',
+    //     drawingNo: 'DWG-2404-001',
+    //     title: 'SUPPORT BRACKET',
+    //     weight: '85',
+    //     qty: '4',
+    //     cutting: '100%',
+    //     fitup: '100%',
+    //     welding: '100%',
+    //     paintReleaseDate: '2025-05-10',
+    //     blastPaint: '50%',
+    //     remarks: '',
+    //     editMode: false,
+    //     jobNumber: '2404',
+    //     reportNumber: '1'
+    //   }, {
+    //     assemblyTagNo: 'B001',
+    //     drawingNo: 'DWG-2404-001',
+    //     title: 'SUPPORT BRACKET',
+    //     weight: '85',
+    //     qty: '4',
+    //     cutting: '100%',
+    //     fitup: '100%',
+    //     welding: '100%',
+    //     paintReleaseDate: '2025-05-10',
+    //     blastPaint: '50%',
+    //     remarks: '',
+    //     editMode: false,
+    //     jobNumber: '2404',
+    //     reportNumber: '1'
+    //   },
+    //   {
+    //     assemblyTagNo: 'B001',
+    //     drawingNo: 'DWG-2404-001',
+    //     title: 'SUPPORT BRACKET',
+    //     weight: '85',
+    //     qty: '4',
+    //     cutting: '100%',
+    //     fitup: '100%',
+    //     welding: '100%',
+    //     paintReleaseDate: '2025-05-10',
+    //     blastPaint: '50%',
+    //     remarks: '',
+    //     editMode: false,
+    //     jobNumber: '2404',
+    //     reportNumber: '1'
+    //   },
+    //   {
+    //     assemblyTagNo: 'B001',
+    //     drawingNo: 'DWG-2404-001',
+    //     title: 'SUPPORT BRACKET',
+    //     weight: '85',
+    //     qty: '4',
+    //     cutting: '100%',
+    //     fitup: '100%',
+    //     welding: '100%',
+    //     paintReleaseDate: '2025-05-10',
+    //     blastPaint: '50%',
+    //     remarks: '',
+    //     editMode: false,
+    //     jobNumber: '2404',
+    //     reportNumber: '1'
+    //   },
+    //   {
+    //     assemblyTagNo: 'B001',
+    //     drawingNo: 'DWG-2404-001',
+    //     title: 'SUPPORT BRACKET',
+    //     weight: '85',
+    //     qty: '4',
+    //     cutting: '100%',
+    //     fitup: '100%',
+    //     welding: '100%',
+    //     paintReleaseDate: '2025-05-10',
+    //     blastPaint: '50%',
+    //     remarks: '',
+    //     editMode: false,
+    //     jobNumber: '2404',
+    //     reportNumber: '1'
+    //   },
+    //   {
+    //     assemblyTagNo: 'B001',
+    //     drawingNo: 'DWG-2404-001',
+    //     title: 'SUPPORT BRACKET',
+    //     weight: '85',
+    //     qty: '4',
+    //     cutting: '100%',
+    //     fitup: '100%',
+    //     welding: '100%',
+    //     paintReleaseDate: '2025-05-10',
+    //     blastPaint: '50%',
+    //     remarks: '',
+    //     editMode: false,
+    //     jobNumber: '2404',
+    //     reportNumber: '1'
+    //   },
+    //   {
+    //     assemblyTagNo: 'B001',
+    //     drawingNo: 'DWG-2404-001',
+    //     title: 'SUPPORT BRACKET',
+    //     weight: '85',
+    //     qty: '4',
+    //     cutting: '100%',
+    //     fitup: '100%',
+    //     welding: '100%',
+    //     paintReleaseDate: '2025-05-10',
+    //     blastPaint: '50%',
+    //     remarks: '',
+    //     editMode: false,
+    //     jobNumber: '2404',
+    //     reportNumber: '1'
+    //   },
+    //   {
+    //     assemblyTagNo: 'B001',
+    //     drawingNo: 'DWG-2404-001',
+    //     title: 'SUPPORT BRACKET',
+    //     weight: '85',
+    //     qty: '4',
+    //     cutting: '100%',
+    //     fitup: '100%',
+    //     welding: '100%',
+    //     paintReleaseDate: '2025-05-10',
+    //     blastPaint: '50%',
+    //     remarks: '',
+    //     editMode: false,
+    //     jobNumber: '2404',
+    //     reportNumber: '1'
+    //   },
+    //   {
+    //     assemblyTagNo: 'B001',
+    //     drawingNo: 'DWG-2404-001',
+    //     title: 'SUPPORT BRACKET',
+    //     weight: '85',
+    //     qty: '4',
+    //     cutting: '100%',
+    //     fitup: '100%',
+    //     welding: '100%',
+    //     paintReleaseDate: '2025-05-10',
+    //     blastPaint: '50%',
+    //     remarks: '',
+    //     editMode: false,
+    //     jobNumber: '2404',
+    //     reportNumber: '1'
+    //   }
+    //
+    // ];
   }
 
   toggleDropdown(): void {
@@ -295,41 +303,104 @@ export class ProgressComponent{
 
   toggleReportSelection(report: string, event: any): void {
     if (event.target.checked) {
-      this.selectedReportNumbers.push(report);
+      this.selectedSubJobNumbers.push(report);
     } else {
-      this.selectedReportNumbers = this.selectedReportNumbers.filter(r => r !== report);
+      this.selectedSubJobNumbers = this.selectedSubJobNumbers.filter(r => r !== report);
     }
   }
 
-  search(): void {
+  async searchSubJobs(){
+    if (this.searchJobNumber) {
+      // Call the service method
+      this.availableSubJobNumbers = [];
+      try {
+        const response = await firstValueFrom(
+          this.jobService.searchSubJobs(this.searchJobNumber)
+        );
+
+        console.log('fetched sub jobs successfully:', response);
+
+        response.subJobDetails.forEach(subJob => {
+          this.availableSubJobNumbers.push(subJob.subJobNumber);
+        })
+        // this.showReportDropdown = true;
+        // this.client = response.clientName;
+        // this.project = response.projectDesc;
+        // this.title = response.title;
+
+      } catch (error) {
+        console.error('Error fetching support details:', error);
+        alert('Error submitting report. Please try again.');
+      }
+    }
+  }
+
+  async search() {
     // Mark that search has been performed
     this.searchPerformed = true;
-
     // Close dropdown
     this.showDropdown = false;
+    if (this.searchJobNumber && this.selectedSubJobNumbers.length > 0) {
+      // Call the service method
+      this.availableSubJobNumbers = [];
+      try {
+        const response = await firstValueFrom(
+          this.supportService.searchSubJobDetailsForSubJobs(this.searchJobNumber , this.selectedSubJobNumbers)
+        );
+
+        console.log('fetched sub job details successfully:', response);
+
+        response.forEach(drawing => {
+          const drawingDetails : ProgressRow ={
+            assemblyTagNo: drawing.assemblyTagNo,
+            drawingNo: drawing.drawingNumber,
+            title: '',
+            weight: '',
+            qty: drawing.qty,
+            cutting: '',
+            fitup: '',
+            welding: '',
+            paintReleaseDate: '',
+            blastPaint: '',
+            remarks: '',
+            editMode: false,
+            jobNumber: drawing.jobNumber,
+            subJobNumber: drawing.subJobNumber
+          }
+          this.filteredRows.push(drawingDetails);
+        })
+        // this.showReportDropdown = true;
+        // this.client = response.clientName;
+        // this.project = response.projectDesc;
+        // this.title = response.title;
+
+      } catch (error) {
+        console.error('Error fetching support details:', error);
+        alert('Error submitting report. Please try again.');
+      }
+    }
 
     // Filter rows based on search criteria
-    if (this.searchJobNumber && this.selectedReportNumbers.length > 0) {
-      this.filteredRows = this.rows.filter(row =>
-        row.jobNumber === this.searchJobNumber &&
-        this.selectedReportNumbers.includes(row.reportNumber)
-      );
-    } else if (this.searchJobNumber) {
-      this.filteredRows = this.rows.filter(row =>
-        row.jobNumber === this.searchJobNumber
-      );
-    } else if (this.selectedReportNumbers.length > 0) {
-      this.filteredRows = this.rows.filter(row =>
-        this.selectedReportNumbers.includes(row.reportNumber)
-      );
-    } else {
-      // If no search criteria, show nothing
-      this.filteredRows = [];
-    }
+    // if (this.searchJobNumber && this.selectedSubJobNumbers.length > 0) {
+    //   this.filteredRows = this.rows.filter(row =>
+    //     row.jobNumber === this.searchJobNumber &&
+    //     this.selectedSubJobNumbers.includes(row.reportNumber)
+    //   );
+    // } else if (this.searchJobNumber) {
+    //   this.filteredRows = this.rows.filter(row =>
+    //     row.jobNumber === this.searchJobNumber
+    //   );
+    // } else if (this.selectedSubJobNumbers.length > 0) {
+    //   this.filteredRows = this.rows.filter(row =>
+    //     this.selectedSubJobNumbers.includes(row.reportNumber)
+    //   );
+    // } else {
+    //   // If no search criteria, show nothing
+    //   this.filteredRows = [];
+    // }
 
     // Update search results flag
     this.hasSearchResults = this.filteredRows.length > 0;
-
     console.log('Search results:', this.filteredRows.length);
   }
 

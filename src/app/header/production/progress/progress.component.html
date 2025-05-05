@@ -19,6 +19,7 @@
         id="searchJobNumber"
         placeholder="Enter Job Number"
         [(ngModel)]="searchJobNumber"
+        (input)="searchSubJobs()"
         name="jobNumber"
       />
     </div>
@@ -26,17 +27,17 @@
     <div class="field-group">
       <div class="dropdown-container">
         <div class="dropdown-display" (click)="toggleDropdown()">
-          {{ selectedReportNumbers.length ? selectedReportNumbers.join(', ') : 'Select Report Numbers' }}
+          {{ selectedSubJobNumbers.length ? selectedSubJobNumbers.join(', ') : 'Select Sub Job Numbers' }}
           <span class="arrow">&#9662;</span>
         </div>
 
         <div class="checkbox-list" *ngIf="showDropdown">
-          <div class="checkbox-item" *ngFor="let report of availableReportNumbers">
+          <div class="checkbox-item" *ngFor="let report of availableSubJobNumbers">
             <input
               type="checkbox"
               [value]="report"
               (change)="toggleReportSelection(report, $event)"
-              [checked]="selectedReportNumbers.includes(report)"
+              [checked]="selectedSubJobNumbers.includes(report)"
             />
             <span>{{ report }}</span>
           </div>
@@ -57,7 +58,7 @@
       <div class="report-header">
         <div class="job-info">
           <span class="info-label"><strong>JOB NUMBER:</strong> <span class="info-value">{{ searchJobNumber }}</span></span>
-          <span class="info-label"><strong>REPORT NUMBER:</strong> <span class="info-value">{{ selectedReportNumbers.join(', ') }}</span></span>
+          <span class="info-label"><strong>SUB JOB NUMBER:</strong> <span class="info-value">{{ selectedSubJobNumbers.join(', ') }}</span></span>
         </div>
         <div class="title">DAS ISLAND SECTIONAL REPLACEMENT OF LZ RELIEF HEADER</div>
       </div>
@@ -141,7 +142,7 @@
     <div *ngIf="!hasSearchResults" class="no-results">
       <div class="no-results-icon">🔍</div>
       <h3>No Results Found</h3>
-      <p>No matching records found for Job Number "{{ searchJobNumber }}" and Report Number "{{ selectedReportNumbers.join(', ') }}"</p>
+      <p>No matching records found for Job Number "{{ searchJobNumber }}" and Report Number "{{ selectedSubJobNumbers.join(', ') }}"</p>
       <p>Please try with different search criteria.</p>
     </div>
   </div>

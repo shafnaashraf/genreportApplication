@@ -51,4 +51,21 @@ export class SupportDetailService {
       .pipe(catchError(this.handleError));
   }
 
+  searchSubJobDetailsForSubJobs(jobNumber: string, subJobNumber: string[]): Observable<SupportDetail[]> {
+    let params = new HttpParams();
+
+    if (jobNumber) {
+      params = params.append('jobNumber', jobNumber);
+    }
+
+    if (subJobNumber && subJobNumber.length > 0) {
+      subJobNumber.forEach(subJob => {
+        params = params.append('subJobNumber', subJob);
+      });
+    }
+
+    return this.http.get<SupportDetail[]>(`${this.apiUrl}/getSupportDetailsBySubJobs`, { params })
+      .pipe(catchError(this.handleError));
+  }
+
 }

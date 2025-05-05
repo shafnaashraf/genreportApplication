@@ -44,6 +44,8 @@ export class jobService {
       .pipe(catchError(this.handleError));
   }
 
+
+
   // Update material item
   updateMaterialItem(item: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${item.id}`, item);
