@@ -46,6 +46,7 @@ export class ProgressComponent{
   filteredRows: ProgressRow[] = [];
   searchPerformed: boolean = false;
   hasSearchResults: boolean = false;
+  title : string ='';
 
   constructor(
     private supportService : SupportDetailService,
@@ -81,7 +82,7 @@ export class ProgressComponent{
         // this.showReportDropdown = true;
         // this.client = response.clientName;
         // this.project = response.projectDesc;
-        // this.title = response.title;
+        this.title = response.title;
 
       } catch (error) {
         console.error('Error fetching support details:', error);
@@ -97,7 +98,7 @@ export class ProgressComponent{
     this.showDropdown = false;
     if (this.searchJobNumber && this.selectedSubJobNumbers.length > 0) {
       // Call the service method
-      this.availableSubJobNumbers = [];
+      this.filteredRows = [];
       try {
         const response = await firstValueFrom(
           this.supportService.searchSubJobDetailsForSubJobs(this.searchJobNumber , this.selectedSubJobNumbers)
@@ -124,10 +125,10 @@ export class ProgressComponent{
           }
           this.filteredRows.push(drawingDetails);
         })
-        // this.showReportDropdown = true;
-        // this.client = response.clientName;
-        // this.project = response.projectDesc;
-        // this.title = response.title;
+
+        // Update search results flag
+        this.hasSearchResults = this.filteredRows.length > 0;
+        console.log('Search results:', this.filteredRows.length);
 
       } catch (error) {
         console.error('Error fetching support details:', error);
@@ -154,9 +155,6 @@ export class ProgressComponent{
     //   this.filteredRows = [];
     // }
 
-    // Update search results flag
-    this.hasSearchResults = this.filteredRows.length > 0;
-    console.log('Search results:', this.filteredRows.length);
   }
 
   toggleEdit(row: ProgressRow): void {

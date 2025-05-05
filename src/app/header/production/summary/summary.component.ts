@@ -1,9 +1,11 @@
 import {Component} from '@angular/core';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {firstValueFrom} from 'rxjs';
+import {jobService} from '../../../services/job.service';
+import {SupportDetailService} from '../../../services/supportDetail.service';
 
 interface ProgressRow {
-  jobNo: string;
   title: string;
   totalQty: string;
   UOM: string;
@@ -36,103 +38,19 @@ interface ProgressRow {
 export class SummaryComponent{
   searchJobNumber: string = '';
   selectedSubJobNumbers: string[] = [];
-  availableSubJobNumbers: string[] = ['1', '2', '3', '4', '5'];
+  availableSubJobNumbers: string[] = [];
   showDropdown: boolean = false;
   rows: ProgressRow[] = [];
   filteredRows: ProgressRow[] = [];
   searchPerformed: boolean = false;
   hasSearchResults: boolean = false;
+  title : string ='';
 
-  ngOnInit(): void {
-    // Sample data
-    this.rows = [
-      {
-        jobNo: 'A001',
-        fabCompPercent: 'DWG-2403-001',
-        title: 'HEADER SECTION 1 rythjukcmjgfkmjjkkjkhjjfhjkjh',
-        UOM: '450',
-        totalQty: '1',
-        cutting: '100%',
-        fitup: '80%',
-        welding: '65%',
-        paintReleaseDate: '2025-05-15',
-        blastPaint: '0%',
-        compPercent:'20%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2403',
-        subJobNumber: '1'
-      },
-      {
-        jobNo: 'A001',
-        fabCompPercent: 'DWG-2403-001',
-        title: 'HEADER SECTION 1',
-        UOM: '450',
-        totalQty: '1',
-        cutting: '100%',
-        fitup: '80%',
-        welding: '65%',
-        paintReleaseDate: '2025-05-15',
-        blastPaint: '0%',
-        compPercent:'20%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2403',
-        subJobNumber: '1'
-      },
-      {
-        jobNo: 'A001',
-        fabCompPercent: 'DWG-2403-001',
-        title: 'HEADER SECTION 1',
-        UOM: '450',
-        totalQty: '1',
-        cutting: '100%',
-        fitup: '80%',
-        welding: '65%',
-        paintReleaseDate: '2025-05-15',
-        blastPaint: '0%',
-        compPercent:'20%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2403',
-        subJobNumber: '1'
-      },
-      {
-        jobNo: 'A001',
-        fabCompPercent: 'DWG-2403-001',
-        title: 'HEADER SECTION 1',
-        UOM: '450',
-        totalQty: '1',
-        cutting: '100%',
-        fitup: '80%',
-        welding: '65%',
-        paintReleaseDate: '2025-05-15',
-        blastPaint: '0%',
-        compPercent:'20%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2403',
-        subJobNumber: '1'
-      }, {
-        jobNo: 'A001',
-        fabCompPercent: 'DWG-2403-001',
-        title: 'HEADER SECTION 1',
-        UOM: '450',
-        totalQty: '1',
-        cutting: '100%',
-        fitup: '80%',
-        welding: '65%',
-        paintReleaseDate: '2025-05-15',
-        blastPaint: '0%',
-        compPercent:'20%',
-        remarks: '',
-        editMode: false,
-        jobNumber: '2403',
-        subJobNumber: '1'
-      }
-    ];
-  }
-
+  constructor(
+    private supportService : SupportDetailService,
+    private jobService : jobService// Replace with your actual service
+  ) { }
+  
   toggleDropdown(): void {
     this.showDropdown = !this.showDropdown;
   }
@@ -145,36 +63,74 @@ export class SummaryComponent{
     }
   }
 
-  search(): void {
-    // Mark that search has been performed
-    this.searchPerformed = true;
+  async searchSubJobs(){
+    if (this.searchJobNumber) {
+      // Call the service method
+      this.availableSubJobNumbers = [];
+      try {
+        const response = await firstValueFrom(
+          this.jobService.searchSubJobs(this.searchJobNumber)
+        );
 
-    // Close dropdown
+        console.log('fetched sub jobs successfully:', response);
+
+        response.subJobDetails.forEach(subJob => {
+          this.availableSubJobNumbers.push(subJob.subJobNumber);
+        })
+        // this.showReportDropdown = true;
+        // this.client = response.clientName;
+        // this.project = response.projectDesc;
+         this.title = response.title;
+
+      } catch (error) {
+        console.error('Error fetching support details:', error);
+        alert('Error submitting report. Please try again.');
+      }
+    }
+  }
+  async search() {
+    this.searchPerformed = true;
     this.showDropdown = false;
 
-    // Filter rows based on search criteria
     if (this.searchJobNumber && this.selectedSubJobNumbers.length > 0) {
-      this.filteredRows = this.rows.filter(row =>
-        row.jobNumber === this.searchJobNumber &&
-        this.selectedSubJobNumbers.includes(row.subJobNumber)
-      );
-    } else if (this.searchJobNumber) {
-      this.filteredRows = this.rows.filter(row =>
-        row.jobNumber === this.searchJobNumber
-      );
-    } else if (this.selectedSubJobNumbers.length > 0) {
-      this.filteredRows = this.rows.filter(row =>
-        this.selectedSubJobNumbers.includes(row.subJobNumber)
-      );
-    } else {
-      // If no search criteria, show nothing
+      // Call the service method
       this.filteredRows = [];
+      try {
+        const response = await firstValueFrom(
+          this.supportService.searchSubJobDetailsForSubJobs(this.searchJobNumber , this.selectedSubJobNumbers)
+        );
+
+        console.log('fetched sub job details successfully:', response);
+
+        response.forEach(drawing => {
+          const drawingDetails : ProgressRow ={
+            title: '',
+            totalQty: '',
+            UOM: '',
+            cutting: '',
+            fitup: '',
+            welding: '',
+            fabCompPercent: '',
+            paintReleaseDate: '',
+            blastPaint: '',
+            compPercent:'',
+            remarks: '',
+            editMode: false,
+            jobNumber: drawing.jobNumber ,
+            subJobNumber: drawing.subJobNumber
+          }
+
+          this.filteredRows.push(drawingDetails);
+        })
+        this.hasSearchResults = this.filteredRows.length > 0;
+        console.log('Search results:', this.filteredRows.length);
+
+      } catch (error) {
+        console.error('Error fetching support details:', error);
+        alert('Error submitting report. Please try again.');
+      }
     }
 
-    // Update search results flag
-    this.hasSearchResults = this.filteredRows.length > 0;
-
-    console.log('Search results:', this.filteredRows.length);
   }
 
   toggleEdit(row: ProgressRow): void {
