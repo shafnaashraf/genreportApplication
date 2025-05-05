@@ -1,29 +1,29 @@
 <!-- HTML -->
 <div class="form-container">
-  <form (ngSubmit)="onSubmit()">
+  <form  (ngSubmit)="onSubmit()">
     <div class="field-row">
       <label for="JobNumber">Job Number</label>
-      <input type="text" id="JobNumber" name="JobNumber" ngModel required />
+      <input type="text" id="JobNumber" name="JobNumber" [(ngModel)]="jobNumber" required />
     </div>
 
     <div class="field-row">
       <label for="client">Client</label>
-      <input type="text" id="client" name="client" [(ngModel)]="name" required />
+      <input type="text" id="client" name="client" [(ngModel)]="clientName" required />
     </div>
 
     <div class="field-row">
       <label for="project">Project</label>
-      <input type="text" id="project" name="project" ngModel required />
+      <input type="text" id="project" name="project" [(ngModel)]="projectDesc" required />
     </div>
 
     <div class="field-row">
       <label for="title">Title</label>
-      <input type="text" id="title" name="title" ngModel required />
+      <input type="text" id="title" name="title"  [(ngModel)]="title" required />
     </div>
 
     <div class="field-row">
-      <label for="reportNumber">Report Number</label>
-      <input type="text" id="reportNumber" name="reportNumber" ngModel required />
+      <label for="reportNumber">Sub Job Number</label>
+      <input type="text" id="reportNumber" name="reportNumber" [(ngModel)]="subJobNumber"  required />
     </div>
 
     <div class="submit-container">

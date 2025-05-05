@@ -1,324 +1,229 @@
-/* dimensions.component.scss */
+/*
+* Material Tracking Component Styles
+* Organized by section: container, search, table, filters, buttons
+*/
 
+/* ==========================================================================
+   Container and Global Styles
+   ========================================================================== */
 .material-tracking-container {
   padding: 15px;
   font-family: Arial, sans-serif;
+}
 
-  .search-section {
-    background-color: #f5f5f5;
-    padding: 15px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* ==========================================================================
+   Search Section Styles
+   ========================================================================== */
+.search-section {
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-    .search-fields {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      align-items: flex-end;
+.search-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: flex-end;
+}
 
-      .field-group {
-        flex: 1;
-        min-width: 200px;
+.field-group {
+  flex: 1;
+  min-width: 200px;
+}
 
-        label {
-          display: block;
-          margin-bottom: 5px;
-          font-weight: bold;
-          font-size: 12px;
-          color: #555;
-        }
+.field-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 12px;
+  color: #555;
+}
 
-        input {
-          width: 100%;
-          padding: 8px 10px;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-          font-size: 14px;
+.field-group input,
+.field-group select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
 
-          &:focus {
-            outline: none;
-            border-color: #4a90e2;
-            box-shadow: 0 0 3px rgba(74, 144, 226, 0.3);
-          }
-        }
-      }
+.field-group input:focus,
+.field-group select:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 3px rgba(74, 144, 226, 0.3);
+}
 
-      .button-group {
-        display: flex;
-        align-items: flex-end;
-      }
-    }
-  }
+.button-group {
+  display: flex;
+  align-items: flex-end;
+}
 
-  .report-actions-section {
-    margin-bottom: 20px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* ==========================================================================
+   Table Structure Styles
+   ========================================================================== */
+.table-container {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
 
-    .report-number-form, .filter-and-export {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+}
 
-      .field-group {
-        display: flex;
-        flex: 1;
-        min-width: 150px;
-        max-width: 450px;
+.results-table th {
+  position: relative;
+  min-width: 120px;
+  padding: 3px;
+  vertical-align: top;
+  text-align: center;
+  font-weight: bold;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+}
 
-        label {
-          white-space: nowrap;
-          font-weight: bold;
-          margin-right: 10px;
-          font-size: 14px;
-          color: #333;
-        }
+.results-table tbody tr {
+  border-bottom: 1px solid #eee;
+}
 
-        input, select {
-          flex: 1;
-          padding: 8px 10px;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-          font-size: 14px;
+.results-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
 
-          &:focus {
-            outline: none;
-            border-color: #4a90e2;
-            box-shadow: 0 0 3px rgba(74, 144, 226, 0.3);
-          }
-        }
-      }
-    }
-  }
+.results-table tbody td {
+  padding: 3px;
+  border: 1px solid #ddd;
+  vertical-align: middle;
+}
 
-  /* Optional: Adjust export button to align better with filters */
-  .action-btn.export-btn {
-    height: 37px; /* Match the height of select inputs */
-    /*margin-left: auto;  Push export button to the right */
-  }
+.results-table tr.selected {
+  background-color: #e8f4ff;
+}
 
-  .results-section {
-    .table-container {
-      overflow-x: auto;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-      border-radius: 5px;
+.results-table tr.editing {
+  background-color: #fffde7;
+}
 
-      .results-table {
-        width: 100%;
-        border-collapse: collapse;
+/* ==========================================================================
+   Filter Styles
+   ========================================================================== */
+.export-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
 
-        th, td {
-          padding: 2px;
-          text-align: left;
-          border: 1px solid #ddd;
-          font-size: 13px;
+.table-filter {
+  margin-top: 8px;
+}
 
-          input {
-            width: 100%;
-            padding: 6px 8px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            font-size: 14px;
+.header-filter {
+  width: 100%;
+  padding: 0px;
+  font-weight: bold;
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  font-size: 12px;
+  background-color: #f0f0f0;
+}
 
-            &:focus {
-              outline: none;
-              border-color: #4a90e2;
-              box-shadow: 0 0 3px rgba(74, 144, 226, 0.3);
-            }
+.header-filter:hover {
+  border-color: #f0f0f0;
+}
 
-            &.invalid {
-              border-color: #e74c3c;
-              background-color: rgba(231, 76, 60, 0.05);
-            }
+.header-filter:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 3px rgba(74, 144, 226, 0.3);
+}
 
-            &[type="number"] {
-              text-align: right;
-            }
-          }
-        }
+.results-table th select {
+  max-width: 100%;
+}
 
-        th {
-          background-color: #f0f0f0;
-          font-weight: bold;
-          color: #333;
-          position: sticky;
-          top: 0;
-          z-index: 10;
-          text-align: center;
-        }
+/* ==========================================================================
+   Action Buttons Styles
+   ========================================================================== */
+.actions-cell {
+  white-space: nowrap;
+  text-align: center;
+}
 
-        .checkbox-column {
-          width: 40px;
-          text-align: center;
-        }
+.btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
 
-        .actions-cell {
-          text-align: center;
-          width: 120px;
-          white-space: nowrap;
+.action-btn {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-          .btn-group {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-          }
-        }
+.action-btn i {
+  margin-right: 5px;
+}
 
-        .input-row {
-          background-color: #f9f9f9;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-          td {
-            padding: 8px;
-          }
-        }
-
-        tr {
-          &.even-row {
-            background-color: #f9f9f9;
-          }
-
-          &.selected {
-            background-color: rgba(74, 144, 226, 0.1);
-          }
-
-          &.editing {
-            background-color: rgba(255, 235, 59, 0.1);
-          }
-
-          &:hover:not(.input-row) {
-            background-color: rgba(0, 0, 0, 0.03);
-          }
-        }
-
-        .empty-row {
-          td {
-            text-align: center;
-            padding: 20px;
-            color: #777;
-            font-style: italic;
-          }
-        }
-      }
-    }
-  }
-
-  .action-btn {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 13px;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    transition: background-color 0.2s, transform 0.1s;
-
-    &:active {
-      transform: translateY(1px);
-    }
-
-    i {
-      font-size: 14px;
-    }
-
-    &.search-btn {
-      background-color: #4a90e2;
-      color: white;
-
-      &:hover {
-        background-color: #3a7bc8;
-      }
-    }
-
-    &.apply-btn {
-      background-color: #4caf50;
-      color: white;
-
-      &:hover {
-        background-color: #3d9c40;
-      }
-
-      &:disabled {
-        background-color: #a5d6a7;
-        cursor: not-allowed;
-      }
-    }
-
-    &.export-btn {
-      background-color: #ff9800;
-      color: white;
-
-      &:hover {
-        background-color: #e68a00;
-      }
-    }
-
-    &.add-btn {
-      background-color: #4caf50;
-      color: white;
-
-      &:hover {
-        background-color: #3d9c40;
-      }
-    }
-
-    &.edit-btn {
-      background-color: #2196f3;
-      color: white;
-
-      &:hover {
-        background-color: #0d8aee;
-      }
-    }
-
-    &.save-btn {
-      background-color: #4caf50;
-      color: white;
-
-      &:hover {
-        background-color: #3d9c40;
-      }
-    }
-
-    &.cancel-btn {
-      background-color: #f44336;
-      color: white;
-
-      &:hover {
-        background-color: #e53935;
-      }
-    }
+/* Button color variations */
+.export-btn {
+  background-color: #ff9800;
+  color: white;
+  &:hover {
+    background-color: #e68a00;
   }
 }
 
-/* Responsive adjustments */
+.search-btn {
+  background-color: #4a90e2;
+  color: white;
+  &:hover {
+    background-color: #3a7bc8;
+  }
+}
+
+.edit-btn {
+  background-color: #2196f3;
+  color: white;
+  &:hover {
+    background-color: #0d8aee;
+  }
+}
+
+.save-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.cancel-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* ==========================================================================
+   Responsive Adjustments
+   ========================================================================== */
 @media (max-width: 768px) {
-  .material-tracking-container {
-    .search-fields, .report-number-form {
-      flex-direction: column;
+  .field-group {
+    min-width: 100%;
+  }
 
-      .field-group {
-        width: 100%;
-      }
-    }
+  .button-group {
+    width: 100%;
+    margin-top: 10px;
+  }
 
-    .results-table {
-      td, th {
-        padding: 8px 5px;
-        font-size: 13px;
-      }
-
-      .action-btn {
-        padding: 6px 8px;
-        font-size: 12px;
-      }
-    }
+  .action-btn {
+    width: 100%;
   }
 }
