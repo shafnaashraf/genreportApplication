@@ -30,8 +30,8 @@
         <div *ngIf="showReportDropdown" class="results-container">
           <label for="reportDropdown">SELECT SUB JOB NUMBER:</label>
           <div class="select-with-button">
-            <select id="reportDropdown" [(ngModel)]="selectedReport">
-              <option *ngFor="let report of reportNumbers" [value]="report">{{ report }}</option>
+            <select id="reportDropdown" [(ngModel)]="selectedSubJob">
+              <option *ngFor="let report of subJobNumbers" [value]="report">{{ report }}</option>
             </select>
             <button (click)="loadReportDetails()" class="action-button">
               <span class="button-icon">📋</span>
@@ -56,7 +56,7 @@
         </div>
         <div class="header-item">
           <label>Sub Job Number:</label>
-          <span>{{ jobDetails.reportNumber }}</span>
+          <span>{{ jobDetails.subJobNumber }}</span>
         </div>
         <div class="header-item">
           <label>Project:</label>
@@ -87,12 +87,12 @@
           <!-- Input Row - Always visible for adding new items -->
           <tr class="input-row">
             <td>
-              <input type="text" [(ngModel)]="newSupport.drawingNo"
-                     [class.invalid]="isFieldInvalid(newSupport.drawingNo)"
+              <input type="text" [(ngModel)]="newSupport.drawingNumber"
+                     [class.invalid]="isFieldInvalid(newSupport.drawingNumber)"
                      placeholder="Drawing No"/>
             </td>
             <td>
-              <input type="text" [(ngModel)]="newSupport.desc" placeholder="Assembly Tag No"/>
+              <input type="text" [(ngModel)]="newSupport.assemblyTagNo" placeholder="Assembly Tag No"/>
             </td>
             <td>
               <input type="text" [(ngModel)]="newSupport.qty" placeholder="Qty"/>
@@ -104,7 +104,7 @@
               <input type="text" [(ngModel)]="newSupport.itemDesc" placeholder="Item Description"/>
             </td>
             <td>
-              <input type="text" [(ngModel)]="newSupport.specGrade" placeholder="Spec Grade"/>
+              <input type="text" [(ngModel)]="newSupport.specifGrade" placeholder="Spec Grade"/>
             </td>
             <td class="actions-cell">
               <button class="action-btn add-btn" (click)="saveSupport()" title="Add Support">
@@ -118,12 +118,12 @@
               [class.editing]="editingIndex === i"
               [class.even-row]="i % 2 === 0">
             <td>
-              <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.drawingNo" />
-              <span *ngIf="editingIndex !== i">{{ support.drawingNo }}</span>
+              <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.drawingNumber" />
+              <span *ngIf="editingIndex !== i">{{ support.drawingNumber }}</span>
             </td>
             <td>
-              <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.desc" />
-              <span *ngIf="editingIndex !== i">{{ support.desc }}</span>
+              <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.assemblyTagNo" />
+              <span *ngIf="editingIndex !== i">{{ support.assemblyTagNo }}</span>
             </td>
             <td>
               <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.qty" />
@@ -138,8 +138,8 @@
               <span *ngIf="editingIndex !== i">{{ support.itemDesc }}</span>
             </td>
             <td>
-              <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.specGrade" />
-              <span *ngIf="editingIndex !== i">{{ support.specGrade }}</span>
+              <input *ngIf="editingIndex === i" type="text" [(ngModel)]="editingSupport!.specifGrade" />
+              <span *ngIf="editingIndex !== i">{{ support.specifGrade }}</span>
             </td>
             <td class="actions-cell">
               <div *ngIf="editingIndex !== i" class="btn-group">

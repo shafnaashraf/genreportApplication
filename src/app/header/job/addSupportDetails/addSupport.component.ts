@@ -1,15 +1,11 @@
 import {Component} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
+import {jobService} from '../../../services/job.service';
+import {SupportDetail} from '../../../models/SupportDetail';
+import {SupportDetailService} from '../../../services/supportDetail.service';
+import {firstValueFrom} from 'rxjs';
 
-interface SupportDetail {
-  drawingNo: string;
-  desc: string;
-  qty: string;
-  itemNo: string;
-  itemDesc: string;
-  specGrade: string;
-}
 @Component({
   selector: 'add-support',
   templateUrl: 'addSupport.component.html',
@@ -25,21 +21,29 @@ export class AddSupportComponent{
 
   // Search form properties
   jobNumber: string = '';
-  reportNumbers: string[] = [];
-  selectedReport: string = '';
+  client: string ='';
+  project: string ='';
+  title: string = '';
+  subJobNumbers: string[] = [];
+  selectedSubJob: string = '';
   showReportDropdown: boolean = false;
   showDetailsSection: boolean = false;
+
+  constructor(
+    private supportDetailService: SupportDetailService,
+    private jobService : jobService// Replace with your actual service
+  ) { }
 
   // Job details
   jobDetails: {
     jobNumber: string;
-    reportNumber: string;
+    subJobNumber: string;
     client: string;
     project: string;
     title: string
   } = {
     jobNumber: '',
-    reportNumber: '',
+    subJobNumber: '',
     client: '',
     project: '',
     title: ''
@@ -47,48 +51,75 @@ export class AddSupportComponent{
 
   // Support table properties
   newSupport: SupportDetail = {
-    drawingNo: '',
-    desc: '',
-    qty: '',
+    jobNumber: '',
+    subJobNumber: '',
+    drawingNumber: '',
+    assemblyTagNo: '',
+    qty: 0,
     itemNo: '',
     itemDesc: '',
-    specGrade: ''
+    specifGrade: ''
   };
 
   supportList: SupportDetail[] = [];
   editingSupport: SupportDetail | null = null;
   editingIndex: number = -1;
 
-  // Search job - simulating API call
-  searchJob() {
+  async searchJob() {
     if (this.jobNumber) {
-      // Mock API response - in real app, this would be an API call
-      setTimeout(() => {
-        this.reportNumbers = ['REP-2023-001', 'REP-2023-002', 'REP-2023-003'];
+      // Call the service method
+      this.subJobNumbers = [];
+
+      try {
+        const response = await firstValueFrom(
+          this.jobService.searchSubJobs(this.jobNumber)
+        );
+
+        console.log('fetched sub jobs successfully:', response);
+
+        response.subJobDetails.forEach(subJob => {
+          this.subJobNumbers.push(subJob.subJobNumber);
+        })
         this.showReportDropdown = true;
-      }, 500);
+        this.client = response.clientName;
+        this.project = response.projectDesc;
+        this.title = response.title;
+
+      } catch (error) {
+        console.error('Error fetching support details:', error);
+        alert('Error submitting report. Please try again.');
+      }
     }
   }
 
   // Load report details
-  loadReportDetails() {
-    if (this.selectedReport) {
-      // Mock API response - in real app, this would be an API call
-      setTimeout(() => {
+  async loadReportDetails() {
+    if (this.selectedSubJob) {
+      try {
+        const response = await firstValueFrom(
+          this.supportDetailService.searchSubJobDetails(this.jobNumber, this.selectedSubJob)
+        );
+
+        console.log('fetched support details successfully:', response);
+
         this.jobDetails = {
           jobNumber: this.jobNumber,
-          reportNumber: this.selectedReport,
-          client: 'ABC Corporation',
-          project: 'Industrial Complex Renovation',
-          title: 'Support Details Report'
+          subJobNumber: this.selectedSubJob,
+          client: this.client,
+          project: this.project,
+          title: this.title
         };
 
-        // Initialize empty list - would normally be populated from API
         this.supportList = [];
+        response.forEach(support => {
+          this.supportList.push(support);
+        });
 
-        // Show details section
         this.showDetailsSection = true;
-      }, 500);
+      } catch (error) {
+        console.error('Error fetching support details:', error);
+        alert('Error submitting report. Please try again.');
+      }
     }
   }
 
@@ -105,17 +136,33 @@ export class AddSupportComponent{
   }
 
   // Support table functions
-  saveSupport() {
-    if (this.newSupport.drawingNo !== '') {
-      this.supportList.push({ ...this.newSupport });
-      this.newSupport = {
-        drawingNo: '',
-        desc: '',
-        qty: '',
-        itemNo: '',
-        itemDesc: '',
-        specGrade: ''
-      };
+  async saveSupport() {
+    if (this.newSupport.drawingNumber !== '') {
+      this.newSupport.jobNumber = this.jobNumber;
+      this.newSupport.subJobNumber = this.selectedSubJob;
+
+      try {
+        const response = await firstValueFrom(
+          this.supportDetailService.addSupportDetails(this.newSupport)
+        );
+
+        console.log('Support created successfully:', response);
+
+        this.supportList.push({ ...this.newSupport });
+        this.newSupport = {
+          jobNumber: '',
+          subJobNumber: '',
+          drawingNumber: '',
+          assemblyTagNo: '',
+          qty: 0,
+          itemNo: '',
+          itemDesc: '',
+          specifGrade: ''
+        };
+      } catch (error) {
+        console.error('Error fetching support details:', error);
+        alert('Error submitting report. Please try again.');
+      }
     }
   }
 
@@ -123,7 +170,7 @@ export class AddSupportComponent{
     return value === '';
   }
 
-  editSupport(support: SupportDetail, index: number) {
+  async editSupport(support: SupportDetail, index: number) {
     // Create a clone of the support to edit
     this.editingSupport = { ...support };
     this.editingIndex = index;

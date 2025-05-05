@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterOutlet} from '@angular/router';
-import {jobService} from '../../../services/jobService';
+import {jobService} from '../../../services/job.service';
 import {JobDetailsVO} from '../../../models/JobDetailsVO';
 import {SubJobDetailsVO} from '../../../models/SubJobDetailsVO';
 

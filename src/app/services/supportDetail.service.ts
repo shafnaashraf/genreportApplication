@@ -5,14 +5,15 @@ import {Observable, throwError} from 'rxjs';
 import {environment} from "../environments/environment";
 import {catchError} from "rxjs/operators";
 import {JobDetailsVO} from '../models/JobDetailsVO';
+import {SupportDetail} from '../models/SupportDetail';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class jobService {
+export class SupportDetailService {
 
-  private apiUrl = environment.apiUrl + '/api/jobs';
+  private apiUrl = environment.apiUrl + '/api/supportDetails';
 
   private handleError(error: any) {
     let errorMessage = '';
@@ -30,8 +31,18 @@ export class jobService {
   constructor(private http: HttpClient) { }
 
   // Get material items by search criteria
-  addJob(job: JobDetailsVO): Observable<JobDetailsVO> {
-    return this.http.post<JobDetailsVO>(`${this.apiUrl}/createJob`, job)
+  addSupportDetails(job: SupportDetail): Observable<SupportDetail> {
+    return this.http.post<SupportDetail>(`${this.apiUrl}/createSupport`, job)
+      .pipe(catchError(this.handleError));
+  }
+
+  searchSubJobDetails(jobNumber: string,subJobNumber:string): Observable<SupportDetail[]> {
+    let params = new HttpParams();
+    if (jobNumber) {
+      params = params.append('jobNumber', jobNumber);
+      params = params.append('subJobNumber', subJobNumber);
+    }
+    return this.http.get<SupportDetail[]>(`${this.apiUrl}/getSupportDetails`, { params })
       .pipe(catchError(this.handleError));
   }
 
@@ -40,16 +51,4 @@ export class jobService {
     return this.http.put<any>(`${this.apiUrl}/${item.id}`, item);
   }
 
-  // Export material items to report format
-  exportMaterialItems(jobNumber: string, subJobNumber: string, drawingNo: string): Observable<Blob> {
-    let params = new HttpParams();
-    if (jobNumber) params = params.append('jobNumber', jobNumber);
-    if (subJobNumber) params = params.append('subJobNumber', subJobNumber);
-    if (drawingNo) params = params.append('drawingNo', drawingNo);
-
-    return this.http.get(`${this.apiUrl}/export`, {
-      params,
-      responseType: 'blob'
-    });
-  }
 }
