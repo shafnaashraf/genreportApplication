@@ -18,7 +18,7 @@ interface ProgressRow {
   editMode: boolean;
   isEdited?: boolean;
   jobNumber: string;
-  reportNumber: string;
+  subJobNumber: string;
 }
 
 @Component({
@@ -35,8 +35,8 @@ interface ProgressRow {
 })
 export class SummaryComponent{
   searchJobNumber: string = '';
-  selectedReportNumbers: string[] = [];
-  availableReportNumbers: string[] = ['1', '2', '3', '4', '5'];
+  selectedSubJobNumbers: string[] = [];
+  availableSubJobNumbers: string[] = ['1', '2', '3', '4', '5'];
   showDropdown: boolean = false;
   rows: ProgressRow[] = [];
   filteredRows: ProgressRow[] = [];
@@ -61,7 +61,7 @@ export class SummaryComponent{
         remarks: '',
         editMode: false,
         jobNumber: '2403',
-        reportNumber: '1'
+        subJobNumber: '1'
       },
       {
         jobNo: 'A001',
@@ -78,7 +78,7 @@ export class SummaryComponent{
         remarks: '',
         editMode: false,
         jobNumber: '2403',
-        reportNumber: '1'
+        subJobNumber: '1'
       },
       {
         jobNo: 'A001',
@@ -95,7 +95,7 @@ export class SummaryComponent{
         remarks: '',
         editMode: false,
         jobNumber: '2403',
-        reportNumber: '1'
+        subJobNumber: '1'
       },
       {
         jobNo: 'A001',
@@ -112,7 +112,7 @@ export class SummaryComponent{
         remarks: '',
         editMode: false,
         jobNumber: '2403',
-        reportNumber: '1'
+        subJobNumber: '1'
       }, {
         jobNo: 'A001',
         fabCompPercent: 'DWG-2403-001',
@@ -128,7 +128,7 @@ export class SummaryComponent{
         remarks: '',
         editMode: false,
         jobNumber: '2403',
-        reportNumber: '1'
+        subJobNumber: '1'
       }
     ];
   }
@@ -139,9 +139,9 @@ export class SummaryComponent{
 
   toggleReportSelection(report: string, event: any): void {
     if (event.target.checked) {
-      this.selectedReportNumbers.push(report);
+      this.selectedSubJobNumbers.push(report);
     } else {
-      this.selectedReportNumbers = this.selectedReportNumbers.filter(r => r !== report);
+      this.selectedSubJobNumbers = this.selectedSubJobNumbers.filter(r => r !== report);
     }
   }
 
@@ -153,18 +153,18 @@ export class SummaryComponent{
     this.showDropdown = false;
 
     // Filter rows based on search criteria
-    if (this.searchJobNumber && this.selectedReportNumbers.length > 0) {
+    if (this.searchJobNumber && this.selectedSubJobNumbers.length > 0) {
       this.filteredRows = this.rows.filter(row =>
         row.jobNumber === this.searchJobNumber &&
-        this.selectedReportNumbers.includes(row.reportNumber)
+        this.selectedSubJobNumbers.includes(row.subJobNumber)
       );
     } else if (this.searchJobNumber) {
       this.filteredRows = this.rows.filter(row =>
         row.jobNumber === this.searchJobNumber
       );
-    } else if (this.selectedReportNumbers.length > 0) {
+    } else if (this.selectedSubJobNumbers.length > 0) {
       this.filteredRows = this.rows.filter(row =>
-        this.selectedReportNumbers.includes(row.reportNumber)
+        this.selectedSubJobNumbers.includes(row.subJobNumber)
       );
     } else {
       // If no search criteria, show nothing
