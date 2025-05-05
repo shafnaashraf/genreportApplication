@@ -160,8 +160,8 @@ export class AddSupportComponent{
           specifGrade: ''
         };
       } catch (error) {
-        console.error('Error fetching support details:', error);
-        alert('Error submitting report. Please try again.');
+        console.error('Error adding support details:', error);
+        alert('Error adding support details. Please try again.');
       }
     }
   }
@@ -170,16 +170,30 @@ export class AddSupportComponent{
     return value === '';
   }
 
-  async editSupport(support: SupportDetail, index: number) {
+  editSupport(support: SupportDetail, index: number) {
     // Create a clone of the support to edit
     this.editingSupport = { ...support };
     this.editingIndex = index;
   }
 
-  saveEditedSupport() {
+  async saveEditedSupport() {
     if (this.editingSupport && this.editingIndex >= 0) {
-      this.supportList[this.editingIndex] = { ...this.editingSupport };
-      this.cancelEdit();
+      this.editingSupport.jobNumber = this.jobNumber;
+      this.editingSupport.subJobNumber = this.selectedSubJob;
+
+      try {
+        const response = await firstValueFrom(
+          this.supportDetailService.updateSupportDetails(this.editingSupport)
+        );
+
+        console.log('Support edited successfully:', response);
+        this.supportList[this.editingIndex] = { ...this.editingSupport };
+        this.cancelEdit();
+
+      } catch (error) {
+        console.error('Error editing support details:', error);
+        alert('Error editing support details. Please try again.');
+      }
     }
   }
 

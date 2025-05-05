@@ -31,9 +31,14 @@ export class SupportDetailService {
   constructor(private http: HttpClient) { }
 
   // Get material items by search criteria
-  addSupportDetails(job: SupportDetail): Observable<SupportDetail> {
-    return this.http.post<SupportDetail>(`${this.apiUrl}/createSupport`, job)
+  addSupportDetails(supportDetail: SupportDetail): Observable<SupportDetail> {
+    return this.http.post<SupportDetail>(`${this.apiUrl}/createSupport`, supportDetail)
       .pipe(catchError(this.handleError));
+  }
+
+  // Update material item
+  updateSupportDetails(supportDetail: SupportDetail): Observable<SupportDetail> {
+    return this.http.put<any>(`${this.apiUrl}/editSupport`, supportDetail);
   }
 
   searchSubJobDetails(jobNumber: string,subJobNumber:string): Observable<SupportDetail[]> {
@@ -44,11 +49,6 @@ export class SupportDetailService {
     }
     return this.http.get<SupportDetail[]>(`${this.apiUrl}/getSupportDetails`, { params })
       .pipe(catchError(this.handleError));
-  }
-
-  // Update material item
-  updateMaterialItem(item: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${item.id}`, item);
   }
 
 }
