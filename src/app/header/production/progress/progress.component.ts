@@ -138,6 +138,7 @@ export class ProgressComponent{
       // Save changes
       row.editMode = false;
       row.isEdited = true;
+      row.id = row.progressId != undefined ? row.progressId : undefined;
       try {
         const response = await firstValueFrom(
           this.progressSerivce.addProgressDetails(row)
