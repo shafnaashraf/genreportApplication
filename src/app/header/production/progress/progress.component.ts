@@ -4,24 +4,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {firstValueFrom} from 'rxjs';
 import {jobService} from '../../../services/job.service';
 import {SupportDetailService} from '../../../services/supportDetail.service';
+import {ProgressVO} from '../../../models/ProgressVO';
+import {ProgressService} from '../../../services/progress.service';
 
-interface ProgressRow {
-  assemblyTagNo: string;
-  drawingNo: string;
-  title: string;
-  weight: string;
-  qty: number;
-  cutting: string;
-  fitup: string;
-  welding: string;
-  paintReleaseDate: string;
-  blastPaint: string;
-  remarks: string;
-  editMode: boolean;
-  isEdited?: boolean;
-  jobNumber: string;
-  subJobNumber: string;
-}
 
 @Component({
   selector: 'app-progress',
@@ -42,15 +27,17 @@ export class ProgressComponent{
   selectedSubJobNumbers: string[] = [];
   availableSubJobNumbers: string[] = [];
   showDropdown: boolean = false;
-  rows: ProgressRow[] = [];
-  filteredRows: ProgressRow[] = [];
+  rows: ProgressVO[] = [];
+  filteredRows: ProgressVO[] = [];
   searchPerformed: boolean = false;
   hasSearchResults: boolean = false;
   title : string ='';
+  wait : boolean = false;
 
   constructor(
     private supportService : SupportDetailService,
-    private jobService : jobService// Replace with your actual service
+    private jobService : jobService,
+    private progressSerivce : ProgressService
   ) { }
 
   toggleDropdown(): void {
@@ -79,9 +66,6 @@ export class ProgressComponent{
         response.subJobDetails.forEach(subJob => {
           this.availableSubJobNumbers.push(subJob.subJobNumber);
         })
-        // this.showReportDropdown = true;
-        // this.client = response.clientName;
-        // this.project = response.projectDesc;
         this.title = response.title;
 
       } catch (error) {
@@ -94,6 +78,7 @@ export class ProgressComponent{
   async search() {
     // Mark that search has been performed
     this.searchPerformed = true;
+    this.wait = true;
     // Close dropdown
     this.showDropdown = false;
     if (this.searchJobNumber && this.selectedSubJobNumbers.length > 0) {
@@ -101,27 +86,26 @@ export class ProgressComponent{
       this.filteredRows = [];
       try {
         const response = await firstValueFrom(
-          this.supportService.searchSubJobDetailsForSubJobs(this.searchJobNumber , this.selectedSubJobNumbers)
+          this.progressSerivce.fetchProgressDetails(this.searchJobNumber , this.selectedSubJobNumbers)
         );
-
+        this.wait = false;
         console.log('fetched sub job details successfully:', response);
 
         response.forEach(drawing => {
-          const drawingDetails : ProgressRow ={
-            assemblyTagNo: drawing.assemblyTagNo,
-            drawingNo: drawing.drawingNumber,
-            title: '',
-            weight: '',
+          const drawingDetails : ProgressVO = {
+            drawingNo : drawing.drawingNo,
+            assemblyTagNo : drawing.assemblyTagNo,
+            weight : drawing.weight !=undefined ? drawing.weight :undefined,
             qty: drawing.qty,
-            cutting: '',
-            fitup: '',
-            welding: '',
-            paintReleaseDate: '',
-            blastPaint: '',
-            remarks: '',
+            cutting:  drawing.cutting !=undefined ? drawing.cutting :undefined,
+            fitup:  drawing.fitup !=undefined ? drawing.fitup :undefined,
+            welding:  drawing.welding !=undefined ? drawing.welding :undefined,
+            paintRelDate: drawing.paintRelDate !=undefined ? drawing.paintRelDate :undefined,
+            blastNPaint: drawing.blastNPaint !=undefined ? drawing.blastNPaint :undefined,
+            remarks: drawing.remarks !=undefined ? drawing.remarks :undefined,
             editMode: false,
-            jobNumber: drawing.jobNumber,
-            subJobNumber: drawing.subJobNumber
+            progressId: drawing.progressId !=undefined?drawing.progressId : undefined,
+            supportId: drawing.supportId,
           }
           this.filteredRows.push(drawingDetails);
         })
@@ -135,43 +119,36 @@ export class ProgressComponent{
         alert('Error submitting report. Please try again.');
       }
     }
-
-    // Filter rows based on search criteria
-    // if (this.searchJobNumber && this.selectedSubJobNumbers.length > 0) {
-    //   this.filteredRows = this.rows.filter(row =>
-    //     row.jobNumber === this.searchJobNumber &&
-    //     this.selectedSubJobNumbers.includes(row.reportNumber)
-    //   );
-    // } else if (this.searchJobNumber) {
-    //   this.filteredRows = this.rows.filter(row =>
-    //     row.jobNumber === this.searchJobNumber
-    //   );
-    // } else if (this.selectedSubJobNumbers.length > 0) {
-    //   this.filteredRows = this.rows.filter(row =>
-    //     this.selectedSubJobNumbers.includes(row.reportNumber)
-    //   );
-    // } else {
-    //   // If no search criteria, show nothing
-    //   this.filteredRows = [];
-    // }
-
   }
 
-  toggleEdit(row: ProgressRow): void {
+  toggleEdit(row: ProgressVO): void {
+    if (row.editMode) {
+      // Reset the highlight effect after 2 seconds
+      this.saveProgressDetail(row).then(r => console.log('Saved row:', row));
+
+    } else {
+      // Enter edit mode
+      row.editMode = true;
+    }
+  }
+
+
+  async saveProgressDetail(row: ProgressVO) {
     if (row.editMode) {
       // Save changes
       row.editMode = false;
       row.isEdited = true;
-
-      // Reset the highlight effect after 2 seconds
-      setTimeout(() => {
+      try {
+        const response = await firstValueFrom(
+          this.progressSerivce.addProgressDetails(row)
+        );
         row.isEdited = false;
-      }, 2000);
+        console.log('saved progress details successfully:', response);
 
-      console.log('Saved row:', row);
-    } else {
-      // Enter edit mode
-      row.editMode = true;
+      } catch (error) {
+        console.error('Error fetching support details:', error);
+        alert('Error submitting report. Please try again.');
+      }
     }
   }
 
@@ -184,4 +161,7 @@ export class ProgressComponent{
     console.log('Export functionality');
     // Implement export logic
   }
+
+
+
 }

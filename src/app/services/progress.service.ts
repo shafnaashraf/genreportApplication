@@ -1,18 +1,19 @@
 // src/app/services/material-tracking.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {environment} from "../environments/environment";
 import {catchError} from "rxjs/operators";
-import {JobDetailsVO} from '../models/JobDetailsVO';
+import {SupportDetail} from '../models/SupportDetail';
+import {ProgressVO} from '../models/ProgressVO';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class jobService {
+export class ProgressService {
 
-  private apiUrl = environment.apiUrl + '/api/jobs';
+  private apiUrl = environment.apiUrl + '/api/production';
 
   private handleError(error: any) {
     let errorMessage = '';
@@ -30,30 +31,31 @@ export class jobService {
   constructor(private http: HttpClient) { }
 
   // Get material items by search criteria
-  addJob(job: JobDetailsVO): Observable<JobDetailsVO> {
-    return this.http.post<JobDetailsVO>(`${this.apiUrl}/createJob`, job)
+  addProgressDetails(supportDetail: ProgressVO): Observable<ProgressVO> {
+    return this.http.post<ProgressVO>(`${this.apiUrl}/createProgress`, supportDetail)
       .pipe(catchError(this.handleError));
   }
 
-  searchSubJobs(jobNumber: string): Observable<JobDetailsVO> {
+  // Update material item
+  updateSupportDetails(supportDetail: SupportDetail): Observable<SupportDetail> {
+    return this.http.put<any>(`${this.apiUrl}/editSupport`, supportDetail);
+  }
+
+  fetchProgressDetails(jobNumber: string, subJobNumber: string[]): Observable<ProgressVO[]> {
     let params = new HttpParams();
+
     if (jobNumber) {
       params = params.append('jobNumber', jobNumber);
     }
-    return this.http.get<JobDetailsVO>(`${this.apiUrl}/searchSubJobs`, { params })
+
+    if (subJobNumber && subJobNumber.length > 0) {
+      subJobNumber.forEach(subJob => {
+        params = params.append('subJobNumber', subJob);
+      });
+    }
+
+    return this.http.get<ProgressVO[]>(`${this.apiUrl}/getProgressDetails`, { params })
       .pipe(catchError(this.handleError));
   }
 
-  // Export material items to report format
-  exportMaterialItems(jobNumber: string, subJobNumber: string, drawingNo: string): Observable<Blob> {
-    let params = new HttpParams();
-    if (jobNumber) params = params.append('jobNumber', jobNumber);
-    if (subJobNumber) params = params.append('subJobNumber', subJobNumber);
-    if (drawingNo) params = params.append('drawingNo', drawingNo);
-
-    return this.http.get(`${this.apiUrl}/export`, {
-      params,
-      responseType: 'blob'
-    });
-  }
 }

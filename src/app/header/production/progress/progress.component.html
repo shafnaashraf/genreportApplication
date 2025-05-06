@@ -100,7 +100,7 @@
               <span *ngIf="!row.editMode">{{ row.weight }}</span>
             </td>
             <td>
-              <input *ngIf="row.editMode" [(ngModel)]="row.qty" />
+              <input *ngIf="row.editMode" [disabled]="true" [(ngModel)]="row.qty" />
               <span *ngIf="!row.editMode">{{ row.qty }}</span>
             </td>
             <td>
@@ -116,12 +116,12 @@
               <span *ngIf="!row.editMode">{{ row.welding }}</span>
             </td>
             <td>
-              <input *ngIf="row.editMode" [(ngModel)]="row.paintReleaseDate" type="date" />
-              <span *ngIf="!row.editMode">{{ row.paintReleaseDate }}</span>
+              <input *ngIf="row.editMode" [(ngModel)]="row.paintRelDate" type="date" />
+              <span *ngIf="!row.editMode">{{ row.paintRelDate }}</span>
             </td>
             <td>
-              <input *ngIf="row.editMode" [(ngModel)]="row.blastPaint" />
-              <span *ngIf="!row.editMode">{{ row.blastPaint }}</span>
+              <input *ngIf="row.editMode" [(ngModel)]="row.blastNPaint" />
+              <span *ngIf="!row.editMode">{{ row.blastNPaint }}</span>
             </td>
             <td>
               <input *ngIf="row.editMode" [(ngModel)]="row.remarks" />
@@ -139,7 +139,7 @@
     </div>
 
     <!-- Show when no results found -->
-    <div *ngIf="!hasSearchResults" class="no-results">
+    <div *ngIf="!hasSearchResults && !wait" class="no-results">
       <div class="no-results-icon">🔍</div>
       <h3>No Results Found</h3>
       <p>No matching records found for Job Number "{{ searchJobNumber }}" and Report Number "{{ selectedSubJobNumbers.join(', ') }}"</p>
