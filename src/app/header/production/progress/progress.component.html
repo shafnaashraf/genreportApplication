@@ -92,8 +92,8 @@
               <span *ngIf="!row.editMode">{{ row.drawingNo }}</span>
             </td>
             <td>
-              <input *ngIf="row.editMode" [disabled]="true" [(ngModel)]="row.title" />
-              <span *ngIf="!row.editMode">{{ row.title }}</span>
+              <input *ngIf="row.editMode" [disabled]="true" [(ngModel)]="title" />
+              <span *ngIf="!row.editMode">{{ title }}</span>
             </td>
             <td>
               <input *ngIf="row.editMode" [(ngModel)]="row.weight" />

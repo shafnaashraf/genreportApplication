@@ -1,4 +1,5 @@
 export interface SupportDetail {
+  id?: number;
   jobNumber: string;
   subJobNumber: string;
   drawingNumber: string;

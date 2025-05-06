@@ -89,8 +89,8 @@
               <span *ngIf="!row.editMode">{{ row.jobNumber }}</span>
             </td>
             <td>
-              <input *ngIf="row.editMode" [disabled]="true" [(ngModel)]="row.title" />
-              <span *ngIf="!row.editMode">{{ row.title }}</span>
+              <input *ngIf="row.editMode" [disabled]="true" [(ngModel)]="title" />
+              <span *ngIf="!row.editMode">{{ title }}</span>
             </td>
             <td>
               <input *ngIf="row.editMode" [disabled]="true" [(ngModel)]="row.totalQty" />

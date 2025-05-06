@@ -50,7 +50,7 @@ export class SummaryComponent{
     private supportService : SupportDetailService,
     private jobService : jobService// Replace with your actual service
   ) { }
-  
+
   toggleDropdown(): void {
     this.showDropdown = !this.showDropdown;
   }
