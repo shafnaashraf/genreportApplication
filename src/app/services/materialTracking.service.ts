@@ -50,14 +50,15 @@ export class MaterialTrackingService {
   addReportNumber(materialIds: string[], reportNo: string): Observable<string> {
     let params = new HttpParams();
 
-    // Add each materialId as a separate parameter
     materialIds.forEach(id => {
       params = params.append('materialIds', id);
     });
     params = params.set('reportNo', reportNo);
 
-    return this.http.post<string>(`${this.apiUrl}/addReportNo`, null, { params })
-      .pipe(catchError(this.handleError));
+    return this.http.post(`${this.apiUrl}/addReportNo`, null, {
+      params,
+      responseType: 'text'  // Handle plain text response
+    }).pipe(catchError(this.handleError));
   }
 
     // Export material items to report format
