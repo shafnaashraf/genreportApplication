@@ -5,8 +5,7 @@ import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {MaterialTrackingService} from '../../services/materialTracking.service';
 import {MaterialItemVO} from '../../models/MaterialItemVO';
 import {firstValueFrom} from 'rxjs';
-import {ProgressVO} from '../../models/ProgressVO';
-
+import {MaterialTrackingExportService} from '../../services/exportServices/materialTrackingExport.service';
 
 
 @Component({
@@ -31,7 +30,8 @@ export class MaterialComponent implements OnInit {
   loading = false;
   error: string | null = null;
 
-  constructor(private fb: FormBuilder,private materialTrackingService: MaterialTrackingService) { }
+  constructor(private fb: FormBuilder,private materialTrackingService: MaterialTrackingService,
+  private excelService : MaterialTrackingExportService) { }
 
   ngOnInit(): void {
     this.initSearchForm();
@@ -88,12 +88,6 @@ export class MaterialComponent implements OnInit {
         this.loading = false;
       }
     }
-  }
-
-  exportReport(): void {
-    // Implement export functionality
-    console.log('Exporting report...');
-    alert('Report exported successfully!');
   }
 
   toggleSelection(item: MaterialItemVO): void {
@@ -225,4 +219,42 @@ export class MaterialComponent implements OnInit {
     }, 100);
   }
 
+  //export part
+
+  // Method to handle export button click
+  exportReport(): void {
+
+    console.log('Exporting report...');
+    const { jobNumber, subJobNumber, drawingNo } = this.searchForm.value;
+    this.excelService.exportToExcel(
+      this.materialItems,
+      jobNumber,
+      subJobNumber,
+      drawingNo
+    );
+  }
+
+  /* Method to export only selected rows
+  onExportSelectedClick(): void {
+    const selectedIndices = this.getSelectedRowIndices(); // Implement this based on your checkbox logic
+    const jobNumber = 'JOB001';
+    const subJobNumber = 'SUB001';
+    const drawingNumber = 'd1';
+
+    this.excelService.exportSelectedRowsToExcel(
+      this.materialData,
+      selectedIndices,
+      jobNumber,
+      subJobNumber,
+      drawingNumber
+    );
+  }
+
+  // Helper method to get selected row indices (implement based on your checkbox logic)
+  private getSelectedRowIndices(): number[] {
+    // Return array of selected row indices
+    // This depends on how you're tracking checkbox selections
+    return []; // Replace with actual implementation
+  }
+  */
 }

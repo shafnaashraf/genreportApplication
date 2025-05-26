@@ -8,7 +8,7 @@ import {MaterialItemVO} from '../models/MaterialItemVO';
 import {ProgressVO} from '../models/ProgressVO';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class MaterialTrackingService {
     private apiUrl = environment.apiUrl + '/api/material';
