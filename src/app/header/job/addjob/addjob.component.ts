@@ -34,6 +34,7 @@ export class AddjobComponent{
 
     const subJobDetail: SubJobDetailsVO = {
       subJobNumber: this.subJobNumber,
+      title: this.title
     };
     subJobDetails.push(subJobDetail);
 
@@ -41,7 +42,6 @@ export class AddjobComponent{
       jobNumber : this.jobNumber,
       clientName :this.clientName,
       projectDesc : this.projectDesc,
-      title : this.title,
       subJobDetails : subJobDetails
     }
     // Create JobDetailsVO from form

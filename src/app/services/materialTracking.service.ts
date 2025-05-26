@@ -4,12 +4,14 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {environment} from "../environments/environment";
 import {catchError} from "rxjs/operators";
+import {MaterialItemVO} from '../models/MaterialItemVO';
+import {ProgressVO} from '../models/ProgressVO';
 
 @Injectable({
     providedIn: 'root'
 })
 export class MaterialTrackingService {
-    private apiUrl = environment.apiUrl + '/api/material-tracking';
+    private apiUrl = environment.apiUrl + '/api/material';
     private handleError(error: any) {
         let errorMessage = '';
         if (error.error instanceof ErrorEvent) {
@@ -25,21 +27,38 @@ export class MaterialTrackingService {
 
     constructor(private http: HttpClient) { }
 
-    // Get material items by search criteria
-    searchMaterialItems(jobNumber: string, subJobNumber: string, drawingNo: string): Observable<any[]> {
+    searchMaterialItems(jobNumber: string, subJobNumber: string, drawingNo: string): Observable<MaterialItemVO[]> {
         let params = new HttpParams();
         if (jobNumber) params = params.append('jobNumber', jobNumber);
         if (subJobNumber) params = params.append('subJobNumber', subJobNumber);
         if (drawingNo) params = params.append('drawingNo', drawingNo);
 
-        return this.http.get<any[]>(`${this.apiUrl}/search`, { params })
+        return this.http.get<any[]>(`${this.apiUrl}/getMaterialDetails`, { params })
             .pipe(catchError(this.handleError));
     }
 
-    // Update material item
-    updateMaterialItem(item: any): Observable<any> {
-        return this.http.put<any>(`${this.apiUrl}/${item.id}`, item);
-    }
+  addMaterialDetails(materialDetail: MaterialItemVO): Observable<MaterialItemVO> {
+    return this.http.post<MaterialItemVO>(`${this.apiUrl}/createMaterialDetails`, materialDetail)
+      .pipe(catchError(this.handleError));
+  }
+
+  addMaterialDetailsForMultiple(materialDetail: MaterialItemVO[]): Observable<MaterialItemVO[]> {
+    return this.http.post<MaterialItemVO[]>(`${this.apiUrl}/createMultipleMaterialDetails`, materialDetail)
+      .pipe(catchError(this.handleError));
+  }
+
+  addReportNumber(materialIds: string[], reportNo: string): Observable<string> {
+    let params = new HttpParams();
+
+    // Add each materialId as a separate parameter
+    materialIds.forEach(id => {
+      params = params.append('materialIds', id);
+    });
+    params = params.set('reportNo', reportNo);
+
+    return this.http.post<string>(`${this.apiUrl}/addReportNo`, null, { params })
+      .pipe(catchError(this.handleError));
+  }
 
     // Export material items to report format
     exportMaterialItems(jobNumber: string, subJobNumber: string, drawingNo: string): Observable<Blob> {

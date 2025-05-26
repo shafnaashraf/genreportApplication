@@ -75,11 +75,11 @@
           </td>
           <td>{{ i + 1 }}</td>
           <td>
-            <span>{{ item.drawingNo }}</span>
+            <span>{{ item.drawingNumber }}</span>
            <!-- <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.drawingNo"> -->
           </td>
           <td>
-            <span>{{ item.descriptionAssemblyTagNo }}</span>
+            <span>{{ item.assemblyTagNo }}</span>
             <!-- <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.descriptionAssemblyTagNo">-->
           </td>
           <td>
@@ -91,11 +91,11 @@
            <!-- <input *ngIf="item.isEditing" type="number" [(ngModel)]="item.itemNo">-->
           </td>
           <td>
-            <span >{{ item.itemDescription }}</span>
+            <span >{{ item.itemDesc }}</span>
             <!--<input *ngIf="item.isEditing" type="text" [(ngModel)]="item.itemDescription">-->
           </td>
           <td>
-            <span>{{ item.specificationGrade }}</span>
+            <span>{{ item.specifGrade }}</span>
             <!-- <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.specificationGrade">-->
           </td>
           <td>
@@ -120,8 +120,8 @@
           </td>
           <!-- Added Report Number cell -->
           <td>
-            <span *ngIf="!item.isEditing">{{ item.reportNumber }}</span>
-            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.reportNumber">
+            <span *ngIf="!item.isEditing">{{ item.reportNo }}</span>
+            <input *ngIf="item.isEditing" type="text" [(ngModel)]="item.reportNo">
           </td>
           <td class="actions-column">
             <button *ngIf="!item.isEditing" class="edit-btn" (click)="toggleEditMode(item)">

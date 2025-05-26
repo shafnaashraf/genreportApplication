@@ -80,7 +80,7 @@ export class SummaryComponent{
         // this.showReportDropdown = true;
         // this.client = response.clientName;
         // this.project = response.projectDesc;
-         this.title = response.title;
+         //this.title = response.title;
 
       } catch (error) {
         console.error('Error fetching support details:', error);

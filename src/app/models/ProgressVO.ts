@@ -13,6 +13,7 @@ export interface ProgressVO {
   isEdited?: boolean;
   supportId:number;
   progressId?:number;
+  title?: string;
   id?: number; //this is actually the progress id only, to handle 2 different api, wrote as seperate
 }
 

@@ -23,7 +23,6 @@ export class AddSupportComponent{
   jobNumber: string = '';
   client: string ='';
   project: string ='';
-  title: string = '';
   subJobNumbers: string[] = [];
   selectedSubJob: string = '';
   showReportDropdown: boolean = false;
@@ -40,13 +39,11 @@ export class AddSupportComponent{
     subJobNumber: string;
     client: string;
     project: string;
-    title: string
   } = {
     jobNumber: '',
     subJobNumber: '',
     client: '',
     project: '',
-    title: ''
   };
 
   // Support table properties
@@ -58,7 +55,8 @@ export class AddSupportComponent{
     qty: 0,
     itemNo: '',
     itemDesc: '',
-    specifGrade: ''
+    specifGrade: '',
+    title:''
   };
 
   supportList: SupportDetail[] = [];
@@ -83,7 +81,6 @@ export class AddSupportComponent{
         this.showReportDropdown = true;
         this.client = response.clientName;
         this.project = response.projectDesc;
-        this.title = response.title;
 
       } catch (error) {
         console.error('Error fetching support details:', error);
@@ -107,7 +104,6 @@ export class AddSupportComponent{
           subJobNumber: this.selectedSubJob,
           client: this.client,
           project: this.project,
-          title: this.title
         };
 
         this.supportList = [];

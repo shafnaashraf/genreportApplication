@@ -31,7 +31,6 @@ export class ProgressComponent{
   filteredRows: ProgressVO[] = [];
   searchPerformed: boolean = false;
   hasSearchResults: boolean = false;
-  title : string ='';
   wait : boolean = false;
 
   constructor(
@@ -66,7 +65,6 @@ export class ProgressComponent{
         response.subJobDetails.forEach(subJob => {
           this.availableSubJobNumbers.push(subJob.subJobNumber);
         })
-        this.title = response.title;
 
       } catch (error) {
         console.error('Error fetching support details:', error);
@@ -106,6 +104,7 @@ export class ProgressComponent{
             editMode: false,
             progressId: drawing.progressId !=undefined?drawing.progressId : undefined,
             supportId: drawing.supportId,
+            title:drawing.title
           }
           this.filteredRows.push(drawingDetails);
         })
