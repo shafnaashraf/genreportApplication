@@ -6,6 +6,7 @@ import {environment} from "../environments/environment";
 import {catchError} from "rxjs/operators";
 import {JobDetailsVO} from '../models/JobDetailsVO';
 import {SupportDetail} from '../models/SupportDetail';
+import {SummaryVO} from '../models/SummaryVO';
 
 
 @Injectable({
@@ -14,6 +15,7 @@ import {SupportDetail} from '../models/SupportDetail';
 export class SupportDetailService {
 
   private apiUrl = environment.apiUrl + '/api/supportDetails';
+  private productionApiUrl = environment.apiUrl + '/api/production'
 
   private handleError(error: any) {
     let errorMessage = '';
@@ -65,6 +67,23 @@ export class SupportDetailService {
     }
 
     return this.http.get<SupportDetail[]>(`${this.apiUrl}/getSupportDetailsBySubJobs`, { params })
+      .pipe(catchError(this.handleError));
+  }
+
+  getSummaryDetailsBySubJobs(jobNumber: string, subJobNumber: string[]): Observable<SummaryVO[]> {
+    let params = new HttpParams();
+
+    if (jobNumber) {
+      params = params.append('jobNumber', jobNumber);
+    }
+
+    if (subJobNumber && subJobNumber.length > 0) {
+      subJobNumber.forEach(subJob => {
+        params = params.append('subJobNumber', subJob);
+      });
+    }
+
+    return this.http.get<SummaryVO[]>(`${this.productionApiUrl}/getSummaryDetailsBySubJobs`, { params })
       .pipe(catchError(this.handleError));
   }
 

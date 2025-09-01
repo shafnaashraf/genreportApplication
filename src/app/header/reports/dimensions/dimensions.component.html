@@ -106,7 +106,7 @@
         </tr>
 
         <!-- Saved Data Rows -->
-        <tr *ngFor="let item of materialItems; let i = index"
+        <tr *ngFor="let item of dimensionItems; let i = index"
             [ngClass]="{'selected': item.isSelected, 'editing': item.isEditing, 'even-row': i % 2 === 0}">
           <td class="checkbox-column">
             <input type="checkbox" [checked]="item.isSelected" (change)="toggleSelection(item)">
@@ -162,7 +162,7 @@
         </tr>
 
         <!-- Empty state message -->
-        <tr *ngIf="materialItems.length === 0" class="empty-row">
+        <tr *ngIf="dimensionItems.length === 0" class="empty-row">
           <td colspan="11" class="no-data">No data available. Use the form above to add new entries.</td>
         </tr>
         </tbody>

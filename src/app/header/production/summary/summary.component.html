@@ -75,7 +75,6 @@
             <th>Fitup</th>
             <th>Welding</th>
             <th>Fabrication Comp.%</th>
-            <th>Paint Release Date</th>
             <th>Blasting & Painting</th>
             <th>Comp.%</th>
             <th>Remarks</th>
@@ -89,8 +88,8 @@
               <span *ngIf="!row.editMode">{{ row.jobNumber }}</span>
             </td>
             <td>
-              <input *ngIf="row.editMode" [disabled]="true" [(ngModel)]="title" />
-              <span *ngIf="!row.editMode">{{ title }}</span>
+              <input *ngIf="row.editMode" [disabled]="true" [(ngModel)]="row.title" />
+              <span *ngIf="!row.editMode">{{ row.title }}</span>
             </td>
             <td>
               <input *ngIf="row.editMode" [disabled]="true" [(ngModel)]="row.totalQty" />
@@ -113,12 +112,8 @@
               <span *ngIf="!row.editMode">{{ row.welding }}</span>
             </td>
             <td>
-              <input *ngIf="row.editMode" [disabled]="true" [(ngModel)]="row.fabCompPercent" />
-              <span *ngIf="!row.editMode">{{ row.fabCompPercent }}</span>
-            </td>
-            <td>
-              <input *ngIf="row.editMode" [(ngModel)]="row.paintReleaseDate" type="date" />
-              <span *ngIf="!row.editMode">{{ row.paintReleaseDate }}</span>
+              <input *ngIf="row.editMode" [disabled]="true" [(ngModel)]="row.welding" />
+              <span *ngIf="!row.editMode">{{ row.welding }}</span>
             </td>
             <td>
               <input *ngIf="row.editMode" [(ngModel)]="row.blastPaint" />

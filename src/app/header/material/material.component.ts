@@ -40,9 +40,9 @@ export class MaterialComponent implements OnInit {
 
   initSearchForm(): void {
     this.searchForm = this.fb.group({
-      jobNumber: ['8031', Validators.required],
-      subJobNumber: ['01', Validators.required],
-      drawingNo: ['d1', Validators.required]
+      jobNumber: ['DOWNTOWN-OFFICE-2024', Validators.required],
+      subJobNumber: ['WINDOWS', Validators.required],
+      drawingNo: ['FLOOR-2-WINDOWS-Rev-B', Validators.required]
     });
   }
 

@@ -2,20 +2,11 @@
 import { Component, OnInit } from '@angular/core';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {firstValueFrom} from 'rxjs';
+import {DimensionItemVO} from '../../../models/DimensionItemVO';
+import {DimensionReportService} from '../../../services/dimensionReport.service';
+import {MaterialTrackingService} from '../../../services/materialTracking.service';
 
-interface DimensionItem {
-  id?: number;
-  drawingNo: string;
-  qty: string;
-  details: string;
-  drawingDimension: number | null;
-  actualDimension: number | null;
-  variation: number | null;
-  result: string;
-  reportNumber: string;
-  isSelected: boolean;
-  isEditing: boolean;
-}
 @Component({
   selector: 'app-dimensions-report',
   templateUrl: './dimensions.component.html',
@@ -31,23 +22,24 @@ interface DimensionItem {
 })
 export class DimensionsComponent implements OnInit {
   searchForm: FormGroup;
-  materialItems: DimensionItem[] = [];
+  dimensionItems: DimensionItemVO[] = [];
   showResults: boolean = false;
   allSelected: boolean = false;
   currentReportNumber: string = '';
   drawingNo : string = '';
 
+
   // Object for the new item input row
-  newItem: DimensionItem = this.getEmptyDimensionItem();
+  newItem: DimensionItemVO = this.getEmptyDimensionItem();
 
   // For editing functionality
-  originalEditItem: DimensionItem | null = null;
+  originalEditItem: DimensionItemVO | null = null;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private dimensionReportService: DimensionReportService) {
     this.searchForm = this.fb.group({
-      jobNumber: [''],
-      subJobNumber: [''],
-      drawingNo: ['']
+      jobNumber: ['DOWNTOWN-OFFICE-2024'],
+      subJobNumber: ['WINDOWS'],
+      drawingNo: ['FLOOR-2-WINDOWS-Rev-B']
     });
   }
 
@@ -56,7 +48,7 @@ export class DimensionsComponent implements OnInit {
   }
 
   // Initialize an empty dimension item
-  getEmptyDimensionItem(): DimensionItem {
+  getEmptyDimensionItem(): DimensionItemVO {
     return {
       drawingNo: '',
       qty: '',
@@ -78,40 +70,40 @@ export class DimensionsComponent implements OnInit {
   }
 
   // Search functionality
-  search(): void {
+  async search(): Promise<void> {
     // Implement search logic - typically an API call
-    // For demo, let's just show sample results
-    this.showResults = true;
-    this.drawingNo = this.searchForm.value.drawingNo;
+    const {jobNumber, subJobNumber, drawingNo} = this.searchForm.value;
 
-    // Sample data - would normally come from API
-    if (this.materialItems.length === 0) {
-      this.materialItems = [
-        {
-          drawingNo: 'DRW-001',
-          qty: '2',
-          details: 'Flange Connection',
-          drawingDimension: 120.5,
-          actualDimension: 120.7,
-          variation: 0.2,
-          result: 'Pass',
-          reportNumber: 'R-2024-001',
-          isSelected: false,
-          isEditing: false
-        },
-        {
-          drawingNo: 'DRW-001',
-          qty: '1',
-          details: 'Support Bracket',
-          drawingDimension: 85.0,
-          actualDimension: 84.7,
-          variation: -0.3,
-          result: 'Pass',
-          reportNumber: 'R-2024-001',
-          isSelected: false,
-          isEditing: false
-        }
-      ];
+    if (jobNumber && subJobNumber && drawingNo) {
+      this.dimensionItems = [];
+      try {
+        const response = await firstValueFrom(
+          this.dimensionReportService.searchDimensionReportItems(jobNumber, subJobNumber, drawingNo)
+        );
+        this.showResults = true;
+        this.drawingNo = this.searchForm.value.drawingNo;
+        console.log('fetched dimension report details successfully:', response);
+
+        response.forEach(dimension => {
+          const dimensionDetails: DimensionItemVO = {
+            id: dimension.id != undefined? dimension.id : undefined,
+            drawingNo: dimension.drawingNo,
+            qty: dimension.qty!= undefined ? dimension.qty : undefined,
+            details: dimension.details != undefined ? dimension.details : undefined,
+            drawingDimension: dimension.drawingDimension != undefined ? dimension.drawingDimension : undefined,
+            actualDimension: dimension.actualDimension!= undefined ? dimension.actualDimension : undefined,
+            variation: dimension.variation!= undefined ? dimension.variation : undefined,
+            result: dimension.result != undefined ? dimension.result : undefined,
+            reportNumber: dimension.reportNumber!= undefined ? dimension.reportNumber : undefined,
+            isSelected: false,
+            isEditing: false
+          }
+          this.dimensionItems.push(dimensionDetails);
+        })
+
+      } catch (error) {
+        console.error('Error fetching material items:', error);
+      }
     }
   }
 
@@ -123,23 +115,23 @@ export class DimensionsComponent implements OnInit {
       return;
     }
 
-    // Calculate variation if not provided
-    if (this.newItem.drawingDimension !== null &&
-      this.newItem.actualDimension !== null &&
-      this.newItem.variation === null) {
+    if (this.newItem?.drawingDimension != null &&
+      this.newItem?.actualDimension != null &&
+      this.newItem?.variation == null) {
       this.newItem.variation = this.newItem.actualDimension - this.newItem.drawingDimension;
     }
 
+
     // Add to the list - create a new object to avoid reference issues
-    const itemToAdd: DimensionItem = {...this.newItem};
-    this.materialItems.unshift(itemToAdd);
+    const itemToAdd: DimensionItemVO = {...this.newItem};
+    this.dimensionItems.unshift(itemToAdd);
 
     // Reset the new item
     this.newItem = this.getEmptyDimensionItem();
   }
 
   // Toggle edit mode for an item
-  toggleEditMode(item: DimensionItem): void {
+  toggleEditMode(item: DimensionItemVO): void {
     // Store original values before editing to allow cancel operation
     this.originalEditItem = {...item};
 
@@ -147,7 +139,7 @@ export class DimensionsComponent implements OnInit {
     item.isEditing = true;
 
     // Ensure only one item is in edit mode at a time
-    this.materialItems.forEach(i => {
+    this.dimensionItems.forEach(i => {
       if (i !== item) {
         i.isEditing = false;
       }
@@ -155,18 +147,20 @@ export class DimensionsComponent implements OnInit {
   }
 
   // Save edited item
-  saveItem(item: DimensionItem): void {
+  saveItem(item: DimensionItemVO): void {
     // Basic validation
     if (this.isFieldInvalid(item.drawingNo)) {
       alert('Drawing No is required');
       return;
     }
 
-    // Calculate variation if needed
+    /* // Calculate variation if needed
     if (item.drawingDimension !== null &&
       item.actualDimension !== null) {
       item.variation = item.actualDimension - item.drawingDimension;
     }
+
+     */
 
     // Exit edit mode
     item.isEditing = false;
@@ -174,7 +168,7 @@ export class DimensionsComponent implements OnInit {
   }
 
   // Cancel editing
-  cancelEdit(item: DimensionItem): void {
+  cancelEdit(item: DimensionItemVO): void {
     if (this.originalEditItem) {
       // Restore original values
       Object.assign(item, this.originalEditItem);
@@ -186,7 +180,7 @@ export class DimensionsComponent implements OnInit {
   }
 
   // Toggle selection of a single item
-  toggleSelection(item: DimensionItem): void {
+  toggleSelection(item: DimensionItemVO): void {
     item.isSelected = !item.isSelected;
 
     // Update allSelected status
@@ -196,20 +190,20 @@ export class DimensionsComponent implements OnInit {
   // Toggle selection of all items
   toggleSelectAll(): void {
     this.allSelected = !this.allSelected;
-    this.materialItems.forEach(item => {
+    this.dimensionItems.forEach(item => {
       item.isSelected = this.allSelected;
     });
   }
 
   // Check if any items are selected
   hasSelectedItems(): boolean {
-    return this.materialItems.some(item => item.isSelected);
+    return this.dimensionItems.some(item => item.isSelected);
   }
 
   // Update all selected status based on individual selections
   updateAllSelectedStatus(): void {
-    this.allSelected = this.materialItems.length > 0 &&
-      this.materialItems.every(item => item.isSelected);
+    this.allSelected = this.dimensionItems.length > 0 &&
+      this.dimensionItems.every(item => item.isSelected);
   }
 
   // Apply report number to selected items
@@ -219,7 +213,7 @@ export class DimensionsComponent implements OnInit {
       return;
     }
 
-    this.materialItems.forEach(item => {
+    this.dimensionItems.forEach(item => {
       if (item.isSelected) {
         item.reportNumber = this.currentReportNumber;
       }
@@ -233,6 +227,6 @@ export class DimensionsComponent implements OnInit {
     alert('Exporting report...');
 
     // Example implementation would go here
-    console.log('Exporting items:', this.materialItems);
+    console.log('Exporting items:', this.dimensionItems);
   }
 }

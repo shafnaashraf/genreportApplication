@@ -4,24 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {firstValueFrom} from 'rxjs';
 import {jobService} from '../../../services/job.service';
 import {SupportDetailService} from '../../../services/supportDetail.service';
-
-interface ProgressRow {
-  title: string;
-  totalQty: string;
-  UOM: string;
-  cutting: string;
-  fitup: string;
-  welding: string;
-  fabCompPercent: string;
-  paintReleaseDate: string;
-  blastPaint: string;
-  compPercent:string;
-  remarks: string;
-  editMode: boolean;
-  isEdited?: boolean;
-  jobNumber: string;
-  subJobNumber: string;
-}
+import {SummaryVO} from '../../../models/SummaryVO';
 
 @Component({
   selector: 'app-summary',
@@ -40,8 +23,8 @@ export class SummaryComponent{
   selectedSubJobNumbers: string[] = [];
   availableSubJobNumbers: string[] = [];
   showDropdown: boolean = false;
-  rows: ProgressRow[] = [];
-  filteredRows: ProgressRow[] = [];
+  rows: SummaryVO[] = [];
+  filteredRows: SummaryVO[] = [];
   searchPerformed: boolean = false;
   hasSearchResults: boolean = false;
   title : string ='';
@@ -97,23 +80,21 @@ export class SummaryComponent{
       this.filteredRows = [];
       try {
         const response = await firstValueFrom(
-          this.supportService.searchSubJobDetailsForSubJobs(this.searchJobNumber , this.selectedSubJobNumbers)
+          this.supportService.getSummaryDetailsBySubJobs(this.searchJobNumber , this.selectedSubJobNumbers)
         );
 
         console.log('fetched sub job details successfully:', response);
 
         response.forEach(drawing => {
-          const drawingDetails : ProgressRow ={
-            title: '',
-            totalQty: '',
+          const drawingDetails : SummaryVO ={
+            title: drawing.title,
+            totalQty: drawing.totalQty,
             UOM: '',
-            cutting: '',
-            fitup: '',
-            welding: '',
-            fabCompPercent: '',
-            paintReleaseDate: '',
-            blastPaint: '',
-            compPercent:'',
+            cutting: drawing.cutting,
+            fitup: drawing.fitup,
+            welding: drawing.welding,
+            blastPaint: drawing.blastPaint ? drawing.blastPaint :0.0,
+            compPercent:(drawing.welding + (drawing.blastPaint? drawing.blastPaint :0.0))/2,
             remarks: '',
             editMode: false,
             jobNumber: drawing.jobNumber ,
@@ -133,7 +114,7 @@ export class SummaryComponent{
 
   }
 
-  toggleEdit(row: ProgressRow): void {
+  toggleEdit(row: SummaryVO): void {
     if (row.editMode) {
       // Save changes
       row.editMode = false;
